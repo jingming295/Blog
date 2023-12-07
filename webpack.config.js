@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -30,4 +31,9 @@ module.exports = {
     port: 8080,
     open: true,
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html", // HTML 模板路径
+    }),
+  ],
 };
