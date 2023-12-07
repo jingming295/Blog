@@ -4,10 +4,11 @@
 
 ## TODO Plan
 
-- [x] Login and Register
+- [ ] Login and Register
+  - [x] Encrypt Password
+  - [ ] Email Verification
 - [ ] Keep Login Status
-- [ ] Email Verification
-- [ ] Encrypt data
+  - [ ] Encrypt data
 - [ ] Post Article
 - [ ] User Profile Page - 20% progress
-- [ ] User Profile Edit
+  - [ ] User Profile Edit
