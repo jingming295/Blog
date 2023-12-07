@@ -9,7 +9,7 @@
  * @type {URLConfig}
  */
 const urlconfig = {
-    url: 'http://localhost/mciyuan/src/'
+    url: 'http://example.com'
 };
 
 /**

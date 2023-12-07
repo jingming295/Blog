@@ -1,7 +1,7 @@
 import { ReturnClientData as RCD } from "./interface";
 export class ReturnData
 {
-    returnClientData(code: number, message: string, data?: any[] | null)
+    returnClientData(code: number, message: string, data?: any | null)
     {
         if (data === undefined)
         {

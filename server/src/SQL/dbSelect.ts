@@ -1,6 +1,6 @@
 import * as mysql from 'mysql2/promise';
 import DatabaseConnector from './dbConnector';
-import { UserResult } from './interface';
+import { UserResult, UserProfile } from './interface';
 
 export class DBSelect extends DatabaseConnector
 {
@@ -14,7 +14,7 @@ export class DBSelect extends DatabaseConnector
         return this._connectionPromise;
     }
 
-    async login(email: string, hashedPassword: string):Promise<UserResult[]>
+    async login(email: string, hashedPassword: string): Promise<UserResult[]>
     {
         const connection = await this.connection;
         const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
@@ -24,13 +24,23 @@ export class DBSelect extends DatabaseConnector
         return rows as UserResult[];
     }
 
-    async selectEmail(email: string):Promise<{id:string}[]>
+    async selectEmail(email: string): Promise<{ id: string; }[]>
     {
         const connection = await this.connection;
         const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
             'SELECT `u_id` FROM `tb_user` WHERE `u_email` = ?',
             [email]
         );
-        return rows as {id:string}[];
+        return rows as { id: string; }[];
+    }
+
+    async selectUserProfile(id: number)
+    {
+        const connection = await this.connection;
+        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+            'SELECT `u_id`, `u_name`, `u_email`, `u_name`, `u_class`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_id` = ?',
+            [id]
+        );
+        return rows as UserProfile[];
     }
 }

@@ -1,84 +1,78 @@
 import { SendPost } from '../Send Fetch';
 import { NavRelated } from '../Navigation Bar';
 import { ChangePage } from '../Navigation Bar/changePage';
-
-interface ProfileData {
-    name: string;
-    avatar: string;
-    email: string;
-  }
+import { ProfileData } from './interface';
+import '../../scss/User Profile/index.scss'
 
 /**
  * MakeUserProfile class 创建User Profile的组件
  * @class
  * @classdesc Handles user profile page functionality.
  */
-export class MakeUserProfile {
+export class MakeUserProfile
+{
     /**
      * init
      */
-    Init = () => {
+    Init = () =>
+    {
         const sendPost = new SendPost();
-        if (!(document.getElementById('navigationBar'))) {
+        if (!(document.getElementById('navigationBar')))
+        {
             const navRelated = new NavRelated();
             navRelated.MakeNav();
         }
         this.DeletePreviousPageComponent();
 
         const hash = window.location.hash;
-        if (hash.startsWith('#/u')) {
+        if (hash.startsWith('#/u'))
+        {
             const id = hash.slice(hash.indexOf('?id=') + 4);
-            if (id && Number.isInteger(parseInt(id))) {
-                const formData = new FormData();
-                formData.append('type', 'User Profile');
-                formData.append('id', id);
-
+            if (id && Number.isInteger(parseInt(id)))
+            {
                 const params = {
-                    id:id
-                }
-                sendPost.postWithUrlParams('UserProfile', params)
-                    .then(response => {
-                        if (typeof response !== 'string') {
+                    id: id
+                };
+                sendPost.postWithUrlParams('userprofile', params)
+                    .then(response =>
+                    {
+
+                        if (response.code === 0)
+                        {
+                            const profileData:ProfileData = response.data as ProfileData;
+                            this.CreateContent(profileData);
+
+                        } else {
                             const changePage = new ChangePage();
                             changePage.toIndex();
                             return;
                         }
 
-                        const parsedResponse = JSON.parse(response);
 
-                        if (parsedResponse.success !== true) {
-                            const changePage = new ChangePage();
-                            changePage.toIndex();
-                            return;
-                        }
-
-                        const profileData = parsedResponse.ProfileData;
-
-                        if (typeof parsedResponse !== 'object' || !profileData) {
-                            const changePage = new ChangePage();
-                            changePage.toIndex();
-                            return;
-                        }
-
-                        this.CreateContent(profileData);
+                        
                     })
-                    .catch(error => {
+                    .catch(error =>
+                    {
                         console.log(error);
                     });
-            } else {
-                window.location.href = '404.html';
+            } else
+            {
+                // window.location.href = '404.html';
             }
-        } else if (hash === '') {
-            window.location.href = '404.html';
+        } else if (hash === '')
+        {
+            // window.location.href = '404.html';
         }
     };
 
     /**
      * 删除前一个页面的组件
      */
-    DeletePreviousPageComponent = () => {
+    DeletePreviousPageComponent = () =>
+    {
         const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv) {
+        if (contentDiv)
+        {
             contentDiv.remove();
         }
     };
@@ -86,9 +80,11 @@ export class MakeUserProfile {
     /**
      * 创建这个页面的组件
      */
-    CreateContent = (profileData:ProfileData) => {
+    CreateContent = (profileData: ProfileData) =>
+    {
         const site = document.body;
-        if (site) {
+        if (site)
+        {
             const contentDiv = document.createElement('div');
             const authorWarp = document.createElement('div');
             authorWarp.style.background = '#fff';
@@ -104,7 +100,8 @@ export class MakeUserProfile {
             site.appendChild(contentDiv);
             createUserInfoContent(authorWarp, profileData);
             createUserTab(contentDiv, profileData);
-        } else {
+        } else
+        {
             const siteDiv = document.createElement('div');
             siteDiv.id = 'site';
             siteDiv.className = 'site';
@@ -116,15 +113,11 @@ export class MakeUserProfile {
          * @param contentDiv
          * @param profileData
          */
-        function createUserInfoContent (contentDiv:HTMLDivElement, profileData:ProfileData) {
+        function createUserInfoContent(contentDiv: HTMLDivElement, profileData: ProfileData)
+        {
             const backgroundDiv = document.createElement('div');
             backgroundDiv.id = 'backgroundDiv';
             backgroundDiv.className = 'backgroundDiv';
-            backgroundDiv.style.width = '100%';
-            backgroundDiv.style.paddingTop = '20%';
-            backgroundDiv.style.backgroundColor = '#e993c5';
-            backgroundDiv.style.borderTopLeftRadius = '6px';
-            backgroundDiv.style.borderTopRightRadius = '6px';
 
             const userAvatarBackgroundDiv = document.createElement('div');
             userAvatarBackgroundDiv.id = 'userAvatarBackgroundDiv';
@@ -145,7 +138,8 @@ export class MakeUserProfile {
              * @param userAvatarBackgroundDiv
              * @param avatar
              */
-            function createUserAvatar (userAvatarBackgroundDiv:HTMLDivElement, avatar:string) {
+            function createUserAvatar(userAvatarBackgroundDiv: HTMLDivElement, avatar: string)
+            {
                 const userImgWarp = document.createElement('div');
                 const userImg = document.createElement('img');
 
@@ -167,7 +161,8 @@ export class MakeUserProfile {
              * @param userAvatarBackgroundDiv
              * @param userName
              */
-            function createUserData (userAvatarBackgroundDiv:HTMLDivElement, userName:string) {
+            function createUserData(userAvatarBackgroundDiv: HTMLDivElement, userName: string)
+            {
                 const userDataWarp = document.createElement('div');
                 userDataWarp.style.display = 'flex';
                 userDataWarp.style.flexDirection = 'column';
@@ -194,7 +189,8 @@ export class MakeUserProfile {
             }
         }
 
-        function createUserTab (contentDiv:HTMLDivElement, profileData:ProfileData) {
+        function createUserTab(contentDiv: HTMLDivElement, profileData: ProfileData)
+        {
             const userTable = document.createElement('div');
             userTable.style.display = 'flex';
             userTable.style.marginTop = '20px';
@@ -217,10 +213,12 @@ export class MakeUserProfile {
             createLeftPanel(leftPanel);
             createRightPanel(rightPanel, profileData);
 
-            function createLeftPanel (leftPanel:HTMLDivElement) {
+            function createLeftPanel(leftPanel: HTMLDivElement)
+            {
                 let i = 0;
-                const arr: Array<string> = ['用户', '发布的文章'];
-                for (i = 0; i < arr.length; i++) {
+                const arr: Array<string> = ['User Profile', 'Posts'];
+                for (i = 0; i < arr.length; i++)
+                {
                     const userTab = document.createElement('div');
                     userTab.style.width = '200px';
 
@@ -232,16 +230,18 @@ export class MakeUserProfile {
                     userSideBar.style.transition = 'all 0.08s ease';
                     userSideBar.style.cursor = 'pointer';
 
-                    userSideBar.addEventListener('mouseover', function () {
+                    userSideBar.addEventListener('mouseover', function ()
+                    {
                         userSideBar.style.background = 'rgb(247 241 244)';
                     });
-                    userSideBar.addEventListener('mouseout', (event: MouseEvent) => {
+                    userSideBar.addEventListener('mouseout', (event: MouseEvent) =>
+                    {
                         userSideBar.style.background = '#fff';
                     });
 
                     const userSideBarItem = document.createElement('p');
                     userSideBarItem.innerText = arr[i];
-                    userSideBarItem.style.color = '#FF69B4';
+                    userSideBarItem.style.color = '#73abff';
 
                     const arrow = document.createElement('div');
                     arrow.innerHTML = '>';
@@ -254,14 +254,16 @@ export class MakeUserProfile {
                 }
             }
 
-            function createRightPanel (rightPanel:HTMLDivElement, profileData:ProfileData) {
+            function createRightPanel(rightPanel: HTMLDivElement, profileData: ProfileData)
+            {
                 let i = 0;
                 const arr: string[][] = [
                     ['昵称: ', profileData.name],
                     ['邮箱: ', profileData.email]
                 ];
 
-                for (i = 0; i < arr.length; i++) {
+                for (i = 0; i < arr.length; i++)
+                {
                     const userInfoBox = document.createElement('div');
                     const userInfoItem = document.createElement('p');
                     const title = document.createElement('span');

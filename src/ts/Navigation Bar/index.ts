@@ -37,7 +37,6 @@ export class NavRelated
             leftBanner(navigationContainer);
             rightBanner(navigationContainer);
             const appContainer = document.body;
-            console.log('dadasa');
             if (appContainer)
             {
                 appContainer.appendChild(navigationBar);
