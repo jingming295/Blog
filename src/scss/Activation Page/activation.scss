@@ -1,0 +1,49 @@
+$background-color_3: #FF69B4;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #cccccc;
+  }
+  
+  h1 {
+    color: #333333;
+  }
+  
+  p {
+    color: #555555;
+    line-height: 1.5;
+  }
+  
+  .btnReturn {
+    display: inline-block;
+    background-color: #FF69B4;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+    &:active {
+      -webkit-transform: translateY(1px);
+      transform: translateY(1px);
+    }
+    &:hover {
+      opacity: .9;
+      -webkit-transition: opacity .2s;
+      transition: opacity .2s;
+    }
+  }
+  
+  .btnReturn:focus {
+    outline: none;
+  }
+  

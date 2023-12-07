@@ -1,0 +1,131 @@
+$color_1: #ffffff;
+$color_2: #333;
+
+
+$background-color_1: #bbb6b6;
+$background-color_2: #ffffff;
+$background-color_3: #FF69B4;
+$background-color_4: #e993c5;
+$background-color_5: white;
+
+
+
+body {
+	margin: 0;
+	list-style-type: none;
+	background-color: $background-color_1;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	color: $color_1;
+	fill: #ffffff;
+}
+ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	fill: #ffffff;
+}
+li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	fill: #ffffff;
+}
+a {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	fill: #ffffff;
+}
+button {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	color: $color_1;
+	fill: #ffffff;
+}
+input {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	fill: #ffffff;
+}
+p {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-decoration: none;
+	fill: #ffffff;
+}
+
+button[disabled] {
+	&:active {
+		-webkit-transform: none;
+		transform: none;
+	}
+}
+
+
+/*
+这个是整个网站最外层
+*/
+.site {
+	background-color: $background-color_2;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center top;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
+	flex-flow: column;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
