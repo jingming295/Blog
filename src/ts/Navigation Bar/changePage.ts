@@ -1,11 +1,12 @@
 import { urlconfig } from '../Url Config/Live Server Url Config';
 import { MainPage } from '../Main Page';
+import { MakeUserProfile } from '../User Profile';
 export class ChangePage {
     toUserProfile (id:string) {
         document.title = 'User';
-        // const makeUserProfile = new MakeUserProfile();
-        // window.location.href = urlconfig.url + '/#/u?id=' + id;
-        // makeUserProfile.Init();
+        const makeUserProfile = new MakeUserProfile();
+        window.location.href = urlconfig.url + '/#/u?id=' + id;
+        makeUserProfile.Init();
     }
 
     toPostArticle () {
