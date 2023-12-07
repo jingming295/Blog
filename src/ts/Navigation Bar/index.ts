@@ -70,21 +70,27 @@ export class NavRelated
                 const sendPost = new SendPost();
                 const userData = localStorage.getItem('UserData');
                 const encUserData = localStorage.getItem('EncUserData');
-                if (userData !== null && encUserData !== null) {
+                if (userData !== null && encUserData !== null)
+                {
                     const parseUserData = JSON.parse(userData);
                     const params = {
                         UserData: userData,
                         EncUserData: encUserData,
 
-                    }
+                    };
                     sendPost.postWithUrlParams('KeepLogin', params)
-                        .then((response) => {
-                            if (typeof response === 'string') {
+                        .then((response) =>
+                        {
+                            if (typeof response === 'string')
+                            {
                                 const parsedResponse = JSON.parse(response);
-                                if (typeof parsedResponse === 'object') {
-                                    if (parsedResponse.success === true) {
+                                if (typeof parsedResponse === 'object')
+                                {
+                                    if (parsedResponse.success === true)
+                                    {
                                         aprUserComponent(parsedResponse.avatar, parseUserData['User Id']);
-                                    } else {
+                                    } else
+                                    {
                                         localStorage.clear();
                                         const navRelated = new NavRelated();
                                         navRelated.MakeNav();
@@ -92,10 +98,12 @@ export class NavRelated
                                 }
                             }
                         })
-                        .catch((error: any) => {
+                        .catch((error: any) =>
+                        {
                             console.log(error);
                         });
-                } else {
+                } else
+                {
                     localStorage.clear();
                     location.reload();
                 }

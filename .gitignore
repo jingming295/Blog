@@ -8,3 +8,6 @@ node_modules/
 
 # Compiled output
 dist/
+
+# Exclude webpack config
+!webpack.config.js
