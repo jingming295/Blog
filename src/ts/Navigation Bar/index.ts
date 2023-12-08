@@ -2,6 +2,7 @@ import { ChangePage } from "./changePage";
 import { HandleLoginNRegister } from "./LoginNRegister";
 import { HandlePopMsg } from "./popMsg";
 import { SendPost } from "../Send Fetch";
+import { UserData } from "./interface";
 /**
  * 顶栏相关
  * @class
@@ -64,20 +65,20 @@ export class NavRelated
             rightBanner.className = 'rightBanner';
             rightBanner.id = 'rightBanner';
             navigationContainer.appendChild(rightBanner);
-            if (localStorage.getItem('UserData') && localStorage.getItem('EncUserData'))
+
+            const userData = localStorage.getItem('UserData');
+            if (userData)
             {
                 const sendPost = new SendPost();
-                const userData = localStorage.getItem('UserData');
-                const encUserData = localStorage.getItem('EncUserData');
-                if (userData !== null && encUserData !== null)
+                
+                if (userData !== null)
                 {
-                    const parseUserData = JSON.parse(userData);
+                    const parseUserData:UserData = JSON.parse(userData);
                     const params = {
-                        UserData: userData,
-                        EncUserData: encUserData,
+                        UserData: parseUserData,
 
                     };
-                    sendPost.postWithUrlParams('KeepLogin', params)
+                    sendPost.postWithUrlParams('keeplogin', params)
                         .then((response) =>
                         {
                             if (typeof response === 'string')
@@ -87,7 +88,7 @@ export class NavRelated
                                 {
                                     if (parsedResponse.success === true)
                                     {
-                                        aprUserComponent(parsedResponse.avatar, parseUserData['User Id']);
+                                        aprUserComponent(parsedResponse.avatar, parseUserData.userData.id.toString());
                                     } else
                                     {
                                         localStorage.clear();

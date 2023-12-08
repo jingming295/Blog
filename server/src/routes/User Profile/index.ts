@@ -7,10 +7,8 @@ const router = express.Router();
 router.post('/userprofile', async (req: Request, res: Response) =>
 {
     const normalRequestUserProfile = new NormalRequestUserProfile;
-    const query = req.query as { id: string };
-    console.log(query)
-
-    const userResult = await normalRequestUserProfile.requestUserProfile(query)
+    const body = req.body as { id: string };
+    const userResult = await normalRequestUserProfile.requestUserProfile(body)
     res.json(userResult);
 });
 export default router;

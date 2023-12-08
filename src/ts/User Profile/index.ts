@@ -2,7 +2,7 @@ import { SendPost } from '../Send Fetch';
 import { NavRelated } from '../Navigation Bar';
 import { ChangePage } from '../Navigation Bar/changePage';
 import { ProfileData } from './interface';
-import '../../scss/User Profile/index.scss'
+import '../../scss/UserProfile/index.scss'
 
 /**
  * MakeUserProfile class 创建User Profile的组件
@@ -41,7 +41,6 @@ export class MakeUserProfile
                         {
                             const profileData:ProfileData = response.data as ProfileData;
                             this.CreateContent(profileData);
-
                         } else {
                             const changePage = new ChangePage();
                             changePage.toIndex();

@@ -14,11 +14,17 @@ export class DBSelect extends DatabaseConnector
         return this._connectionPromise;
     }
 
+    /**
+     * return user id, class, name
+     * @param email email of user
+     * @param hashedPassword hashed password after salt
+     * @returns 
+     */
     async login(email: string, hashedPassword: string): Promise<UserResult[]>
     {
         const connection = await this.connection;
         const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
-            'SELECT `u_id`, `u_class`, `u_name` FROM `tb_user` WHERE `u_email` = ? && `u_password` = ?',
+            'SELECT `u_id`, `u_class`, `u_name`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_email` = ? && `u_password` = ?',
             [email, hashedPassword]
         );
         return rows as UserResult[];
