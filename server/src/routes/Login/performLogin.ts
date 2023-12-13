@@ -1,5 +1,5 @@
 import { LoginRequest as LR } from './interface';
-import { EncUserData as EUD, LoginData as LD, ReturnClientData as RCD, UserData as UD } from '../../Return To Client/interface';
+import { LoginData as LD, ReturnClientData as RCD, UserData as UD } from '../../Return To Client/interface';
 
 import { Salt } from '../../Crypto/salt';
 import { SHA256 } from '../../Crypto/sha256';

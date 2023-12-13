@@ -3,8 +3,3 @@ export interface AES_256_GCMEncrypted{
     iv:Buffer
     tag:Buffer
 }
-
-export interface KeyCache {
-    key: Buffer;
-    createdAt: number;
-}

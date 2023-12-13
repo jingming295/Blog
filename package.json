@@ -23,6 +23,9 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "sass": "^1.69.5"
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/plugin-formula": "^1.0.11",
+    "sass": "^1.69.5",
+    "snabbdom": "^3.5.1"
   }
 }

@@ -20,8 +20,3 @@ export interface UserData{
   class: number
   avatar: string
 }
-
-export interface EncUserData{
-  s:string,
-  encryptData:string
-}

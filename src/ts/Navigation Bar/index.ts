@@ -9,52 +9,20 @@ import { UserData } from "./interface";
  */
 export class NavRelated
 {
+    private handlePopMsg: HandlePopMsg;
+    constructor()
+    {
+        this.handlePopMsg = new HandlePopMsg();
+    }
     /**
      * 生成顶栏
      */
     MakeNav()
     {
-        if (document.getElementById('navigationBar'))
-        {
-            const navigationContainer = document.getElementById('navigation-container');
-            if (navigationContainer instanceof HTMLDivElement)
-            {
-                rightBanner(navigationContainer);
-                this.MakeLoginNRegister();
-                this.addButtonListener();
-            }
-        } else
-        {
-            const navigationBar = document.createElement('div');
-            navigationBar.style.userSelect = 'none';
-            navigationBar.className = 'navigationBar';
-            navigationBar.id = 'navigationBar';
-
-            const navigationContainer = document.createElement('div');
-            navigationContainer.className = 'navigation-container';
-            navigationContainer.id = 'navigation-container';
-            navigationBar.appendChild(navigationContainer);
-
-            leftBanner(navigationContainer);
-            rightBanner(navigationContainer);
-            const appContainer = document.body;
-            if (appContainer)
-            {
-                appContainer.appendChild(navigationBar);
-                if (localStorage.getItem('UserData') && localStorage.getItem('EncUserData'))
-                {
-                    // 在这里输入要做的东西
-                } else
-                {
-                    this.MakeLoginNRegister();
-                }
-            }
-        }
-
         /**
          * 生成右边的横幅
          */
-        function rightBanner(navigationContainer: HTMLDivElement)
+        const rightBanner = (navigationContainer: HTMLDivElement) =>
         {
             if (document.getElementById('rightBanner'))
             {
@@ -70,10 +38,10 @@ export class NavRelated
             if (userData)
             {
                 const sendPost = new SendPost();
-                
+
                 if (userData !== null)
                 {
-                    const parseUserData:UserData = JSON.parse(userData);
+                    const parseUserData: UserData = JSON.parse(userData);
                     const params = {
                         UserData: parseUserData,
 
@@ -81,21 +49,16 @@ export class NavRelated
                     sendPost.postWithUrlParams('keeplogin', params)
                         .then((response) =>
                         {
-                            if (typeof response === 'string')
+                            if (response.code === 0)
                             {
-                                const parsedResponse = JSON.parse(response);
-                                if (typeof parsedResponse === 'object')
-                                {
-                                    if (parsedResponse.success === true)
-                                    {
-                                        aprUserComponent(parsedResponse.avatar, parseUserData.userData.id.toString());
-                                    } else
-                                    {
-                                        localStorage.clear();
-                                        const navRelated = new NavRelated();
-                                        navRelated.MakeNav();
-                                    }
-                                }
+                                aprUserComponent(parseUserData.userData.avatar, parseUserData.userData.id.toString());
+
+                            } else
+                            {
+                                this.handlePopMsg.popMsg(response.message)
+                                localStorage.clear();
+                                const navRelated = new NavRelated();
+                                navRelated.MakeNav();
                             }
                         })
                         .catch((error: any) =>
@@ -185,6 +148,43 @@ export class NavRelated
                     navRelated.MakeNav();
                 }
             }
+        };
+
+        if (document.getElementById('navigationBar'))
+        {
+            const navigationContainer = document.getElementById('navigation-container');
+            if (navigationContainer instanceof HTMLDivElement)
+            {
+                rightBanner(navigationContainer);
+                this.MakeLoginNRegister();
+                this.addButtonListener();
+            }
+        } else
+        {
+            const navigationBar = document.createElement('div');
+            navigationBar.style.userSelect = 'none';
+            navigationBar.className = 'navigationBar';
+            navigationBar.id = 'navigationBar';
+
+            const navigationContainer = document.createElement('div');
+            navigationContainer.className = 'navigation-container';
+            navigationContainer.id = 'navigation-container';
+            navigationBar.appendChild(navigationContainer);
+
+            leftBanner(navigationContainer);
+            rightBanner(navigationContainer);
+            const appContainer = document.body;
+            if (appContainer)
+            {
+                appContainer.appendChild(navigationBar);
+                if (localStorage.getItem('UserData') && localStorage.getItem('EncUserData'))
+                {
+                    // 在这里输入要做的东西
+                } else
+                {
+                    this.MakeLoginNRegister();
+                }
+            }
         }
 
         /**
@@ -268,9 +268,7 @@ export class NavRelated
             appContainer.appendChild(loginRegisterDiv);
             this.addButtonListener();
             const handleLoginNRegister = new HandleLoginNRegister();
-            const handlePopMsg = new HandlePopMsg();
             handleLoginNRegister.init();
-            handlePopMsg.init();
         }
         /**
          * 生成到logo为止

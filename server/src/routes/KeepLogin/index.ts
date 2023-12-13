@@ -1,16 +1,20 @@
 // src/routes/Login/index.ts
 import express, { Request, Response } from 'express';
 import { KeepLogin } from './performKeepLogin';
-import { EncUserData, UserData } from '../../Return To Client/interface';
-
+import { LoginData as LD } from '../../Return To Client/interface';
 const router = express.Router();
 
 router.post('/keeplogin', async (req: Request, res: Response) =>
 {
   const keepLogin = new KeepLogin();
-  console.log(req.body)
-  const body  = req.body as unknown as { userData: UserData, encUserData: EncUserData; };
-  const userResult = await keepLogin.performKeepLogin(body);
+  const body = req.body;
+  // TODO fix this trash code
+  const loginData = {
+    ...body.UserData, encUserData: {
+      ...body.UserData.encUserData, iv: Buffer.from(body.UserData.encUserData.iv.data), encryptedData: Buffer.from(body.UserData.encUserData.encryptedData.data), tag: Buffer.from(body.UserData.encUserData.tag.data)
+    }
+  } as LD;
+  const userResult = await keepLogin.performKeepLogin(loginData);
   res.json(userResult);
 });
 export default router;

@@ -1,0 +1,2 @@
+-101 = user data not match
+-102 = Invalid IV or Auth Tag

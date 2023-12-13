@@ -109,7 +109,6 @@ export class HandleLoginNRegister
         sendPost.postWithUrlParams('login', params)
             .then(async (response) =>
             {
-                console.log(response)
                 handlePopMsg.popMsg(response.message);
                 if (response.code === 0)
                 {
