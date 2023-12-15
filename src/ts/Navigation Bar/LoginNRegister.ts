@@ -109,18 +109,16 @@ export class HandleLoginNRegister
         sendPost.postWithUrlParams('login', params)
             .then(async (response) =>
             {
-                console.log(response)
                 handlePopMsg.popMsg(response.message);
                 if (response.code === 0)
                 {
-                    // localStorage.setItem('UserData', JSON.stringify(response));
-                    // localStorage.setItem('EncUserData', hashedPassword);  // 保存哈希后的密码到本地
-                    // const navRelated = new NavRelated();
-                    // navRelated.closeLoginnRegisterPg();
-                    // navRelated.MakeNav();
-                    // const warpLoginnregister = document.getElementById('warpLoginnregister');
-                    // await this.delay(150);
-                    // warpLoginnregister?.remove();
+                    localStorage.setItem('UserData', JSON.stringify(response.data));
+                    const navRelated = new NavRelated();
+                    navRelated.closeLoginnRegisterPg();
+                    navRelated.MakeNav();
+                    const warpLoginnregister = document.getElementById('warpLoginnregister');
+                    await this.delay(150);
+                    warpLoginnregister?.remove();
                 }
             })
             .catch((error) =>

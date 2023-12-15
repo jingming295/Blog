@@ -8,8 +8,8 @@ const router = express.Router();
 router.post('/login', async (req: Request, res: Response) =>
 {
   const login = new Login();
-  const query: LR = req.query as { email: string, password: string; };
-  const userResult = await login.performLogin(query);
+  const body: LR = req.body as { email: string, password: string; };
+  const userResult = await login.performLogin(body);
   res.json(userResult);
 });
 export default router;

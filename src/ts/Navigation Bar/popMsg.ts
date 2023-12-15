@@ -4,14 +4,14 @@
  */
 export class HandlePopMsg
 {
-    init(){
-        this.createMsgContainer();
+    constructor(){
+        this.createMsgContainer()
     }
 
     /**
    * create a container to handle msg
    */
-    createMsgContainer()
+    private createMsgContainer()
     {
         if (!document.getElementById('msgContainerDiv'))
         {

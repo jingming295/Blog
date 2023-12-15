@@ -1,6 +1,6 @@
 import { ChangePage } from "./Navigation Bar/changePage";
-import "../scss/Index Page/index.scss"
-import "../scss/Nav/nav.scss"
+import "../scss/IndexPage/index.scss"
+import "../scss/Nav/index.scss"
 
 /**
  * IndexPageHandler class handles index page functionality.
@@ -33,7 +33,6 @@ class IndexPageHandler {
 }
 
 window.addEventListener('load', () => {
-    // eslint-disable-next-line no-unused-vars
     const indexPageHandler = new IndexPageHandler();
     indexPageHandler.init()
 });

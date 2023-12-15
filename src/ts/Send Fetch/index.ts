@@ -1,18 +1,21 @@
+import { UserData } from "../Navigation Bar/interface";
+
 /**
  * 发送post的class
  */
 export class SendPost
 {
 
-    postWithUrlParams(api: string, params: Record<string, string | number>)
+    postWithUrlParams(api: string, params: Record<string, string | number | UserData>)
     {
-        const url = new URL(`http://localhost:3000/${api}`);
-
-        // 将参数追加到 URL 上
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key].toString()));
-
-        return fetch(url.toString(), {
+        const url = `http://localhost:3000/${api}`;
+    
+        return fetch(url, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params),
         })
             .then(response =>
             {
@@ -26,9 +29,10 @@ export class SendPost
             .catch(error =>
             {
                 console.error('Error:', error);
-                throw new Error('Request failed');
+                throw new Error('Backend Not Running');
             });
     }
+    
 
 
 }
