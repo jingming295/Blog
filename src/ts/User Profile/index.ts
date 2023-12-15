@@ -84,6 +84,7 @@ export class MakeUserProfile
         const site = document.body;
         if (site)
         {
+            
             const contentDiv = document.createElement('div');
             const authorWarp = document.createElement('div');
             authorWarp.style.background = '#fff';
