@@ -1,8 +1,13 @@
 $themeColor: #73abff;
-.backgroundDiv{
-    width: 100%; 
-    padding-top: 20%; 
-    background-color: $themeColor; 
-    border-top-left-radius: 6px; 
-    border-top-right-radius: 6px;
+.contentDiv{
+    max-width: 100%;
+    padding-left: 3%;
+    padding-right: 3%;
+    .backgroundDiv{
+        width: 100%; 
+        padding-top: 20%; 
+        background-color: $themeColor; 
+        border-top-left-radius: 6px; 
+        border-top-right-radius: 6px;
+    }
 }

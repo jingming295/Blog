@@ -9,6 +9,9 @@ $background-color_4: #e993c5;
 $background-color_5: white;
 
 
+body, div, input, ul, li, a, button{
+	box-sizing: border-box;
+}
 
 body {
 	margin: 0;

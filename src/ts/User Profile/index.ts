@@ -91,9 +91,6 @@ export class MakeUserProfile
 
             contentDiv.id = 'contentDiv';
             contentDiv.className = 'contentDiv';
-            contentDiv.style.maxWidth = '100%';
-            contentDiv.style.marginLeft = '3%';
-            contentDiv.style.marginRight = '3%';
             contentDiv.appendChild(authorWarp);
 
             site.appendChild(contentDiv);

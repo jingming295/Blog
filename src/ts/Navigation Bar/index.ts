@@ -104,7 +104,7 @@ export class NavRelated
                     userAvatarDiv.style.width = '38px';
                     userAvatarDiv.style.marginLeft = '20px';
 
-                    postArticleBtn.innerText = '发布文章';
+                    postArticleBtn.innerText = 'post';
                     postArticleBtn.style.color = 'black';
                     postArticleBtn.style.fontSize = 'xx-small';
                     postArticleBtn.style.padding = '6px';

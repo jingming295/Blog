@@ -5,6 +5,7 @@ import { Editor } from "../Editor/Editor";
 import { UserData } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import '../../scss/Editor/style.scss'
+import '../../scss/New Post Page/index.scss'
 export class CreateNewPost
 {
     private handlePopMsg: HandlePopMsg;
@@ -84,16 +85,9 @@ export class CreateNewPost
 
         contentDiv.id = 'contentDiv';
         contentDiv.className = 'contentDiv';
-        contentDiv.style.width = '60%';
-        contentDiv.style.marginLeft = '3%';
-        contentDiv.style.marginRight = '3%';
-        contentDiv.style.color = 'black';
 
         editorWarpper.id = 'editor—wrapper';
         editorWarpper.className = 'editor';
-        editorWarpper.style.width = '100%';
-        editorWarpper.style.height = '500px';
-        editorWarpper.style.backgroundColor = 'white';
 
         toolbar.id = 'toolbar-container';
 
