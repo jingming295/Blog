@@ -6,6 +6,9 @@ node_modules/
 *.js
 *.js.map
 
+# Json
+*.json
+
 # Compiled output
 dist/
 
