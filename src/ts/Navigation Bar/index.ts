@@ -588,9 +588,11 @@ export class NavRelated
 
     /**
      * 隐藏指定注册组件
-     * @param loginBoxItemDiv
-     * @param registerLink
-     * @param newUserSpan
+     * @param loginBoxItemDiv  login box item div
+     * @param registerLink link of register
+     * @param newUserSpan span of new user
+     * @param quickLoginButton button of quick login    
+     * @param loginBoxTitle title of login box
      */
     ShowLoginComponents(loginBoxItemDiv: HTMLDivElement, registerLink: HTMLAnchorElement,
         newUserSpan: HTMLSpanElement, quickLoginButton: HTMLButtonElement, loginBoxTitle: HTMLSpanElement)
