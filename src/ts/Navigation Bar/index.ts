@@ -104,7 +104,7 @@ export class NavRelated
                     userAvatarDiv.style.width = '38px';
                     userAvatarDiv.style.marginLeft = '20px';
 
-                    postArticleBtn.innerText = 'post';
+                    postArticleBtn.innerText = 'Post Article';
                     postArticleBtn.style.color = 'black';
                     postArticleBtn.style.fontSize = 'xx-small';
                     postArticleBtn.style.padding = '6px';

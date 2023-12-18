@@ -1,4 +1,4 @@
-import { UserData } from "../Navigation Bar/interface";
+import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 
 /**
  * 发送post的class
@@ -6,7 +6,7 @@ import { UserData } from "../Navigation Bar/interface";
 export class SendPost
 {
 
-    postWithUrlParams(api: string, params: Record<string, string | number | UserData>)
+    postWithUrlParams(api: string, params: Record<string, string | number | UD | AD>)
     {
         const url = `http://localhost:3000/${api}`;
     

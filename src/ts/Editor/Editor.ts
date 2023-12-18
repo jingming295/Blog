@@ -20,7 +20,6 @@ export class Editor {
             config: editorConfig,
             mode: 'default' // or 'simple'
         });
-
         const toolbarConfig: Partial<IToolbarConfig> = {
 
         };
@@ -45,7 +44,7 @@ export class Editor {
             index: 6,
             keys: [{
                 key: 'group-more-style', // 必填，要以 group 开头
-                title: '插入内容', // 必填
+                title: 'Insert', // 必填
                 menuKeys: ['fileHide', 'insertFormula'] // 下级菜单 key ，必填
             }]
 
@@ -58,7 +57,7 @@ export class Editor {
             config: toolbarConfig,
             mode: 'default' // or 'simple'
         });
-        const curToolbarConfig = toolbar.getConfig();
-        console.log('目前配置：', curToolbarConfig.toolbarKeys); // 当前菜单排序和分组
+        const curToolbarConfig = toolbar.getConfig();    
+        return editor;
     }
 }

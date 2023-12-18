@@ -30,7 +30,7 @@ class MyModalMenu implements IModalMenu {
     modalWidth: number;
 
     constructor () {
-        this.title = '插入下载文件(隐藏内容)';
+        this.title = 'Insert Download File (Hidden)';
         // this.iconSvg = '<svg >...</svg>'
         this.tag = 'button';
         this.showModal = true;

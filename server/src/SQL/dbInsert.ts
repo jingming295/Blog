@@ -23,4 +23,15 @@ export class DBInsert extends DatabaseConnector
         );
         return ResultSetHeader;
     }
+
+    async postArticle(title: string, content: string, area: string, tag: string, userID:number): Promise<ResultSetHeader>
+    {
+        const connection = await this.connection;
+        const [ResultSetHeader, fields]: [mysql.ResultSetHeader, mysql.FieldPacket[]] = await connection.query(
+            'INSERT INTO `tb_article`(`article_title`, `article_content`, `article_area`, `article_tag`, article_author) VALUES (?,?,?,?,?)',
+            [title, content, area, tag, userID]
+        );
+        return ResultSetHeader;
+        
+    }
 }

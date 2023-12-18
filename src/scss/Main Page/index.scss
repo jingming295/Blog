@@ -1,0 +1,24 @@
+.contentDiv{
+    .ArticleCard{
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: white;
+        color: black;
+        div{
+            width: 100%;
+        }
+        h4{
+            margin: 0px;
+            padding: 5px;
+            cursor: pointer;
+            float: left;
+        }
+        p{
+            padding: 5px;
+            float:left;
+        }
+    }
+
+}
