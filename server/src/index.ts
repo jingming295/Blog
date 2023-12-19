@@ -6,6 +6,8 @@ import registerRouter from './routes/Register';
 import userprofile from './routes/User Profile';
 import keepLogin from './routes/KeepLogin'
 import uploadArticle from './routes/UploadArticle';
+import getArticleCardData from './routes/GetArticleCardData';
+import getArticleContent from './routes/GetArticleContent';
 
 const app = express();
 const port = 3000;
@@ -14,7 +16,7 @@ app.use(express.json());
 
 app.use(cors());
 
-const routers = [loginRouter, registerRouter, userprofile, keepLogin, uploadArticle];
+const routers = [loginRouter, registerRouter, userprofile, keepLogin, uploadArticle, getArticleCardData, getArticleContent];
 app.use('/', routers);
 
 // 处理根路径

@@ -49,4 +49,22 @@ export class DBSelect extends DatabaseConnector
         );
         return rows as UserProfile[];
     }
+
+    async selectArticleCardData(){
+        const connection = await this.connection;
+        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+            'SELECT `article_id`, `article_title`, `u_name` FROM `tb_article` JOIN tb_user WHERE article_author = u_id'
+        );
+        return rows as {article_id: string, article_title: string, u_name: string}[];
+    }
+
+    async selectArticleContent(articleId: string){
+
+        const connection = await this.connection;
+        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+            'SELECT `article_id`, `article_title`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id',
+            [articleId]
+        );
+        return rows as {article_id: string, article_title: string, u_name: string, article_content:string}[];
+    }
 }

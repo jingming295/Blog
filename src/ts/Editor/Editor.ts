@@ -6,7 +6,7 @@ export class Editor {
     constructor () {
         const newMenu = new NewMenu();
         i18nChangeLanguage('en')
-        newMenu.init();
+        // newMenu.init();
     }
 
     createEditor () {
@@ -40,15 +40,15 @@ export class Editor {
             'emotion'
         ];
 
-        toolbarConfig.insertKeys = {
-            index: 6,
-            keys: [{
-                key: 'group-more-style', // 必填，要以 group 开头
-                title: 'Insert', // 必填
-                menuKeys: ['fileHide', 'insertFormula'] // 下级菜单 key ，必填
-            }]
+        // toolbarConfig.insertKeys = {
+        //     index: 6,
+        //     keys: [{
+        //         key: 'group-more-style', // 必填，要以 group 开头
+        //         title: 'Insert', // 必填
+        //         menuKeys: ['insertFormula'] // 下级菜单 key ，必填
+        //     }]
 
-        };
+        // };
 
         // eslint-disable-next-line no-unused-vars
         const toolbar = createToolbar({

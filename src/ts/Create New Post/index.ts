@@ -5,7 +5,7 @@ import { Editor } from "../Editor/Editor";
 import { ArticleData, UserData } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import '../../scss/Editor/style.scss';
-import '../../scss/New Post Page/index.scss';
+import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
 export class CreateNewPost
 {

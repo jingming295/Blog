@@ -43,24 +43,25 @@ export class MakeUserProfile
                             this.CreateContent(profileData);
                         } else {
                             const changePage = new ChangePage();
-                            changePage.toIndex();
+                            changePage.to404Page();
                             return;
                         }
-
-
-                        
                     })
                     .catch(error =>
                     {
                         console.log(error);
+                        const changePage = new ChangePage();
+                        changePage.to404Page();
                     });
             } else
             {
-                // window.location.href = '404.html';
+                const changePage = new ChangePage();
+                changePage.to404Page();
             }
         } else if (hash === '')
         {
-            // window.location.href = '404.html';
+            const changePage = new ChangePage();
+            changePage.to404Page();
         }
     };
 
