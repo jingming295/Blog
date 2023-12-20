@@ -9,12 +9,6 @@ export class MainPage
     private handlePopMsg = new HandlePopMsg();
     init = () =>
     {
-        if (!(document.getElementById('navigationBar')))
-        {
-            const navRelated = new NavRelated();
-            navRelated.MakeNav();
-        }
-        this.DeletePreviousPageComponent();
         this.createContentDiv();
     };
 
@@ -23,7 +17,6 @@ export class MainPage
 
         function createArticleCard(title: string, author: string, id: string)
         {
-            const changePage = new ChangePage();
             const ArticleCard = document.createElement('div');
 
             const TitleWrapper = document.createElement('div');
@@ -36,6 +29,7 @@ export class MainPage
 
 
             ArticleTitle.onclick = () => {
+                const changePage = new ChangePage(true);
                 changePage.toArticle(id);
             }
 
@@ -92,13 +86,4 @@ export class MainPage
             throw new Error(error);
         });
     }
-
-    DeletePreviousPageComponent = () =>
-    {
-        const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv)
-        {
-            contentDiv.remove();
-        }
-    };
 }

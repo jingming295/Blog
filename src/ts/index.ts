@@ -7,7 +7,7 @@ import "../scss/Nav/index.scss";
  * @class
  * @classdesc Handles index page functionality.
  */
-class IndexPageHandler
+class init
 {
     /**
      * Constructor for ActivationPage class.
@@ -46,16 +46,19 @@ class IndexPageHandler
         } else if (hash.startsWith('#/404'))
         {
             changePage.to404Page();
-        }
-        else
+        } else if (hash.startsWith('#/manage%20article'))
         {
+            changePage.toManageArticle();
+        } else {
             changePage.toIndex();
         }
     }
+
+    
 }
 
 window.addEventListener('load', () =>
 {
-    const indexPageHandler = new IndexPageHandler();
-    indexPageHandler.init();
+    const i = new init();
+    i.init();
 });

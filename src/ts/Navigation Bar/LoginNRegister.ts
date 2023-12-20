@@ -82,7 +82,7 @@ export class HandleLoginNRegister
         sendPost.postWithUrlParams('register', params)
             .then((response) =>
             {
-                console.log(response)
+                console.log(response);
                 handlePopMsg.popMsg(response.message);
             })
             .catch((error: any) =>
@@ -115,7 +115,7 @@ export class HandleLoginNRegister
                     localStorage.setItem('UserData', JSON.stringify(response.data));
                     const navRelated = new NavRelated();
                     navRelated.closeLoginnRegisterPg();
-                    navRelated.MakeNav();
+                    navRelated.changeNavBar();
                     const warpLoginnregister = document.getElementById('warpLoginnregister');
                     await this.delay(150);
                     warpLoginnregister?.remove();

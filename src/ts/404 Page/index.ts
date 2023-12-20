@@ -7,12 +7,6 @@ export class Page404{
         const site = document.body;
         if (site)
         {
-            if (!(document.getElementById('navigationBar')))
-            {
-                const navRelated = new NavRelated();
-                navRelated.MakeNav();
-            }
-            this.DeletePreviousPageComponent();
             this.append404Page(site)
         }
     }
@@ -36,13 +30,4 @@ export class Page404{
         site.appendChild(contentDiv);
 
     }
-
-    private DeletePreviousPageComponent = () =>
-    {
-        const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv)
-        {
-            contentDiv.remove();
-        }
-    };
 }

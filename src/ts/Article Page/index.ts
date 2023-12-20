@@ -15,38 +15,23 @@ export class MakeArticlePage
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                if (!(document.getElementById('navigationBar')))
-                {
-                    const navRelated = new NavRelated();
-                    navRelated.MakeNav();
-                }
-                this.DeletePreviousPageComponent();
                 this.makeArticlePage(id);
             } else
             {
 
-                const changePage = new ChangePage();
+                const changePage = new ChangePage(true);
 
                 changePage.to404Page();
             }
         } else
         {
-            const changePage = new ChangePage();
+            const changePage = new ChangePage(true);
             changePage.to404Page();
         }
 
 
 
     }
-
-    private DeletePreviousPageComponent = () =>
-    {
-        const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv)
-        {
-            contentDiv.remove();
-        }
-    };
 
     private async makeArticlePage(id: string)
     {
@@ -56,6 +41,7 @@ export class MakeArticlePage
             const contentDiv = document.createElement('div');
             contentDiv.id = 'contentDiv';
             site.appendChild(contentDiv);
+            console.log(contentDiv)
 
             const data = await this.getArticleContent(id);
             if(data){
@@ -97,12 +83,12 @@ export class MakeArticlePage
             } else
             {
                 this.handlePopMsg.popMsg(response.message);
-                const changePage = new ChangePage();
+                const changePage = new ChangePage(true);
                 changePage.to404Page();
             }
         }).catch((error: any) =>
         {
-            const changePage = new ChangePage();
+            const changePage = new ChangePage(true);
             changePage.to404Page();
         });
 

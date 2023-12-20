@@ -3,251 +3,254 @@ import { HandleLoginNRegister } from "./LoginNRegister";
 import { HandlePopMsg } from "./popMsg";
 import { SendPost } from "../Send Fetch";
 import { UserData } from "./interface";
+import { UserVerification } from "../User Verification";
 /**
  * 顶栏相关
  * @class
  */
 export class NavRelated
 {
+    private navigationBar: HTMLDivElement;
     private handlePopMsg: HandlePopMsg;
+    // private changePage = new ChangePage();
     constructor()
     {
+        const navigationBar = document.createElement('div');
+        navigationBar.className = 'navigationBar';
+        navigationBar.id = 'navigationBar';
+
+        this.navigationBar = navigationBar;
         this.handlePopMsg = new HandlePopMsg();
+
+        if (!document.getElementById('navigationBar'))
+        {
+            const appContainer = document.body;
+            appContainer.appendChild(this.navigationBar);
+        }
     }
     /**
      * 生成顶栏
      */
     MakeNav()
     {
-        /**
-         * 生成右边的横幅
-         */
-        const rightBanner = (navigationContainer: HTMLDivElement) =>
+
+        const navigationContainer = document.createElement('div');
+        navigationContainer.className = 'navigation-container';
+        navigationContainer.id = 'navigation-container';
+        this.navigationBar.appendChild(navigationContainer);
+        this.createLeftBanner(navigationContainer);
+
+        this.createRightBanner(navigationContainer);
+
+
+        if (localStorage.getItem('UserData'))
         {
-            if (document.getElementById('rightBanner'))
-            {
-                DeleteComponent();
-                return;
-            }
-            const rightBanner = document.createElement('div');
-            rightBanner.className = 'rightBanner';
-            rightBanner.id = 'rightBanner';
-            navigationContainer.appendChild(rightBanner);
+            // do nothings
+        } else
+        {
+            this.MakeLoginNRegister();
+        }
 
-            const userData = localStorage.getItem('UserData');
-            if (userData)
-            {
-                const sendPost = new SendPost();
 
-                if (userData !== null)
+    }
+
+    /**
+     * 生成右边的横幅
+     */
+    private async createRightBanner(navigationContainer: HTMLDivElement)
+    {
+        const aprUserComponent = (avatar: string, id: string) =>
+        {
+            const rightBanner = document.getElementById('rightBanner');
+            if (rightBanner)
+            {
+                const userAvatarDiv = document.createElement('div');
+                const postArticleDiv = document.createElement('div');
+                const manageArticleDiv = document.createElement('div');
+                const userAvatarImg = document.createElement('img');
+                const postArticleBtn = document.createElement('div');
+                const manageArticleBtn = document.createElement('div');
+
+                postArticleDiv.className = 'articleDiv';
+                manageArticleDiv.className = 'articleDiv';
+
+                userAvatarDiv.className = 'userAvatarWrapper';
+
+                postArticleBtn.className = 'articleBtn';
+                postArticleBtn.innerText = 'Post Article';
+                postArticleBtn.onclick = () =>
                 {
-                    const parseUserData: UserData = JSON.parse(userData);
-                    const params = {
-                        UserData: parseUserData,
+                    const changePage = new ChangePage(true);
+                    changePage.toPostArticle();
+                };
 
-                    };
-                    sendPost.postWithUrlParams('keeplogin', params)
-                        .then((response) =>
-                        {
-                            if (response.code === 0)
-                            {
-                                aprUserComponent(parseUserData.userData.avatar, parseUserData.userData.id.toString());
-
-                            } else
-                            {
-                                this.handlePopMsg.popMsg(response.message)
-                                localStorage.clear();
-                                const navRelated = new NavRelated();
-                                navRelated.MakeNav();
-                            }
-                        })
-                        .catch((error: any) =>
-                        {
-                            console.log(error);
-                        });
-                } else
+                manageArticleBtn.className = 'articleBtn';
+                manageArticleBtn.innerText = 'Manage Article';
+                manageArticleBtn.onclick = () =>
                 {
-                    localStorage.clear();
-                    location.reload();
-                }
-            } else
-            {
-                aprLoginComponent();
-            }
+                    const changePage = new ChangePage(true);
+                    changePage.toManageArticle();
+                };
 
-            function aprLoginComponent()
-            {
-                const btnLogin = document.createElement('button');
-                btnLogin.className = 'btnLogin';
-                btnLogin.id = 'btnLogin';
-                btnLogin.textContent = 'Login';
-                const btnRegister = document.createElement('button');
-                btnRegister.className = 'btnRegister';
-                btnRegister.id = 'btnRegister';
-                btnRegister.textContent = 'Register';
-                rightBanner.appendChild(btnLogin);
-                rightBanner.appendChild(btnRegister);
-            }
-
-            function aprUserComponent(avatar: string, id: string)
-            {
-                const changePage = new ChangePage();
-                const rightBanner = document.getElementById('rightBanner');
-                if (rightBanner)
+                userAvatarImg.className = 'userAvatar';
+                userAvatarImg.setAttribute('UserId', id);
+                userAvatarImg.addEventListener('click', () =>
                 {
-                    const userAvatarDiv = document.createElement('div');
-                    const postArticleDiv = document.createElement('div');
-                    const userAvatarImg = document.createElement('img');
-                    const postArticleBtn = document.createElement('div');
-
-                    userAvatarDiv.style.height = '38px';
-                    userAvatarDiv.style.width = '38px';
-                    userAvatarDiv.style.marginLeft = '20px';
-
-                    postArticleBtn.innerText = 'Post Article';
-                    postArticleBtn.style.color = 'black';
-                    postArticleBtn.style.fontSize = 'xx-small';
-                    postArticleBtn.style.padding = '6px';
-                    postArticleBtn.style.cursor = 'pointer';
-                    postArticleBtn.style.backgroundColor = '#FF69B4';
-                    postArticleBtn.style.color = 'white';
-                    postArticleBtn.style.borderRadius = '15px';
-                    postArticleBtn.addEventListener('click', changePage.toPostArticle);
-
-                    userAvatarImg.style.width = '100%';
-                    userAvatarImg.style.height = '100%';
-                    userAvatarImg.style.borderRadius = '50%';
-                    userAvatarImg.style.objectFit = 'cover';
-                    userAvatarImg.setAttribute('UserId', id);
-                    userAvatarImg.addEventListener('click', () =>
+                    const avatarId = userAvatarImg.getAttribute('UserId');
+                    if (avatarId !== null)
                     {
-                        const avatarId = userAvatarImg.getAttribute('UserId');
-                        if (avatarId !== null)
-                        {
-                            changePage.toUserProfile(avatarId);
-                        }
-                    });
+                        const changePage = new ChangePage(true);
+                        changePage.toUserProfile(avatarId);
+                    }
+                });
 
-                    userAvatarDiv.style.cursor = 'pointer';
-                    userAvatarImg.src = '../avatar/' + avatar;
-                    userAvatarDiv.appendChild(userAvatarImg);
-                    postArticleDiv.appendChild(postArticleBtn);
-                    rightBanner.appendChild(postArticleDiv);
-                    rightBanner.appendChild(userAvatarDiv);
-                    navigationContainer.appendChild(rightBanner);
-                }
-            }
-
-            function DeleteComponent()
-            {
-                const rightBanner = document.getElementById('rightBanner');
-                if (rightBanner)
-                {
-                    rightBanner.remove();
-                    const navRelated = new NavRelated();
-                    navRelated.MakeNav();
-                }
+                userAvatarImg.src = '../avatar/' + avatar;
+                userAvatarDiv.appendChild(userAvatarImg);
+                postArticleDiv.appendChild(postArticleBtn);
+                manageArticleDiv.appendChild(manageArticleBtn);
+                rightBanner.appendChild(postArticleDiv);
+                rightBanner.appendChild(manageArticleDiv);
+                rightBanner.appendChild(userAvatarDiv);
+                navigationContainer.appendChild(rightBanner);
             }
         };
 
-        if (document.getElementById('navigationBar'))
+        if (document.getElementById('rightBanner'))
         {
-            const navigationContainer = document.getElementById('navigation-container');
-            if (navigationContainer instanceof HTMLDivElement)
+            DeleteComponent();
+            return;
+        }
+        const rightBanner = document.createElement('div');
+        rightBanner.className = 'rightBanner';
+        rightBanner.id = 'rightBanner';
+        navigationContainer.appendChild(rightBanner);
+
+        const userData = localStorage.getItem('UserData');
+        if (userData)
+        {
+
+            if (userData !== null)
             {
-                rightBanner(navigationContainer);
-                this.MakeLoginNRegister();
-                this.addButtonListener();
+                const parseUserData: UserData = JSON.parse(userData);
+                const userVerification = new UserVerification();
+                if (await userVerification.verification())
+                {
+                    aprUserComponent(parseUserData.userData.avatar, parseUserData.userData.id.toString());
+                } else
+                {
+                    localStorage.clear();
+                    const navRelated = new NavRelated();
+                    navRelated.MakeNav();
+                }
+            } else
+            {
+                localStorage.clear();
+                location.reload();
             }
         } else
         {
-            const navigationBar = document.createElement('div');
-            navigationBar.style.userSelect = 'none';
-            navigationBar.className = 'navigationBar';
-            navigationBar.id = 'navigationBar';
-
-            const navigationContainer = document.createElement('div');
-            navigationContainer.className = 'navigation-container';
-            navigationContainer.id = 'navigation-container';
-            navigationBar.appendChild(navigationContainer);
-
-            leftBanner(navigationContainer);
-            rightBanner(navigationContainer);
-            const appContainer = document.body;
-            if (appContainer)
-            {
-                appContainer.appendChild(navigationBar);
-                if (localStorage.getItem('UserData') && localStorage.getItem('EncUserData'))
-                {
-                    // 在这里输入要做的东西
-                } else
-                {
-                    this.MakeLoginNRegister();
-                }
-            }
+            aprLoginComponent();
         }
 
-        /**
-         * 生成右边的横幅
-         */
-        function leftBanner(navigationContainer: HTMLDivElement)
+        function aprLoginComponent()
         {
-            const leftBanner = document.createElement('div');
-            // rightBanner.className = 'rightBanner';
-            leftBanner.className = 'leftBanner';
-            aprLogo();
-            aprMenu();
-            navigationContainer.appendChild(leftBanner);
+            const btnLogin = document.createElement('button');
+            btnLogin.className = 'btnLogin';
+            btnLogin.id = 'btnLogin';
+            btnLogin.textContent = 'Login';
+            const btnRegister = document.createElement('button');
+            btnRegister.className = 'btnRegister';
+            btnRegister.id = 'btnRegister';
+            btnRegister.textContent = 'Register';
+            rightBanner.appendChild(btnLogin);
+            rightBanner.appendChild(btnRegister);
+        }
 
-            /**
-             * 生成logo
-             */
-            function aprLogo()
+        function DeleteComponent()
+        {
+            const rightBanner = document.getElementById('rightBanner');
+            if (rightBanner)
             {
-                const changePage = new ChangePage();
-                const logo = document.createElement('div');
-                logo.className = 'logo';
-
-                const logoLink = document.createElement('a');
-                logoLink.rel = 'home';
-                logoLink.style.cursor = 'pointer';
-                logoLink.addEventListener('click', changePage.toIndex);
-
-                const siteTitle = document.createElement('p');
-                siteTitle.className = 'site-title';
-                siteTitle.textContent = 'Blog';
-
-                logoLink.appendChild(siteTitle);
-                logo.appendChild(logoLink);
-                leftBanner.appendChild(logo);
+                rightBanner.remove();
+                const navRelated = new NavRelated();
+                navRelated.changeNavBar();
             }
+        }
+    };
 
-            function aprMenu()
+    /**
+     * 生成右边的横幅
+     */
+    private createLeftBanner(navigationContainer: HTMLDivElement)
+    {
+        const leftBanner = document.createElement('div');
+        leftBanner.className = 'leftBanner';
+        aprLogo();
+        aprMenu();
+        navigationContainer.appendChild(leftBanner);
+
+        /**
+         * 生成logo
+         */
+        function aprLogo()
+        {
+
+            const logo = document.createElement('div');
+            logo.className = 'logo';
+            const logoLink = document.createElement('a');
+            logoLink.rel = 'home';
+            logoLink.onclick = () =>
             {
-                const ul = document.createElement('ul');
-                ul.style.marginLeft = '20px';
-                const gameLi = document.createElement('li');
-                const gameLink = document.createElement('a');
-                gameLink.href = '';
-                gameLink.textContent = 'Programming';
-                gameLi.appendChild(gameLink);
-                ul.appendChild(gameLi);
+                const changePage = new ChangePage(true);
+                changePage.toIndex();
+            };
 
-                const resourceLi = document.createElement('li');
-                const resourceLink = document.createElement('a');
-                resourceLink.href = '';
-                resourceLink.textContent = 'Anime';
-                resourceLi.appendChild(resourceLink);
-                ul.appendChild(resourceLi);
-                leftBanner.appendChild(ul);
-            }
+            const siteTitle = document.createElement('p');
+            siteTitle.className = 'site-title';
+            siteTitle.textContent = 'Blog';
+
+            logoLink.appendChild(siteTitle);
+            logo.appendChild(logoLink);
+            leftBanner.appendChild(logo);
+        }
+
+        function aprMenu()
+        {
+            const ul = document.createElement('ul');
+            const gameLi = document.createElement('li');
+            const gameLink = document.createElement('a');
+            gameLink.href = '';
+            gameLink.textContent = 'Programming';
+            gameLi.appendChild(gameLink);
+            ul.appendChild(gameLi);
+
+            const resourceLi = document.createElement('li');
+            const resourceLink = document.createElement('a');
+            resourceLink.href = '';
+            resourceLink.textContent = 'Anime';
+            resourceLi.appendChild(resourceLink);
+            ul.appendChild(resourceLi);
+            leftBanner.appendChild(ul);
+        }
+    }
+
+    changeNavBar()
+    {
+        console.log('changeNavBar start');
+        const navigationContainer = document.getElementById('navigation-container');
+        if (navigationContainer instanceof HTMLDivElement)
+        {
+            this.createRightBanner(navigationContainer);
+            this.MakeLoginNRegister();
+            this.addButtonListener();
+
         }
     }
 
     /**
      * 生成登录注册组件
      */
-    MakeLoginNRegister()
+    private MakeLoginNRegister()
     {
         if (document.getElementById('warpLoginnregister'))
         {
@@ -256,7 +259,6 @@ export class NavRelated
         const loginRegisterDiv = document.createElement('div');
         loginRegisterDiv.className = 'warpLoginnregister';
         loginRegisterDiv.id = 'warpLoginnregister';
-        loginRegisterDiv.style.top = '0';
         const formElement = document.createElement('div');
         loginBox();
         form();
@@ -488,7 +490,7 @@ export class NavRelated
     /**
      * 为导航栏上的按钮添加listener
      */
-    addButtonListener()
+    private addButtonListener()
     {
         const navRelated = new NavRelated();
         const btnLogin = document.getElementById('btnLogin');
@@ -562,7 +564,7 @@ export class NavRelated
      * @param registerLink
      * @param newUserSpan
      */
-    ShowRegisterComponents(loginBoxItemDiv: HTMLDivElement, registerLink: HTMLAnchorElement,
+    private ShowRegisterComponents(loginBoxItemDiv: HTMLDivElement, registerLink: HTMLAnchorElement,
         newUserSpan: HTMLSpanElement, quickLoginButton: HTMLButtonElement, loginBoxTitle: HTMLSpanElement)
     {
         loginBoxItemDiv.style.height = '45px';
@@ -593,7 +595,7 @@ export class NavRelated
      * @param quickLoginButton button of quick login    
      * @param loginBoxTitle title of login box
      */
-    ShowLoginComponents(loginBoxItemDiv: HTMLDivElement, registerLink: HTMLAnchorElement,
+    private ShowLoginComponents(loginBoxItemDiv: HTMLDivElement, registerLink: HTMLAnchorElement,
         newUserSpan: HTMLSpanElement, quickLoginButton: HTMLButtonElement, loginBoxTitle: HTMLSpanElement)
     {
         loginBoxItemDiv.style.height = '0';

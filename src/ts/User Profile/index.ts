@@ -17,12 +17,6 @@ export class MakeUserProfile
     Init = () =>
     {
         const sendPost = new SendPost();
-        if (!(document.getElementById('navigationBar')))
-        {
-            const navRelated = new NavRelated();
-            navRelated.MakeNav();
-        }
-        this.DeletePreviousPageComponent();
 
         const hash = window.location.hash;
         if (hash.startsWith('#/u'))
@@ -42,7 +36,7 @@ export class MakeUserProfile
                             const profileData:ProfileData = response.data as ProfileData;
                             this.CreateContent(profileData);
                         } else {
-                            const changePage = new ChangePage();
+                            const changePage = new ChangePage(true);
                             changePage.to404Page();
                             return;
                         }
@@ -50,32 +44,21 @@ export class MakeUserProfile
                     .catch(error =>
                     {
                         console.log(error);
-                        const changePage = new ChangePage();
+                        const changePage = new ChangePage(true);
                         changePage.to404Page();
                     });
             } else
             {
-                const changePage = new ChangePage();
+                const changePage = new ChangePage(true);
                 changePage.to404Page();
             }
         } else if (hash === '')
         {
-            const changePage = new ChangePage();
+            const changePage = new ChangePage(true);
             changePage.to404Page();
         }
     };
 
-    /**
-     * 删除前一个页面的组件
-     */
-    DeletePreviousPageComponent = () =>
-    {
-        const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv)
-        {
-            contentDiv.remove();
-        }
-    };
 
     /**
      * 创建这个页面的组件
@@ -177,7 +160,7 @@ export class MakeUserProfile
 
                 const userDesc = document.createElement('p');
                 userDesc.style.color = 'black';
-                userDesc.textContent = '施工中';
+                userDesc.textContent = 'This is a user description.';
 
                 userNameWarp.appendChild(username);
                 userDataWarp.appendChild(userNameWarp);
@@ -256,8 +239,8 @@ export class MakeUserProfile
             {
                 let i = 0;
                 const arr: string[][] = [
-                    ['昵称: ', profileData.name],
-                    ['邮箱: ', profileData.email]
+                    ['Name: ', profileData.name],
+                    ['Email: ', profileData.email]
                 ];
 
                 for (i = 0; i < arr.length; i++)

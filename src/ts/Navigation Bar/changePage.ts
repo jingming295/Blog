@@ -4,7 +4,25 @@ import { MakeUserProfile } from '../User Profile';
 import { CreateNewPost } from '../Create New Post';
 import { MakeArticlePage } from '../Article Page';
 import { Page404 } from '../404 Page';
+import { ManageArticle } from '../Manage Artivle Page';
+import { NavRelated } from '.';
 export class ChangePage {
+    constructor(DeletePrevious:boolean = false) {
+        if (!(document.getElementById('navigationBar')))
+        {
+            const navRelated = new NavRelated();
+            navRelated.MakeNav();
+        }
+        if(DeletePrevious){
+            const contentDiv = document.getElementById('contentDiv');
+            // console.log(contentDiv)
+            if (contentDiv)
+            {
+                contentDiv.remove();
+            }
+        }
+
+    }
     toUserProfile (id:string) {
         document.title = 'User';
         const makeUserProfile = new MakeUserProfile();
@@ -40,5 +58,12 @@ export class ChangePage {
         const page404 = new Page404();
 
         page404.init();
+    }
+
+    toManageArticle(){
+        document.title = 'Manage Article';
+        window.location.href = urlconfig.url + '/#/manage article';
+        const manageArticle = new ManageArticle();
+        manageArticle.init();
     }
 }

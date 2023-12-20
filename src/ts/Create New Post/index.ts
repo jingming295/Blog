@@ -1,5 +1,4 @@
 import { SendPost } from "../Send Fetch";
-import { NavRelated } from "../Navigation Bar";
 import { ChangePage } from "../Navigation Bar/changePage";
 import { Editor } from "../Editor/Editor";
 import { ArticleData, UserData } from "../Navigation Bar/interface";
@@ -7,6 +6,7 @@ import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import '../../scss/Editor/style.scss';
 import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
+import { UserVerification } from "../User Verification";
 export class CreateNewPost
 {
     private handlePopMsg: HandlePopMsg;
@@ -14,67 +14,14 @@ export class CreateNewPost
     {
         this.handlePopMsg = new HandlePopMsg();
     }
-    init()
+    async init()
     {
-        this.checkOnlineStatus();
-        if (!(document.getElementById('navigationBar')))
+        const userVerification = new UserVerification();
+        if (await userVerification.verification())
         {
-            const navRelated = new NavRelated();
-            navRelated.MakeNav();
+            this.createPostComponents();
         }
     }
-
-    checkOnlineStatus()
-    {
-
-        const sendPost = new SendPost();
-        const UserData = localStorage.getItem('UserData');
-        if (UserData !== null)
-        {
-            const parseUserData: UserData = JSON.parse(UserData);
-            const params = {
-                UserData: parseUserData,
-            };
-            sendPost.postWithUrlParams('keeplogin', params)
-                .then((response) =>
-                {
-                    if (response.code === 0)
-                    {
-                        this.DeletePreviousPageComponent();
-                        this.createPostComponents();
-                    } else
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                        localStorage.clear();
-                        const changePage = new ChangePage();
-                        changePage.toIndex();
-                        location.reload();
-                    }
-                })
-                .catch((error: any) =>
-                {
-                    console.log(error);
-                });
-        } else
-        {
-            localStorage.clear();
-            const changePage = new ChangePage();
-            changePage.toIndex();
-            location.reload();
-        }
-    }
-
-    /**
-     * 删除前一个页面的组件
-     */
-    DeletePreviousPageComponent = () =>
-    {
-        const contentDiv = document.getElementById('contentDiv');
-        if (contentDiv)
-        {
-            contentDiv.remove();
-        }
-    };
 
     createPostComponents()
     {
@@ -144,21 +91,22 @@ export class CreateNewPost
 
             submitWrapper.className = 'submitWrapper';
 
-            submitBtn.className = 'submitBtn'
+            submitBtn.className = 'submitBtn';
             submitBtn.innerHTML = 'Submit';
 
             submitWrapper.appendChild(submitBtn);
             postWrapper.appendChild(submitWrapper);
 
-            submitBtn.onclick = () => {
+            submitBtn.onclick = () =>
+            {
                 const titleInput = document.getElementById('titleInput') as HTMLInputElement;
                 const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
                 const area = areaSelect.value;
                 const title = titleInput.value;
                 this.UploadArticle(title, editor.getHtml(), area, 'programming');
-            }
+            };
 
-        }
+        };
         contentDiv.appendChild(postWrapper);
         body.appendChild(contentDiv);
         createTitleInput();
@@ -166,21 +114,22 @@ export class CreateNewPost
         createSubmit(editor);
     }
 
-    UploadArticle(title:string, article:string, area:string, tag:string){
+    UploadArticle(title: string, article: string, area: string, tag: string)
+    {
         const sendPost = new SendPost();
         const UserData = localStorage.getItem('UserData');
         if (UserData !== null)
         {
             const parseUserData: UserData = JSON.parse(UserData);
-            const ArticleData:ArticleData = {
-                title:title,
-                article:article,
-                area:area,
-                tag:tag
-            }
+            const ArticleData: ArticleData = {
+                title: title,
+                article: article,
+                area: area,
+                tag: tag
+            };
             const params = {
                 UserData: parseUserData,
-                ArticleData:ArticleData
+                ArticleData: ArticleData
             };
             sendPost.postWithUrlParams('uploadArticle', params)
                 .then((response) =>
@@ -200,7 +149,7 @@ export class CreateNewPost
         } else
         {
             localStorage.clear();
-            const changePage = new ChangePage();
+            const changePage = new ChangePage(true);
             changePage.toIndex();
             location.reload();
         }
