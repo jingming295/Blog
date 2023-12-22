@@ -14,6 +14,7 @@ body, div, input, ul, li, a, button{
 }
 
 body {
+	height: 100%;
 	margin: 0;
 	list-style-type: none;
 	background-color: $background-color_1;
@@ -27,6 +28,11 @@ body {
 	text-decoration: none;
 	fill: #ffffff;
 }
+
+.contentDiv{
+	height:100%;
+}
+
 ul {
 	margin: 0;
 	padding: 0;

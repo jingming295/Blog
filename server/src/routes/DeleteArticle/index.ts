@@ -1,8 +1,7 @@
 // src/routes/Register/index.ts
 import express, { Request, Response } from 'express';
 import { LoginData as LD } from '../../Return To Client/interface';
-import { UploadArticle } from './performUploadArticle';
-import { ArticleData as AD } from './interface';
+import { DeleteArticle } from './PerformDeleteArticle';
 const router = express.Router();
 
 function transformUserData(body: any): LD {
@@ -17,16 +16,18 @@ function transformUserData(body: any): LD {
     } as LD;
 }
 
-router.post('/uploadArticle', async (req: Request, res: Response) => {
-    const body = req.body as { UserData: LD, ArticleData: AD };
-    if (body.UserData === undefined || body.ArticleData === undefined) {
-        res.json({ code: -101, message: 'Data is not complete' });
+router.post('/deleteArticle', async (req: Request, res: Response) => {
+    const body = req.body as { UserData: LD, articleID: number };
+    console.log(body)
+    if(body.UserData === undefined || body.articleID === undefined){
+        res.json({code: -101, message: 'Data is not complete'});
         return;
     }
-    const uploadArticle = new UploadArticle();
+
+    const deleteArticle = new DeleteArticle();
     const transformedUserData = transformUserData(body);
-    const data = {UserData: transformedUserData, ArticleData: body.ArticleData};
-    const returndata = await uploadArticle.performUploadArticle(data)
+    const data = {UserData: transformedUserData, ArticleId: body.articleID};
+    const returndata = await deleteArticle.performDeleteArticle(data)
     res.json(returndata);
 });
 

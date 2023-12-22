@@ -2,7 +2,7 @@ import * as mysql from 'mysql2/promise';
 import DatabaseConnector from './dbConnector';
 import { ResultSetHeader } from 'mysql2/promise';
 
-export class DBInsert extends DatabaseConnector
+export class DBUpdate extends DatabaseConnector
 {
     private _connectionPromise: Promise<mysql.Connection> | undefined;
 
@@ -31,19 +31,11 @@ export class DBInsert extends DatabaseConnector
         }
     }
 
-    async Register(username: string, email: string, hashedPassword: string): Promise<ResultSetHeader>
+    async DeleteArticle(articleID:number): Promise<ResultSetHeader>
     {
         return this.executeQuery(
-            'INSERT INTO `tb_user`(`u_name`, `u_email`, `u_password`, `u_class`, `u_active`) VALUES (?,?,?,0,1)',
-            [username, email, hashedPassword]
-        );
-    }
-
-    async postArticle(title: string, content: string, area: string, tag: string, userID: number): Promise<ResultSetHeader>
-    {
-        return this.executeQuery(
-            'INSERT INTO `tb_article`(`article_title`, `article_content`, `article_area`, `article_tag`, article_author) VALUES (?,?,?,?,?)',
-            [title, content, area, tag, userID]
+            'UPDATE `tb_article` SET `article_alive`=0 WHERE `article_id` = ?',
+            [articleID]
         );
     }
 }

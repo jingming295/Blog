@@ -1,7 +1,6 @@
 import { ChangePage } from "./changePage";
 import { HandleLoginNRegister } from "./LoginNRegister";
 import { HandlePopMsg } from "./popMsg";
-import { SendPost } from "../Send Fetch";
 import { UserData } from "./interface";
 import { UserVerification } from "../User Verification";
 /**

@@ -5,6 +5,7 @@ import { UserResult, UserProfile } from './interface';
 export class DBSelect extends DatabaseConnector
 {
     private _connectionPromise: Promise<mysql.Connection> | undefined;
+
     private get connection(): Promise<mysql.Connection>
     {
         if (!this._connectionPromise)
@@ -14,57 +15,67 @@ export class DBSelect extends DatabaseConnector
         return this._connectionPromise;
     }
 
-    /**
-     * return user id, class, name
-     * @param email email of user
-     * @param hashedPassword hashed password after salt
-     * @returns 
-     */
-    async login(email: string, hashedPassword: string): Promise<UserResult[]>
+    private async executeQuery<T>(query: string, values?: (string | number)[]): Promise<T[]>
     {
         const connection = await this.connection;
-        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+        try
+        {
+            const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+                query,
+                values
+            );
+            return rows as T[];
+        } finally
+        {
+            connection.end();
+        }
+    }
+
+    async login(email: string, hashedPassword: string): Promise<UserResult[]>
+    {
+        return this.executeQuery<UserResult>(
             'SELECT `u_id`, `u_class`, `u_name`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_email` = ? && `u_password` = ?',
             [email, hashedPassword]
         );
-        return rows as UserResult[];
     }
 
     async selectEmail(email: string): Promise<{ id: string; }[]>
     {
-        const connection = await this.connection;
-        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+        return this.executeQuery<{ id: string; }>(
             'SELECT `u_id` FROM `tb_user` WHERE `u_email` = ?',
             [email]
         );
-        return rows as { id: string; }[];
     }
 
-    async selectUserProfile(id: number)
+
+    async selectUserProfile(id: number): Promise<UserProfile[]>
     {
-        const connection = await this.connection;
-        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+        return this.executeQuery<UserProfile>(
             'SELECT `u_id`, `u_name`, `u_email`, `u_name`, `u_class`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_id` = ?',
             [id]
         );
-        return rows as UserProfile[];
     }
 
-    async selectArticleCardData(){
-        const connection = await this.connection;
-        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+    async selectArticleCardData(): Promise<{ article_id: string, article_title: string, u_name: string; }[]>
+    {
+        return this.executeQuery<{ article_id: string, article_title: string, u_name: string; }>(
             'SELECT `article_id`, `article_title`, `u_name` FROM `tb_article` JOIN tb_user WHERE article_author = u_id'
         );
-        return rows as {article_id: string, article_title: string, u_name: string}[];
     }
 
-    async selectArticleContent(articleId: string){
-
-        const connection = await this.connection;
-        const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+    async selectArticleContent(articleId: string): Promise<{ article_id: string, article_title: string, u_name: string, article_content: string; }[]>
+    {
+        return this.executeQuery<{ article_id: string, article_title: string, u_name: string, article_content: string; }>(
             'SELECT `article_id`, `article_title`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id',
             [articleId]
         );
-        return rows as {article_id: string, article_title: string, u_name: string, article_content:string}[];
+    }
+
+    async selectArticleCardByID(userId: number): Promise<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }[]>
+    {
+        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
+            'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_author = ? && article_alive = 1',
+            [userId]
+        );
     }
 }
