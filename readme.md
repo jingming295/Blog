@@ -6,6 +6,8 @@
 
 This project include backend and frontend. Backend files all in server/
 
+Before start, please make sure your computer has Node.js installed https://nodejs.org/en
+
 To start, please clone this project to your pc.
 
 Import the sql into your database name blog
