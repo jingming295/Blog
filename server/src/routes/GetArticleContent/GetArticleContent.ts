@@ -15,13 +15,14 @@ export class GetArticleContent{
                     articleId: item.article_id,
                     articleTitle: item.article_title,
                     articleAuthor: item.u_name,
-                    articleContent: item.article_content
+                    articleContent: item.article_content,
+                    articleArea: item.article_area
                 };
             });
             if(data.length === 0){
                 return this.returnData.returnClientData(-101, 'Article Not Found');
             }
-            return this.returnData.returnClientData(0, 'sucessful', data);
+            return this.returnData.returnClientData(0, 'sucessful', data[0]);
         } catch (error) {
             const returnData = this.returnData.returnClientData(-400, 'Error');
             console.log(error);

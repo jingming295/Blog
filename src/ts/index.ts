@@ -49,7 +49,17 @@ class init
         } else if (hash.startsWith('#/manage%20article'))
         {
             changePage.toManageArticle();
-        } else {
+        } else if(hash.startsWith('#/editArticle')){
+            const id = hash.slice(hash.indexOf('?id=') + 4);
+            if (id && Number.isInteger(parseInt(id)))
+            {
+                changePage.toEditArticle(parseInt(id));
+            } else
+            {
+                changePage.toIndex();
+            }
+        }
+         else {
             changePage.toIndex();
         }
     }

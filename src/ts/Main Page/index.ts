@@ -14,7 +14,6 @@ export class MainPage
 
     private createContentDiv = async () =>
     {
-
         function createArticleCard(title: string, author: string, id: string)
         {
             const ArticleCard = document.createElement('div');
@@ -52,9 +51,10 @@ export class MainPage
             ArticleCard.appendChild(articleId);
             return ArticleCard;
         }
+        const sendPost = new SendPost();
         const contentDiv = document.createElement('div');
         const ArticleWrapper = document.createElement('div');
-        const articleData = await this.getArticleData();
+        const articleData = await sendPost.getArticleData();
 
         for (let i = 0; i < articleData.length; i++)
         {
@@ -68,22 +68,5 @@ export class MainPage
 
     };
 
-    async getArticleData(): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
-    {
-        const sendPost = new SendPost();
-        const params = {};
-        return await sendPost.postWithUrlParams('getArticleCardData', params).then((response) =>
-        {
-            if (response.code === 0)
-            {
-                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
-            }
-            this.handlePopMsg.popMsg(response.message);
-            throw new Error(response.message);
-        }).catch((error: any) =>
-        {
-            console.log(error);
-            throw new Error(error);
-        });
-    }
+
 }

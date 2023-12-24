@@ -46,4 +46,5 @@ export class DBInsert extends DatabaseConnector
             [title, content, area, tag, userID]
         );
     }
+    
 }

@@ -14,7 +14,7 @@ export class MakeUserProfile
     /**
      * init
      */
-    Init = () =>
+    Init = async () =>
     {
         const sendPost = new SendPost();
 
@@ -24,29 +24,14 @@ export class MakeUserProfile
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                const params = {
-                    id: id
-                };
-                sendPost.postWithUrlParams('userprofile', params)
-                    .then(response =>
-                    {
-
-                        if (response.code === 0)
-                        {
-                            const profileData:ProfileData = response.data as ProfileData;
-                            this.CreateContent(profileData);
-                        } else {
-                            const changePage = new ChangePage(true);
-                            changePage.to404Page();
-                            return;
-                        }
-                    })
-                    .catch(error =>
-                    {
-                        console.log(error);
-                        const changePage = new ChangePage(true);
-                        changePage.to404Page();
-                    });
+                const profileData = await sendPost.getUserProfile(parseInt(id));
+                if(profileData){
+                    this.CreateContent(profileData);
+                }else{
+                    const changePage = new ChangePage(true);
+                    changePage.to404Page();
+                    return;
+                }
             } else
             {
                 const changePage = new ChangePage(true);

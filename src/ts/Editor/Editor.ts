@@ -9,17 +9,27 @@ export class Editor {
         // newMenu.init();
     }
 
-    createEditor () {
+    createEditor (html: string | null = null) {
         const editorConfig = {
             placeholder: 'Enter your content'
         };
+        let editor;
+        if(html){
+            editor = createEditor({
+                selector: '#editor-container',
+                html: html,
+                config: editorConfig,
+                mode: 'default' // or 'simple'
+            });
+        } else {
+            editor = createEditor({
+                selector: '#editor-container',
+                html: '<p><br></p>',
+                config: editorConfig,
+                mode: 'default' // or 'simple'
+            });
+        }
 
-        const editor = createEditor({
-            selector: '#editor-container',
-            html: '<p><br></p>',
-            config: editorConfig,
-            mode: 'default' // or 'simple'
-        });
         const toolbarConfig: Partial<IToolbarConfig> = {
 
         };

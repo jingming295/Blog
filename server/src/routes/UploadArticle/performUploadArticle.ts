@@ -5,6 +5,8 @@ import { UserData as UD } from "../../Return To Client/interface";
 import { LoginData as LD } from '../../Return To Client/interface';
 import { ArticleData as AD } from "./interface";
 import { DBInsert } from "../../SQL/dbInsert";
+import { DBSelect } from "../../SQL/dbSelect";
+import { DBUpdate } from "../../SQL/dbUpdate";
 
 
 export class UploadArticle
@@ -23,18 +25,42 @@ export class UploadArticle
             const userData: UD = data.UserData.userData;
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
             {
-                const dbInsert = new DBInsert();
                 const articleData = data.ArticleData;
-                const ResultSetHeader = await dbInsert.postArticle(articleData.title, articleData.article, articleData.area, articleData.tag, userData.id);
+                if(articleData.id){
+                    const dbSelect = new DBSelect()
+                    const dbUpdate = new DBUpdate();
 
-                if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
-                {
-                    const returnData = this.returnData.returnClientData(0, 'Post Sucessful');
-                    return returnData;
-                } else
-                {
-                    throw new Error(ResultSetHeader.info);
+                    const result = await dbSelect.selectArticleIDByItsAuthor(articleData.id, userData.id);
+                    if(result.length > 0){
+                        
+                        const ResultSetHeader = await dbUpdate.updateArticle(articleData.id, articleData.title, articleData.article, articleData.area, articleData.tag);
+    
+                        if (!ResultSetHeader.warningStatus && ResultSetHeader.affectedRows)
+                        {
+                            const returnData = this.returnData.returnClientData(0, 'Update Sucessful');
+                            return returnData;
+                        } else
+                        {
+                            throw new Error(ResultSetHeader.info);
+                        }
+                    }else {
+                        const returnData = this.returnData.returnClientData(-101, 'You has no permission to edit this article');
+                        return returnData;
+                    }
+                } else {
+                    const dbInsert = new DBInsert();
+                    const ResultSetHeader = await dbInsert.postArticle(articleData.title, articleData.article, articleData.area, articleData.tag, userData.id);
+    
+                    if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
+                    {
+                        const returnData = this.returnData.returnClientData(0, 'Post Sucessful');
+                        return returnData;
+                    } else
+                    {
+                        throw new Error(ResultSetHeader.info);
+                    }
                 }
+
             } else
             {
                 const returnData = this.returnData.returnClientData(-101, 'User data not match');

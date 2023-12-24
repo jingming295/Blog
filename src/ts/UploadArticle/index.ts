@@ -7,24 +7,34 @@ import '../../scss/Editor/style.scss';
 import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
 import { UserVerification } from "../User Verification";
-export class CreateNewPost
+export class UploadArticle
 {
     private handlePopMsg: HandlePopMsg;
     constructor()
     {
         this.handlePopMsg = new HandlePopMsg();
     }
-    async init()
+    async init(id: number | null = null)
     {
         const userVerification = new UserVerification();
         if (await userVerification.verification())
         {
-            this.createPostComponents();
+            if (id)
+            {
+                const sendPost = new SendPost();
+                sendPost.CheckPermission(id);
+            }
+            this.createPostComponents(id);
         }
     }
 
-    createPostComponents()
+    async createPostComponents(id: number | null)
     {
+        let article:{articleId: string,  articleTitle: string, articleArea:string, articleAuthor: string, articleContent: string; } | null = null;
+        if(id){
+            const sendPost = new SendPost();
+            article = await sendPost.getArticleContent(id)
+        }
         const body = document.body;
         const contentDiv = document.createElement('div');
         const postWrapper = document.createElement('div');
@@ -33,7 +43,7 @@ export class CreateNewPost
 
         postWrapper.className = 'postWrapper';
 
-        function createTitleInput()
+        function createTitleInput(title:string | null=null, area:string | null=null)
         {
             const titleWrapper = document.createElement('div');
             const titleInput = document.createElement('input');
@@ -44,6 +54,9 @@ export class CreateNewPost
             titleInput.id = 'titleInput';
             titleInput.className = 'titleInput';
             titleInput.placeholder = 'Title';
+            if(title){
+                titleInput.value = title;
+            }
 
             areaSelect.id = 'areaSelect';
             areaSelect.className = 'areaSelect';
@@ -58,12 +71,16 @@ export class CreateNewPost
                 areaSelect.appendChild(option);
             });
 
+            if(area){
+                areaSelect.value = area;
+            }
+
             titleWrapper.appendChild(titleInput);
             titleWrapper.appendChild(areaSelect);
             postWrapper.appendChild(titleWrapper);
         }
 
-        function createEditor()
+        function createEditor(html: string | null = null)
         {
             const editorWarpper = document.createElement('div');
             const toolbar = document.createElement('div');
@@ -81,11 +98,12 @@ export class CreateNewPost
             editorWarpper.appendChild(editorContainer);
             postWrapper.appendChild(editorWarpper);
             const editor = new Editor();
-            return editor.createEditor();
+            return editor.createEditor(html);
         }
 
         const createSubmit = (editor: IDomEditor) =>
         {
+            const sendPost = new SendPost();
             const submitWrapper = document.createElement('div');
             const submitBtn = document.createElement('button');
 
@@ -96,64 +114,42 @@ export class CreateNewPost
 
             submitWrapper.appendChild(submitBtn);
             postWrapper.appendChild(submitWrapper);
-
-            submitBtn.onclick = () =>
+            if (id === null)
             {
-                const titleInput = document.getElementById('titleInput') as HTMLInputElement;
-                const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
-                const area = areaSelect.value;
-                const title = titleInput.value;
-                this.UploadArticle(title, editor.getHtml(), area, 'programming');
-            };
+                submitBtn.onclick = () =>
+                {
+                    const titleInput = document.getElementById('titleInput') as HTMLInputElement;
+                    const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
+                    const area = areaSelect.value;
+                    const title = titleInput.value;
+                    sendPost.UploadArticle(title, editor.getHtml(), area, 'blog');
+                };
+            } else
+            {
+                submitBtn.onclick = () =>
+                {
+                    const titleInput = document.getElementById('titleInput') as HTMLInputElement;
+                    const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
+                    const area = areaSelect.value;
+                    const title = titleInput.value;
+                    sendPost.UpdateArticle(id, title, editor.getHtml(), area, 'blog');
+                };
+            }
+
 
         };
         contentDiv.appendChild(postWrapper);
         body.appendChild(contentDiv);
-        createTitleInput();
-        const editor = createEditor();
-        createSubmit(editor);
-    }
-
-    UploadArticle(title: string, article: string, area: string, tag: string)
-    {
-        const sendPost = new SendPost();
-        const UserData = localStorage.getItem('UserData');
-        if (UserData !== null)
-        {
-            const parseUserData: UserData = JSON.parse(UserData);
-            const ArticleData: ArticleData = {
-                title: title,
-                article: article,
-                area: area,
-                tag: tag
-            };
-            const params = {
-                UserData: parseUserData,
-                ArticleData: ArticleData
-            };
-            sendPost.postWithUrlParams('uploadArticle', params)
-                .then((response) =>
-                {
-                    if (response.code === 0)
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                    } else
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                    }
-                })
-                .catch((error: any) =>
-                {
-                    console.log(error);
-                });
-        } else
-        {
-            localStorage.clear();
-            const changePage = new ChangePage(true);
-            changePage.toIndex();
-            location.reload();
+        if(article){
+            createTitleInput(article.articleTitle, article.articleArea);
+            const editor = createEditor(article.articleContent);
+            createSubmit(editor);
+        } else {
+            createTitleInput()
+            const editor = createEditor();
+            createSubmit(editor);
         }
+
+
     }
-
-
 }

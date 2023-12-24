@@ -63,10 +63,10 @@ export class DBSelect extends DatabaseConnector
         );
     }
 
-    async selectArticleContent(articleId: string): Promise<{ article_id: string, article_title: string, u_name: string, article_content: string; }[]>
+    async selectArticleContent(articleId: string): Promise<{ article_id: string, article_title: string, article_area:string, u_name: string, article_content: string; }[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, u_name: string, article_content: string; }>(
-            'SELECT `article_id`, `article_title`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id  && article_alive = 1',
+        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, u_name: string, article_content: string; }>(
+            'SELECT `article_id`, `article_title`,`article_area`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id  && article_alive = 1',
             [articleId]
         );
     }

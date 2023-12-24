@@ -36,29 +36,8 @@ export class ManageArticle
             if (UserData !== null)
             {
                 const parseUserData: UserData = JSON.parse(UserData);
-                const params = {
-                    UserData: parseUserData,
-                };
-                return await sendPost.postWithUrlParams('getArticleDataByAuthor', params)
-                    .then((response) =>
-                    {
-                        console.log(response);
-                        if (response.code === 0)
-                        {
-                            return response.data as ArticleCard[];
-                        } else
-                        {
-                            this.handlePopMsg.popMsg(response.message);
-                            const changePage = new ChangePage(true);
-                            changePage.toIndex();
-                        }
-                    })
-                    .catch((error) =>
-                    {
-                        this.handlePopMsg.popMsg((error as Error).message);
-                        const changePage = new ChangePage(true);
-                        changePage.toIndex();
-                    });
+                const sendPost = new SendPost();
+                return await sendPost.getArticleDataByAuthor(parseUserData)
             } else
             {
                 localStorage.clear();
@@ -97,6 +76,7 @@ export class ManageArticle
 
     appearArticleCard(articleData: ArticleCard)
     {
+        const sendPost = new SendPost();
         const articleCardWrapper = document.createElement('div');
         articleCardWrapper.className = 'articleCardWrapper';
 
@@ -132,9 +112,11 @@ export class ManageArticle
         editBtn.innerHTML = 'Edit';
         editBtn.className = 'editBtn';
 
+        editBtn.onclick = () => { const changePage = new ChangePage(true); changePage.toEditArticle(articleData.articleID); }
+
         deleteBtn.innerHTML = 'Delete';
         deleteBtn.className = 'deleteBtn';
-        deleteBtn.onclick = () => { this.deleteArticle(articleData.articleID); };
+        deleteBtn.onclick = () => { sendPost.deleteArticle(articleData.articleID); };
 
         areaWrapper.appendChild(area);
 
@@ -157,46 +139,4 @@ export class ManageArticle
         return articleCardWrapper;
     }
 
-    deleteArticle(articleID: number)
-    {
-        const sendPost = new SendPost();
-        const UserData = localStorage.getItem('UserData');
-        if (UserData !== null)
-        {
-            const params = {
-                articleID: articleID,
-                UserData: JSON.parse(UserData),
-            };
-    
-            sendPost.postWithUrlParams('deleteArticle', params)
-                .then((response) =>
-                {
-                    console.log(response);
-                    if (response.code === 0)
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                        const changePage = new ChangePage(true);
-                        changePage.toManageArticle();
-                    } else
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                        const changePage = new ChangePage(true);
-                        changePage.toIndex();
-                    }
-                })
-                .catch((error) =>
-                {
-                    this.handlePopMsg.popMsg((error as Error).message);
-                    const changePage = new ChangePage(true);
-                    changePage.toIndex();
-                });
-        } else
-        {
-            localStorage.clear();
-            const changePage = new ChangePage(true);
-            changePage.toIndex();
-            location.reload();
-        }
-
-    }
 }

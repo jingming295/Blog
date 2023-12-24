@@ -38,4 +38,13 @@ export class DBUpdate extends DatabaseConnector
             [articleID]
         );
     }
+
+    async updateArticle(articleID:number, title: string, content: string, area: string, tag: string): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            'UPDATE `tb_article` SET `article_title` = ?, `article_content` =? , `article_area` = ?, `article_tag` = ? WHERE `article_id` = ?',
+            [title, content, area, tag, articleID]
+        );
+    }
+    
 }

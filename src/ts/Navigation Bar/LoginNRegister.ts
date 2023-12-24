@@ -8,11 +8,6 @@ import { SHA256 } from "../Crypto/sha256";
  */
 export class HandleLoginNRegister
 {
-    constructor()
-    {
-
-    }
-
     init()
     {
         try
@@ -79,23 +74,13 @@ export class HandleLoginNRegister
             password: hashedPassword
         };
 
-        sendPost.postWithUrlParams('register', params)
-            .then((response) =>
-            {
-                console.log(response);
-                handlePopMsg.popMsg(response.message);
-            })
-            .catch((error: any) =>
-            {
-                console.log(error);
-            });
+        sendPost.Register(params.email, params.username, params.password);
     }
 
     async handleLogin()
     {
         const sendPost = new SendPost();
         const sha256 = new SHA256();
-        const handlePopMsg = new HandlePopMsg();
         const uIEmail = document.getElementById('email') as HTMLInputElement;
         const uIPwd = document.getElementById('password') as HTMLInputElement;
 
@@ -106,25 +91,15 @@ export class HandleLoginNRegister
             password: hashedPassword,
         };
 
-        sendPost.postWithUrlParams('login', params)
-            .then(async (response) =>
-            {
-                handlePopMsg.popMsg(response.message);
-                if (response.code === 0)
-                {
-                    localStorage.setItem('UserData', JSON.stringify(response.data));
-                    const navRelated = new NavRelated();
-                    navRelated.closeLoginnRegisterPg();
-                    navRelated.changeNavBar();
-                    const warpLoginnregister = document.getElementById('warpLoginnregister');
-                    await this.delay(150);
-                    warpLoginnregister?.remove();
-                }
-            })
-            .catch((error) =>
-            {
-                handlePopMsg.popMsg(error);
-            });
+        if (await sendPost.Login(params.email, params.password))
+        {
+            const navRelated = new NavRelated();
+            navRelated.closeLoginnRegisterPg();
+            navRelated.changeNavBar();
+            const warpLoginnregister = document.getElementById('warpLoginnregister');
+            await this.delay(150);
+            warpLoginnregister?.remove();
+        }
 
     }
 

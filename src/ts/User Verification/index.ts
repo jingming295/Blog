@@ -11,27 +11,8 @@ export class UserVerification{
         if (UserData !== null)
         {
             const parseUserData: UserData = JSON.parse(UserData);
-            const params = {
-                UserData: parseUserData,
-            };
-            return await sendPost.postWithUrlParams('keeplogin', params)
-                .then((response) =>
-                {
-                    if (response.code === 0)
-                    {
-                        return true;
-                    } else
-                    {
-                        this.handlePopMsg.popMsg(response.message);
-                        localStorage.clear();
-                        // const changePage = new ChangePage(true);
-                        // changePage.toIndex();
-                    }
-                })
-                .catch((error) =>
-                {
-                    this.handlePopMsg.popMsg((error as Error).message);
-                });
+            return await sendPost.KeepLogin(parseUserData);
+
         } else
         {
             localStorage.clear();

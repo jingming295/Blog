@@ -9,6 +9,7 @@ import uploadArticle from './routes/UploadArticle';
 import getArticleCardData from './routes/GetArticleCardData';
 import getArticleContent from './routes/GetArticleContent';
 import getArticleDataByAuthor from './routes/GetArticleDataByAuthor';
+import articlePermission from './routes/ArticlePermission';
 
 import deleteArticle from './routes/DeleteArticle';
 
@@ -28,7 +29,8 @@ const routers = [
   getArticleCardData,
   getArticleContent,
   getArticleDataByAuthor,
-  deleteArticle
+  deleteArticle,
+  articlePermission
 ];
 app.use('/', routers);
 

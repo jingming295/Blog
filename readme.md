@@ -31,7 +31,7 @@ Finally, you can access this website via http://localhost:8080/
 - [x] View Article
 - [ ] Manage Article
   - [x] Post Article
-  - [ ] Edit Article
+  - [x] Edit Article
   - [x] Delete Article
 - [ ] User Profile Page - 20% progress
   - [ ] User Profile Edit

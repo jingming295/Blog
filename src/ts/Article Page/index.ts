@@ -15,7 +15,7 @@ export class MakeArticlePage
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                this.makeArticlePage(id);
+                this.makeArticlePage(parseInt(id));
             } else
             {
 
@@ -33,7 +33,7 @@ export class MakeArticlePage
 
     }
 
-    private async makeArticlePage(id: string)
+    private async makeArticlePage(id: number)
     {
         const site = document.body;
         if (site)
@@ -42,8 +42,8 @@ export class MakeArticlePage
             contentDiv.id = 'contentDiv';
             site.appendChild(contentDiv);
             console.log(contentDiv)
-
-            const data = await this.getArticleContent(id);
+            const sendPost = new SendPost();
+            const data = await sendPost.getArticleContent(id);
             if(data){
 
                 const articleWrapper = document.createElement('div');
@@ -51,15 +51,15 @@ export class MakeArticlePage
                 articleWrapper.className = 'editor-content-view'
 
                 const articleTitle = document.createElement('h1');
-                articleTitle.innerText = data[0].articleTitle;
+                articleTitle.innerText = data.articleTitle;
                 articleWrapper.appendChild(articleTitle);
 
                 const articleAuthor = document.createElement('h3');
-                articleAuthor.innerText = data[0].articleAuthor;
+                articleAuthor.innerText = data.articleAuthor;
                 articleWrapper.appendChild(articleAuthor);
 
                 const articleContent = document.createElement('div');
-                articleContent.innerHTML = data[0].articleContent;
+                articleContent.innerHTML = data.articleContent;
                 articleWrapper.appendChild(articleContent);
 
                 contentDiv.appendChild(articleWrapper);
@@ -68,30 +68,5 @@ export class MakeArticlePage
         }
     }
 
-    private async getArticleContent(id: string)
-    {
-        const sendPost = new SendPost();
-        const params = {
-            articleId: id
-        };
-        return await sendPost.postWithUrlParams('getArticleContent', params).then((response) =>
-        {
-            console.log(response);
-            if (response.code === 0)
-            {
-                return response.data as { articleTitle: string, articleAuthor: string, articleId: string, articleContent: string; }[];
-            } else
-            {
-                this.handlePopMsg.popMsg(response.message);
-                const changePage = new ChangePage(true);
-                changePage.to404Page();
-            }
-        }).catch((error: any) =>
-        {
-            const changePage = new ChangePage(true);
-            changePage.to404Page();
-        });
 
-
-    }
 }
