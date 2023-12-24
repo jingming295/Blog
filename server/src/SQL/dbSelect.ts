@@ -59,14 +59,14 @@ export class DBSelect extends DatabaseConnector
     async selectArticleCardData(): Promise<{ article_id: string, article_title: string, u_name: string; }[]>
     {
         return this.executeQuery<{ article_id: string, article_title: string, u_name: string; }>(
-            'SELECT `article_id`, `article_title`, `u_name` FROM `tb_article` JOIN tb_user WHERE article_author = u_id'
+            'SELECT `article_id`, `article_title`, `u_name` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_alive = 1'
         );
     }
 
     async selectArticleContent(articleId: string): Promise<{ article_id: string, article_title: string, u_name: string, article_content: string; }[]>
     {
         return this.executeQuery<{ article_id: string, article_title: string, u_name: string, article_content: string; }>(
-            'SELECT `article_id`, `article_title`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id',
+            'SELECT `article_id`, `article_title`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id  && article_alive = 1',
             [articleId]
         );
     }
@@ -76,6 +76,20 @@ export class DBSelect extends DatabaseConnector
         return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
             'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_author = ? && article_alive = 1',
             [userId]
+        );
+    }
+
+    /**
+     * To check if the article is the author's
+     * @param articleId 
+     * @param userId 
+     * @returns 
+     */
+    async selectArticleIDByItsAuthor(articleId: number, userId: number): Promise<{ article_id: string; }[]>
+    {
+        return this.executeQuery<{ article_id: string; }>(
+            'SELECT `article_id` FROM `tb_article` WHERE article_id = ? && article_author = ? && article_alive = 1',
+            [articleId, userId]
         );
     }
 }

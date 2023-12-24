@@ -5,6 +5,7 @@ import { ReturnClientData } from "../../Return To Client/interface";
 import { LoginData as LD } from "../../Return To Client/interface";
 import { UserData as UD } from "../../Return To Client/interface";
 import { DBUpdate } from "../../SQL/dbUpdate";
+import { DBSelect } from "../../SQL/dbSelect";
 
 export class DeleteArticle
 {
@@ -16,9 +17,20 @@ export class DeleteArticle
         {
             const decUserData: UD = this.decryptUserData(data.UserData.encUserData, data.UserData.userData.id.toString());
             const userData: UD = data.UserData.userData;
+
+
+
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
             {
+                const dbSelect = new DBSelect();
+
                 const dbUpdate = new DBUpdate();
+
+                const ArticleId = await dbSelect.selectArticleIDByItsAuthor(data.ArticleId, userData.id);
+                if(ArticleId.length<=0){
+                    const returnData = this.returnData.returnClientData(-102, 'This article is not yours');
+                    return returnData;
+                }
 
                 const ResultSetHeader = await dbUpdate.DeleteArticle(data.ArticleId);
 
@@ -52,8 +64,6 @@ export class DeleteArticle
                 return returnData;
             }
         }
-        console.log(data);
-        return this.returnData.returnClientData(0, 'Sucessful');
 
 
 

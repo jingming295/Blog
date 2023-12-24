@@ -1,7 +1,7 @@
 // src/routes/Register/index.ts
 import express, { Request, Response } from 'express';
 import { LoginData as LD } from '../../Return To Client/interface';
-import { DeleteArticle } from './PerformDeleteArticle';
+import { DeleteArticle } from './performDeleteArticle';
 const router = express.Router();
 
 function transformUserData(body: any): LD {
@@ -18,7 +18,6 @@ function transformUserData(body: any): LD {
 
 router.post('/deleteArticle', async (req: Request, res: Response) => {
     const body = req.body as { UserData: LD, articleID: number };
-    console.log(body)
     if(body.UserData === undefined || body.articleID === undefined){
         res.json({code: -101, message: 'Data is not complete'});
         return;

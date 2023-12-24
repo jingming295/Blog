@@ -15,7 +15,6 @@ export class ChangePage {
         }
         if(DeletePrevious){
             const contentDiv = document.getElementById('contentDiv');
-            // console.log(contentDiv)
             if (contentDiv)
             {
                 contentDiv.remove();
@@ -66,4 +65,12 @@ export class ChangePage {
         const manageArticle = new ManageArticle();
         manageArticle.init();
     }
+
+    toEditArticle(id:string){   
+        document.title = 'Edit Article';
+        window.location.href = urlconfig.url + '/#/editArticle?id=' + id;
+        const createNewPost = new CreateNewPost();
+        createNewPost.init();
+    }
+
 }
