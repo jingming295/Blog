@@ -1,6 +1,5 @@
 import { ChangePage } from "./changePage";
 import { HandleLoginNRegister } from "./LoginNRegister";
-import { HandlePopMsg } from "./popMsg";
 import { UserData } from "./interface";
 import { UserVerification } from "../User Verification";
 /**
@@ -10,8 +9,6 @@ import { UserVerification } from "../User Verification";
 export class NavRelated
 {
     private navigationBar: HTMLDivElement;
-    private handlePopMsg: HandlePopMsg;
-    // private changePage = new ChangePage();
     constructor()
     {
         const navigationBar = document.createElement('div');
@@ -19,7 +16,6 @@ export class NavRelated
         navigationBar.id = 'navigationBar';
 
         this.navigationBar = navigationBar;
-        this.handlePopMsg = new HandlePopMsg();
 
         if (!document.getElementById('navigationBar'))
         {
@@ -215,20 +211,20 @@ export class NavRelated
 
         function aprMenu()
         {
+            const area = ['Programming', 'Anime']
             const ul = document.createElement('ul');
-            const gameLi = document.createElement('li');
-            const gameLink = document.createElement('a');
-            gameLink.href = '';
-            gameLink.textContent = 'Programming';
-            gameLi.appendChild(gameLink);
-            ul.appendChild(gameLi);
-
-            const resourceLi = document.createElement('li');
-            const resourceLink = document.createElement('a');
-            resourceLink.href = '';
-            resourceLink.textContent = 'Anime';
-            resourceLi.appendChild(resourceLink);
-            ul.appendChild(resourceLi);
+            area.forEach((value) =>{
+                const li = document.createElement('li');
+                const areaLink = document.createElement('div');
+                areaLink.textContent = value;
+                areaLink.className = 'menu-item';
+                areaLink.onclick = () =>{
+                    const changePage = new ChangePage(true);
+                    changePage.toArea(value);
+                }
+                li.appendChild(areaLink);
+                ul.appendChild(li);
+            })
             leftBanner.appendChild(ul);
         }
     }

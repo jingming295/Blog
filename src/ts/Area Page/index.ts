@@ -1,15 +1,14 @@
-import { SendPost } from '../Send Fetch';
+import { ChangePage } from "../Navigation Bar/changePage";
+import { SendPost } from "../Send Fetch";
 
-import '../../scss/MainPage/index.scss';
-import { ChangePage } from '../Navigation Bar/changePage';
-export class MainPage
+export class AreaPage
 {
-    init = () =>
+    init = (area: string) =>
     {
-        this.createContentDiv();
+        this.createContentDiv(area);
     };
 
-    private createContentDiv = async () =>
+    private createContentDiv = async (area: string) =>
     {
         function createArticleCard(title: string, author: string, id: string)
         {
@@ -24,10 +23,11 @@ export class MainPage
             const articleId = document.createElement('input');
 
 
-            ArticleTitle.onclick = () => {
+            ArticleTitle.onclick = () =>
+            {
                 const changePage = new ChangePage(true);
                 changePage.toArticle(id);
-            }
+            };
 
             ArticleTitle.innerHTML = title;
             ArticleAuthor.innerHTML = author;
@@ -51,8 +51,7 @@ export class MainPage
         const sendPost = new SendPost();
         const contentDiv = document.createElement('div');
         const ArticleWrapper = document.createElement('div');
-        const articleData = await sendPost.getArticleData();
-
+        const articleData = await sendPost.getArticleDataByArea(area);
         for (let i = 0; i < articleData.length; i++)
         {
             const ArticleCard = createArticleCard(articleData[i].articleTitle, articleData[i].articleAuthor, articleData[i].articleId);
@@ -64,6 +63,5 @@ export class MainPage
         document.body.appendChild(contentDiv);
 
     };
-
 
 }

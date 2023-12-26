@@ -49,8 +49,6 @@ export class ManageArticle
         const ArticleData = await getArticleData();
         if (ArticleData && ArticleData.length > 0)
         {
-            console.log(ArticleData);
-
             // const articleCardWrapper = this.appearArticleCard(ArticleData);
             const articleCardWrapper: HTMLDivElement[] = [];
             ArticleData.forEach(item =>

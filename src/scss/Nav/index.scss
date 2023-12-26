@@ -75,6 +75,13 @@ $background-color_6: rgba(255, 255, 255, 0);
 				a {
 					color: $gray;
 				}
+
+				.menu-item{
+					cursor: pointer;
+				}
+				.menu-item:hover{
+					color: $themeColor;
+				}
 			}
 		}
 		.rightBanner {

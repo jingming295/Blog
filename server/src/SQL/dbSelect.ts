@@ -92,4 +92,12 @@ export class DBSelect extends DatabaseConnector
             [articleId, userId]
         );
     }
+
+    async selectArticleByArea(area: string): Promise<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }[]>
+    {
+        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
+            'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_area = ? && article_alive = 1 && article_author = u_id',
+            [area]
+        );
+    }
 }

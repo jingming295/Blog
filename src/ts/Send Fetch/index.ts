@@ -232,6 +232,30 @@ export class SendPost
         });
     }
 
+    async getArticleDataByArea(area: string): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
+    {
+        const params = {
+            area: area
+        };
+        return await this.postWithUrlParams('getArticleDataByArea', params).then((response) =>
+        {
+            if (response.code === 0)
+            {
+                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
+            } else {
+                this.handlePopMsg.popMsg(response.message);
+                const changePage = new ChangePage(true);
+                changePage.to404Page();
+                return []
+            }
+
+        }).catch((error: any) =>
+        {
+            console.log(error);
+            throw new Error(error);
+        });
+    }
+
     async getUserProfile(id:number){
         const params = {
             id: id

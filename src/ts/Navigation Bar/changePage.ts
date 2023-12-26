@@ -6,6 +6,7 @@ import { MakeArticlePage } from '../Article Page';
 import { Page404 } from '../404 Page';
 import { ManageArticle } from '../Manage Article Page';
 import { NavRelated } from '.';
+import { AreaPage } from '../Area Page';
 export class ChangePage {
     constructor(DeletePrevious:boolean = false) {
         if (!(document.getElementById('navigationBar')))
@@ -71,6 +72,14 @@ export class ChangePage {
         window.location.href = urlconfig.url + '/#/editArticle?id=' + id;
         const updateArticle = new UploadArticle();
         updateArticle.init(id);
+    }
+
+    toArea(area:string){
+
+        document.title = area;
+        window.location.href = urlconfig.url + '/#/area?area=' + area;
+        const areaPage = new AreaPage();
+        areaPage.init(area);
     }
 
 }

@@ -10,8 +10,8 @@ import getArticleCardData from './routes/GetArticleCardData';
 import getArticleContent from './routes/GetArticleContent';
 import getArticleDataByAuthor from './routes/GetArticleDataByAuthor';
 import articlePermission from './routes/ArticlePermission';
-
 import deleteArticle from './routes/DeleteArticle';
+import getArticleByArea from './routes/getArticleDataByArea';
 
 const app = express();
 const port = 3000;
@@ -30,7 +30,8 @@ const routers = [
   getArticleContent,
   getArticleDataByAuthor,
   deleteArticle,
-  articlePermission
+  articlePermission,
+  getArticleByArea
 ];
 app.use('/', routers);
 

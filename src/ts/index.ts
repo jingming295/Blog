@@ -49,7 +49,8 @@ class init
         } else if (hash.startsWith('#/manage%20article'))
         {
             changePage.toManageArticle();
-        } else if(hash.startsWith('#/editArticle')){
+        } else if (hash.startsWith('#/editArticle'))
+        {
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
@@ -58,13 +59,25 @@ class init
             {
                 changePage.toIndex();
             }
+        } else if (hash.startsWith('#/area'))
+        {
+            const area = hash.slice(hash.indexOf('?area=') + 6);
+            console.log(area)
+            if (area)
+            {
+                changePage.toArea(area);
+            } else
+            {
+                changePage.toIndex();
+            }
         }
-         else {
+        else
+        {
             changePage.toIndex();
         }
     }
 
-    
+
 }
 
 window.addEventListener('load', () =>
