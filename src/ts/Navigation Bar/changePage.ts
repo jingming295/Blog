@@ -12,7 +12,7 @@ export class ChangePage {
         if (!(document.getElementById('navigationBar')))
         {
             const navRelated = new NavRelated();
-            navRelated.MakeNav();
+            navRelated.init();
         }
         if(DeletePrevious){
             const contentDiv = document.getElementById('contentDiv');

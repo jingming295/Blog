@@ -1,50 +1,77 @@
+$themeColor: #73abff;
+$shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
 #contentDiv{
+  min-height: 100%;
+  .articleWrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    .articleBox{
+      display: flex;
+      flex-direction: column;
+      overflow-x: auto;
+      width: 95%;
+      min-height: 80vh;
+
+      padding: 0 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+      background-color: #ffffff;
+      box-shadow: $shadow;
+      
+      .statusBar{
+        .articleAuthor, .articleArea{
+          padding: 4px 10px;
+          color: $themeColor;
+          font-size: .875em;
+          margin: 10px 10px 28px 0!important;
+          border-radius: 5px;
+          float: left;
+          cursor: pointer;
+          background-color: #dae9ff;
+        }
+      }
+
   
-  .editor-content-view {
-    background-color: #ffffff;
-    border: 3px solid #ccc;
-    border-radius: 5px;
-    padding: 0 10px;
-    margin-top: 20px;
-    overflow-x: auto;
-
-    p, li{
-      white-space: pre-wrap;
+      p, li{
+        white-space: pre-wrap;
+      }
+      blockquote{
+        border-left: 8px solid #d0e5f2;
+        padding: 10px 10px;
+        margin: 10px 0;
+        background-color: #f1f1f1;
+      }
+  
+      code{
+        font-family: monospace;
+        background-color: #eee;
+        padding: 3px;
+        border-radius: 3px;
+      }
+      pre>code{
+        display: block;
+        padding: 10px;
+      }
+      table{
+        border-collapse: collapse;
+      }
+      td, th{
+        border: 1px solid #ccc;
+        min-width: 50px;
+        height: 20px;
+      }
+      th{
+        background-color: #f1f1f1;
+      }
+      ul, ol{
+        padding-left: 20px;
+  
+      }
+      input[type="checkbox"] {
+        margin-right: 5px;
+      }
     }
-    blockquote{
-      border-left: 8px solid #d0e5f2;
-      padding: 10px 10px;
-      margin: 10px 0;
-      background-color: #f1f1f1;
-    }
-
-    code{
-      font-family: monospace;
-      background-color: #eee;
-      padding: 3px;
-      border-radius: 3px;
-    }
-    pre>code{
-      display: block;
-      padding: 10px;
-    }
-    table{
-      border-collapse: collapse;
-    }
-    td, th{
-      border: 1px solid #ccc;
-      min-width: 50px;
-      height: 20px;
-    }
-    th{
-      background-color: #f1f1f1;
-    }
-    ul, ol{
-      padding-left: 20px;
-
-    }
-    input[type="checkbox"] {
-      margin-right: 5px;
-    }
+ 
   }
 }

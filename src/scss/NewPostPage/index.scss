@@ -1,43 +1,114 @@
-.contentDiv{
-    .postWrapper{
+$postWrapperBG: #fff;
+$shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+$inputBgColor: rgba(242, 243, 245, 1);
+$inputBgColorHover: rgba(229, 230, 235, 1);
+$borderRadius : 12px;
+$themeColor: #73abff;
+
+.contentDiv {
+    .postWrapper {
+        margin-top: 20px;
         width: 100%;
         height: 100%;
         padding-left: 3%;
         padding-right: 3%;
+        border-radius: $borderRadius;
         color: black;
-        background-color: gray;
-        .titleWrapper{
+        background-color: $postWrapperBG;
+        box-shadow: $shadow;
+
+        .inputWrapper {
             width: 100%;
-            height: 50px;
             padding-top: 10px;
             padding-bottom: 10px;
             display: flex;
-            flex-direction:row;
+            flex-direction: row;
             justify-content: space-between;
-            .titleInput{
+
+            .titleWrapper {
+                background-color: $inputBgColor;
                 width: 50%;
+                border-right: 1px solid $inputBgColorHover;
+                border-radius: $borderRadius 0 0 $borderRadius ;
+
+                .titleInput {
+                    width: 100%;
+                    height: 100%;
+                    padding: 10px 0;
+                    background: none;
+                    border: none;
+                    font-size: 20px;
+                }
+
             }
-            .areaSelect{
+
+            .titleWrapper,
+            .areaWrapper {
+                padding: 0 12px;
+                transition: background-color 0.2s ease-in-out;
+            }
+
+            .titleWrapper:hover,
+            .areaSelect:hover {
+                background-color: $inputBgColorHover !important;
+            }
+
+            .areaWrapper {
+                display: flex;
+                align-items: center;
+                border-radius: 0 $borderRadius $borderRadius 0;
+                background-color: $inputBgColor;
                 width: 50%;
+
+                .areaSelect {
+                    width: 100%;
+                    height: 70%;
+                    background-color: $inputBgColor;
+                    border: none;
+                    border-radius: $borderRadius;
+                    transition: background-color 0.2s ease-in-out;
+                }
             }
         }
-        .editor{
+
+        .editor {
             width: 100%;
             height: 100%;
             background-color: white;
-            .editor-container{
+            border: 2px solid #eee;
+            border-radius: 10px;
+
+            #toolbar-container {
+                padding: 2.5px;
+                box-shadow: 0 2px 2px -2px rgba(34, 47, 62, .1), 0 8px 8px -4px rgba(34, 47, 62, .07);
+                box-sizing: border-box;
+            }
+
+            .editor-container {
+                padding: 2.5px;
                 height: 450px;
             }
         }
-        .submitWrapper{
+
+        .submitWrapper {
             padding-top: 10px;
             padding-bottom: 10px;
             display: flex;
             flex-direction: row-reverse;
-            .submitBtn{
-                padding: 5px;
-                color: black;
+
+            .submitBtn {
+                background-image: linear-gradient(195deg, $themeColor 0%, #16e6f8 100%);
+                padding: 10px 24px;
+                box-sizing: border-box;
+                border-radius: 8px;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
             }
+            .submitBtn:hover {
+                box-shadow: 0 14px 26px -12px rgba(22,192,248,.4), 0 4px 23px rgba(22,192,248,.15), 0 8px 10px -5px rgba(22,192,248,.2);
+            }   
         }
     }
 

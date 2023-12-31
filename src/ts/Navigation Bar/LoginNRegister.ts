@@ -2,6 +2,7 @@ import { SendPost } from "../Send Fetch";
 import { HandlePopMsg } from "./popMsg";
 import { NavRelated } from ".";
 import { SHA256 } from "../Crypto/sha256";
+import { LoginNRegister } from "../Login And Register Page";
 /**
  * 登录和注册相关
  * @class
@@ -94,8 +95,9 @@ export class HandleLoginNRegister
         if (await sendPost.Login(params.email, params.password))
         {
             const navRelated = new NavRelated();
-            navRelated.closeLoginnRegisterPg();
-            navRelated.changeNavBar();
+            const loginNRegister = new LoginNRegister();
+            loginNRegister.closeLoginnRegisterPg();
+            navRelated.changeNavBarStatus();
             const warpLoginnregister = document.getElementById('warpLoginnregister');
             await this.delay(150);
             warpLoginnregister?.remove();

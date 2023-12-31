@@ -1,8 +1,9 @@
 import { SendPost } from '../Send Fetch';
-import { NavRelated } from '../Navigation Bar';
+import { UserData } from '../Navigation Bar/interface';
 import { ChangePage } from '../Navigation Bar/changePage';
 import { ProfileData } from './interface';
-import '../../scss/UserProfile/index.scss'
+import '../../scss/UserProfile/index.scss';
+import { ArticleCard } from '../Manage Article Page/interface';
 
 /**
  * MakeUserProfile class 创建User Profile的组件
@@ -25,9 +26,11 @@ export class MakeUserProfile
             if (id && Number.isInteger(parseInt(id)))
             {
                 const profileData = await sendPost.getUserProfile(parseInt(id));
-                if(profileData){
+                if (profileData)
+                {
                     this.CreateContent(profileData);
-                }else{
+                } else
+                {
                     const changePage = new ChangePage(true);
                     changePage.to404Page();
                     return;
@@ -48,30 +51,24 @@ export class MakeUserProfile
     /**
      * 创建这个页面的组件
      */
-    CreateContent = (profileData: ProfileData) =>
+    CreateContent = async (profileData: ProfileData) =>
     {
         const site = document.body;
         if (site)
         {
-            
+
             const contentDiv = document.createElement('div');
-            const authorWarp = document.createElement('div');
-            authorWarp.style.background = '#fff';
-            authorWarp.style.borderRadius = '6px';
+
+
 
             contentDiv.id = 'contentDiv';
             contentDiv.className = 'contentDiv';
-            contentDiv.appendChild(authorWarp);
+            const authorHeaderWarp = createUserInfoContent(profileData);
+            const userTab = await createUserTab(profileData);
 
+            contentDiv.appendChild(authorHeaderWarp);
+            contentDiv.appendChild(userTab);
             site.appendChild(contentDiv);
-            createUserInfoContent(authorWarp, profileData);
-            createUserTab(contentDiv, profileData);
-        } else
-        {
-            const siteDiv = document.createElement('div');
-            siteDiv.id = 'site';
-            siteDiv.className = 'site';
-            document.body.appendChild(siteDiv);
         }
 
         /**
@@ -79,39 +76,21 @@ export class MakeUserProfile
          * @param contentDiv
          * @param profileData
          */
-        function createUserInfoContent(contentDiv: HTMLDivElement, profileData: ProfileData)
+        function createUserInfoContent(profileData: ProfileData): HTMLDivElement
         {
-            const backgroundDiv = document.createElement('div');
-            backgroundDiv.id = 'backgroundDiv';
-            backgroundDiv.className = 'backgroundDiv';
-
-            const userAvatarBackgroundDiv = document.createElement('div');
-            userAvatarBackgroundDiv.id = 'userAvatarBackgroundDiv';
-            userAvatarBackgroundDiv.className = 'userAvatarBackgroundDiv';
-            userAvatarBackgroundDiv.style.maxWidth = '100%';
-            userAvatarBackgroundDiv.style.height = '150px';
-            userAvatarBackgroundDiv.style.padding = '0px 42px 18px 42px';
-            userAvatarBackgroundDiv.style.display = 'flex';
-            userAvatarBackgroundDiv.style.marginTop = '-80px';
-
-            contentDiv.appendChild(backgroundDiv);
-            contentDiv.appendChild(userAvatarBackgroundDiv);
-            createUserAvatar(userAvatarBackgroundDiv, profileData.avatar);
-            createUserData(userAvatarBackgroundDiv, profileData.name);
-
             /**
-             * 创建用户头像
+             * create user avatar
              * @param userAvatarBackgroundDiv
              * @param avatar
              */
-            function createUserAvatar(userAvatarBackgroundDiv: HTMLDivElement, avatar: string)
+            function createUserAvatar(avatar: string): HTMLDivElement
             {
                 const userImgWarp = document.createElement('div');
                 const userImg = document.createElement('img');
 
                 userImgWarp.style.width = '150px';
                 userImgWarp.style.height = '150px';
-                userImgWarp.appendChild(userImg);
+
                 userImg.style.width = '100%';
                 userImg.style.height = '100%';
                 userImg.style.objectFit = 'cover';
@@ -119,15 +98,16 @@ export class MakeUserProfile
                 userImg.style.border = '4px solid #fff';
                 userImg.style.borderRadius = '6px';
                 userImg.style.boxSizing = 'border-box';
-                userAvatarBackgroundDiv.appendChild(userImgWarp);
+                userImgWarp.appendChild(userImg);
+                return userImgWarp;
             }
 
             /**
-             * 创建显示用户资料的组件
+             * create user data
              * @param userAvatarBackgroundDiv
              * @param userName
              */
-            function createUserData(userAvatarBackgroundDiv: HTMLDivElement, userName: string)
+            function createUserData(userName: string): HTMLDivElement
             {
                 const userDataWarp = document.createElement('div');
                 userDataWarp.style.display = 'flex';
@@ -148,80 +128,122 @@ export class MakeUserProfile
                 userDesc.textContent = 'This is a user description.';
 
                 userNameWarp.appendChild(username);
+
                 userDataWarp.appendChild(userNameWarp);
                 userDataWarp.appendChild(userDesc);
 
-                userAvatarBackgroundDiv.appendChild(userDataWarp);
+                return userDataWarp;
             }
+
+            const authorHeaderWarp = document.createElement('div');
+            authorHeaderWarp.className = 'userHeaderWarp';
+
+            const backgroundDiv = document.createElement('div');
+            backgroundDiv.id = 'backgroundDiv';
+            backgroundDiv.className = 'backgroundDiv';
+
+            const userHeaderComponentWrapper = document.createElement('div');
+            userHeaderComponentWrapper.className = 'userHeaderComponentWrapper';
+
+
+            const userAvatar = createUserAvatar(profileData.avatar);
+            const userData = createUserData(profileData.name);
+            userHeaderComponentWrapper.appendChild(userAvatar);
+            userHeaderComponentWrapper.appendChild(userData);
+
+            authorHeaderWarp.appendChild(backgroundDiv);
+            authorHeaderWarp.appendChild(userHeaderComponentWrapper);
+            return authorHeaderWarp;
         }
 
-        function createUserTab(contentDiv: HTMLDivElement, profileData: ProfileData)
+        async function createUserTab(profileData: ProfileData)
         {
-            const userTable = document.createElement('div');
-            userTable.style.display = 'flex';
-            userTable.style.marginTop = '20px';
-            const leftPanel = document.createElement('div');
-            userTable.id = 'userTab';
-
-            leftPanel.style.maxWidth = '100%';
-            leftPanel.id = 'lp';
-
-            const rightPanel = document.createElement('div');
-            rightPanel.style.width = '100%';
-            rightPanel.style.marginLeft = '20px';
-            rightPanel.id = 'rp';
-
-            userTable.appendChild(leftPanel);
-            userTable.appendChild(rightPanel);
-
-            contentDiv.appendChild(userTable);
-
-            createLeftPanel(leftPanel);
-            createRightPanel(rightPanel, profileData);
-
-            function createLeftPanel(leftPanel: HTMLDivElement)
+            function createLeftPanel(): HTMLDivElement
             {
+                const leftPanel = document.createElement('div');
+                leftPanel.className = 'userProfile-Usertab-leftPanel';
                 let i = 0;
-                const arr: Array<string> = ['User Profile', 'Posts'];
-                for (i = 0; i < arr.length; i++)
+
+                const sideBarItem = [
+                    {
+                        name: 'User Profile',
+                        func: function ()
+                        {
+                            const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
+                            if (rightPanel)
+                            {
+                                rightPanel.remove();
+                                const rightPanerWrapper = document.querySelector('.userProfile-Usertab-rightPanelWrapper') as HTMLDivElement;
+                                if (rightPanerWrapper)
+                                {
+                                    const rightPanel = createUserProfileRightPanel(profileData);
+                                    rightPanerWrapper.appendChild(rightPanel);
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: 'Posts',
+                        func: async function ()
+                        {
+                            const UserData = localStorage.getItem('UserData');
+                            if (UserData !== null)
+                            {
+                                const parseUserData: UserData = JSON.parse(UserData);
+                                const sendPost = new SendPost();
+                                const data = await sendPost.getArticleDataByAuthor(parseUserData);
+                                if (data)
+                                {
+                                    const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
+                                    if (rightPanel)
+                                    {
+                                        rightPanel.remove();
+                                        const rightPanerWrapper = document.querySelector('.userProfile-Usertab-rightPanelWrapper') as HTMLDivElement;
+                                        if (rightPanerWrapper)
+                                        {
+                                            const rightPanel = createPostsRightPanel(data);
+                                            rightPanerWrapper.appendChild(rightPanel);
+                                        }
+                                    }
+                                } else
+                                {
+                                    
+                                }
+
+                            }
+                        }
+                    }
+                ];
+
+                sideBarItem.forEach((item) =>
                 {
-                    const userTab = document.createElement('div');
-                    userTab.style.width = '200px';
+                    const userSideBarWrapper = document.createElement('div');
+                    userSideBarWrapper.className = 'userSideBarWrapper';
 
                     const userSideBar = document.createElement('div');
-                    userSideBar.style.padding = '16px';
-                    userSideBar.style.background = '#fff';
-                    userSideBar.style.display = 'flex';
-                    userSideBar.style.justifyContent = 'space-between';
-                    userSideBar.style.transition = 'all 0.08s ease';
-                    userSideBar.style.cursor = 'pointer';
-
-                    userSideBar.addEventListener('mouseover', function ()
-                    {
-                        userSideBar.style.background = 'rgb(247 241 244)';
-                    });
-                    userSideBar.addEventListener('mouseout', (event: MouseEvent) =>
-                    {
-                        userSideBar.style.background = '#fff';
-                    });
+                    userSideBar.className = 'userSideBar';
+                    userSideBar.onclick = item.func;
 
                     const userSideBarItem = document.createElement('p');
-                    userSideBarItem.innerText = arr[i];
-                    userSideBarItem.style.color = '#73abff';
+                    userSideBarItem.className = 'userSideBarItem';
+                    userSideBarItem.innerText = item.name;
 
                     const arrow = document.createElement('div');
+                    arrow.className = 'arrow';
                     arrow.innerHTML = '>';
-                    arrow.style.color = 'black';
 
-                    leftPanel.appendChild(userTab);
                     userSideBar.appendChild(userSideBarItem);
                     userSideBar.appendChild(arrow);
-                    userTab.appendChild(userSideBar);
-                }
+                    userSideBarWrapper.appendChild(userSideBar);
+                    leftPanel.appendChild(userSideBarWrapper);
+                });
+                return leftPanel;
             }
 
-            function createRightPanel(rightPanel: HTMLDivElement, profileData: ProfileData)
+            function createUserProfileRightPanel(profileData: ProfileData)
             {
+                const rightPanel = document.createElement('div');
+                rightPanel.className = 'userProfile-Usertab-rightPanel';
                 let i = 0;
                 const arr: string[][] = [
                     ['Name: ', profileData.name],
@@ -235,14 +257,12 @@ export class MakeUserProfile
                     const title = document.createElement('span');
                     const content = document.createElement('span');
 
-                    userInfoBox.style.width = '100%';
-                    userInfoBox.style.backgroundColor = 'white';
+                    userInfoBox.className = 'userInfoBox';
 
-                    userInfoItem.style.padding = '20px';
-                    userInfoItem.style.color = 'black';
+                    userInfoItem.className = 'userInfoItem';
 
+                    title.className = 'userInfoItem-title';
                     title.innerText = arr[i][0];
-                    title.style.marginRight = '10px';
 
                     content.innerText = arr[i][1];
 
@@ -251,7 +271,110 @@ export class MakeUserProfile
                     userInfoBox.appendChild(userInfoItem);
                     rightPanel.appendChild(userInfoBox);
                 }
+                return rightPanel;
             }
+
+            function createPostsRightPanel(data: void | ArticleCard[] | undefined)
+            {
+                function appearArticleCard(articleData: ArticleCard)
+                {
+                    const sendPost = new SendPost();
+                    const articleCardWrapper = document.createElement('div');
+                    articleCardWrapper.className = 'articleCardWrapper';
+
+                    const areaWrapper = document.createElement('div');
+                    const titleWrapper = document.createElement('div');
+                    const contentWrapper = document.createElement('div');
+                    const buttonWrapper = document.createElement('div');
+
+                    buttonWrapper.className = 'buttonWrapper';
+
+
+                    const area = document.createElement('div');
+
+                    const title = document.createElement('div');
+
+                    const content = document.createElement('div');
+
+                    const editBtn = document.createElement('div');
+
+                    const deleteBtn = document.createElement('div');
+
+
+                    area.innerHTML = articleData.articleArea;
+                    area.className = 'area';
+
+                    title.innerHTML = articleData.articleTitle;
+                    title.className = 'title';
+                    title.onclick = () => { const changePage = new ChangePage(true); changePage.toArticle(articleData.articleID.toString()); };
+
+                    content.innerHTML = articleData.p;
+                    content.className = 'content';
+
+                    editBtn.innerHTML = 'Edit';
+                    editBtn.className = 'editBtn';
+
+                    editBtn.onclick = () => { const changePage = new ChangePage(true); changePage.toEditArticle(articleData.articleID); };
+
+                    deleteBtn.innerHTML = 'Delete';
+                    deleteBtn.className = 'deleteBtn';
+                    deleteBtn.onclick = () => { sendPost.deleteArticle(articleData.articleID); };
+
+                    areaWrapper.appendChild(area);
+
+                    titleWrapper.appendChild(title);
+
+                    contentWrapper.appendChild(content);
+
+                    buttonWrapper.appendChild(editBtn);
+
+                    buttonWrapper.appendChild(deleteBtn);
+
+                    articleCardWrapper.appendChild(areaWrapper);
+
+                    articleCardWrapper.appendChild(titleWrapper);
+
+                    articleCardWrapper.appendChild(contentWrapper);
+
+                    articleCardWrapper.appendChild(buttonWrapper);
+
+                    return articleCardWrapper;
+                }
+
+                const rightPanel = document.createElement('div');
+                rightPanel.className = 'userProfile-Usertab-rightPanel';
+                if (data)
+                {
+
+                    data.forEach(item =>
+                    {
+                        const articleCard = appearArticleCard(item);
+                        rightPanel.appendChild(articleCard);
+                    });
+
+                }
+                return rightPanel;
+            }
+
+            const userTable = document.createElement('div');
+            const leftPanelWrapper = document.createElement('div');
+            const rightPanelWrapper = document.createElement('div');
+
+            userTable.className = 'userProfile-Usertab';
+
+            leftPanelWrapper.className = 'userProfile-Usertab-leftPanelWrapper';
+
+
+            rightPanelWrapper.className = 'userProfile-Usertab-rightPanelWrapper';
+
+            userTable.appendChild(leftPanelWrapper);
+            userTable.appendChild(rightPanelWrapper);
+
+            const leftPanel = createLeftPanel();
+            const rightPanel = createUserProfileRightPanel(profileData);
+            leftPanelWrapper.appendChild(leftPanel);
+            rightPanelWrapper.appendChild(rightPanel);
+            return userTable;
         }
     };
 }

@@ -19,6 +19,7 @@ export class UserVerification{
             const changePage = new ChangePage(true);
             changePage.toIndex();
             location.reload();
+            return false
         }
     }
 }

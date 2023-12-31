@@ -3,6 +3,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
+import { ArticleContent } from "./interface";
 
 /**
  * 发送post的class
@@ -291,7 +292,7 @@ export class SendPost
         {
             if (response.code === 0)
             {
-                return response.data as {articleId: string,  articleTitle: string, articleArea:string, articleAuthor: string, articleContent: string; };
+                return response.data as ArticleContent;
             } else
             {
                 this.handlePopMsg.popMsg(response.message);
@@ -323,13 +324,13 @@ export class SendPost
                 {
                     this.handlePopMsg.popMsg(response.message);
                     localStorage.clear();
-                    // const changePage = new ChangePage(true);
-                    // changePage.toIndex();
+                    return false;
                 }
             })
             .catch((error) =>
             {
                 this.handlePopMsg.popMsg((error as Error).message);
+                return false
             });
     }
 
@@ -346,8 +347,7 @@ export class SendPost
                 } else
                 {
                     this.handlePopMsg.popMsg(response.message);
-                    const changePage = new ChangePage(true);
-                    changePage.toIndex();
+                    return null;
                 }
             })
             .catch((error) =>

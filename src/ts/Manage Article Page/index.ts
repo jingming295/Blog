@@ -30,14 +30,12 @@ export class ManageArticle
 
         const getArticleData = async () =>
         {
-
-            const sendPost = new SendPost();
             const UserData = localStorage.getItem('UserData');
             if (UserData !== null)
             {
                 const parseUserData: UserData = JSON.parse(UserData);
                 const sendPost = new SendPost();
-                return await sendPost.getArticleDataByAuthor(parseUserData)
+                return await sendPost.getArticleDataByAuthor(parseUserData);
             } else
             {
                 localStorage.clear();
@@ -62,14 +60,14 @@ export class ManageArticle
 
                 manageArticleWrapper.appendChild(item);
             });
-
+            contentDiv.appendChild(manageArticleWrapper);
+            body.appendChild(contentDiv);
+        } else
+        {
+            const changePage = new ChangePage(true);
+            changePage.toIndex();
+            return;
         }
-
-
-
-        contentDiv.appendChild(manageArticleWrapper);
-
-        body.appendChild(contentDiv);
     }
 
     appearArticleCard(articleData: ArticleCard)
@@ -102,7 +100,7 @@ export class ManageArticle
 
         title.innerHTML = articleData.articleTitle;
         title.className = 'title';
-        title.onclick = () => { const changePage = new ChangePage(true); changePage.toArticle(articleData.articleID.toString());}
+        title.onclick = () => { const changePage = new ChangePage(true); changePage.toArticle(articleData.articleID.toString()); };
 
         content.innerHTML = articleData.p;
         content.className = 'content';
@@ -110,7 +108,7 @@ export class ManageArticle
         editBtn.innerHTML = 'Edit';
         editBtn.className = 'editBtn';
 
-        editBtn.onclick = () => { const changePage = new ChangePage(true); changePage.toEditArticle(articleData.articleID); }
+        editBtn.onclick = () => { const changePage = new ChangePage(true); changePage.toEditArticle(articleData.articleID); };
 
         deleteBtn.innerHTML = 'Delete';
         deleteBtn.className = 'deleteBtn';

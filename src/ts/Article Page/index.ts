@@ -1,8 +1,8 @@
-import { NavRelated } from "../Navigation Bar";
 import { SendPost } from "../Send Fetch";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ChangePage } from "../Navigation Bar/changePage";
 import '../../scss/ArticlePage/index.scss';
+import { ArticleContent } from "../Send Fetch/interface";
 export class MakeArticlePage
 {
     handlePopMsg = new HandlePopMsg();
@@ -46,26 +46,59 @@ export class MakeArticlePage
             if(data){
 
                 const articleWrapper = document.createElement('div');
-
-                articleWrapper.className = 'editor-content-view'
-
-                const articleTitle = document.createElement('h1');
-                articleTitle.innerText = data.articleTitle;
-                articleWrapper.appendChild(articleTitle);
-
-                const articleAuthor = document.createElement('h3');
-                articleAuthor.innerText = data.articleAuthor;
-                articleWrapper.appendChild(articleAuthor);
-
-                const articleContent = document.createElement('div');
-                articleContent.innerHTML = data.articleContent;
-                articleWrapper.appendChild(articleContent);
-
+                const articleBox = document.createElement('div');
+                articleWrapper.className = 'articleWrapper'
+                articleBox.className = 'articleBox';
+                const articleTitle = this.createArticleTitle(data);
+                const statusBar = this.createStatusBar(data);
+                const articleContent = this.createArticleContent(data);
+                articleBox.appendChild(articleTitle);
+                articleBox.appendChild(statusBar);
+                articleBox.appendChild(articleContent);
+                articleWrapper.appendChild(articleBox);
                 contentDiv.appendChild(articleWrapper);
             }
 
         }
     }
 
+    private createArticleTitle(data:ArticleContent){
+        const articleTitle = document.createElement('h2');
+        articleTitle.innerText = data.articleTitle;
+        return articleTitle;
+    }
+
+    private createStatusBar(data:ArticleContent){
+        function createAuthorTab(){
+            const articleAuthor = document.createElement('div');
+            articleAuthor.className = 'articleAuthor';
+            articleAuthor.innerText = `Author: ${data.articleAuthor}`;
+            return articleAuthor;
+        }
+
+        function createAreaTab(){
+            const articleArea = document.createElement('div');
+            articleArea.className = 'articleArea';
+            articleArea.innerText = `Area: ${data.articleArea}`;
+            articleArea.onclick = ()=>{
+                const changePage = new ChangePage(true);
+                changePage.toArea(data.articleArea);
+            }
+            return articleArea;
+        }
+
+        const statusBar = document.createElement('div');
+        statusBar.className = 'statusBar';
+        statusBar.appendChild(createAuthorTab());
+        statusBar.appendChild(createAreaTab());
+        return statusBar;
+    }
+
+    private createArticleContent(data:ArticleContent){
+        const articleContent = document.createElement('div');
+        articleContent.className = 'articleContent';
+        articleContent.innerHTML = data.articleContent;
+        return articleContent;
+    }
 
 }

@@ -1,7 +1,5 @@
 import { SendPost } from "../Send Fetch";
-import { ChangePage } from "../Navigation Bar/changePage";
 import { Editor } from "../Editor/Editor";
-import { ArticleData, UserData } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import '../../scss/Editor/style.scss';
 import '../../scss/NewPostPage/index.scss';
@@ -45,11 +43,17 @@ export class UploadArticle
 
         function createTitleInput(title:string | null=null, area:string | null=null)
         {
+            const inputWrapper = document.createElement('div');
             const titleWrapper = document.createElement('div');
+            const areaWrapper = document.createElement('div');
             const titleInput = document.createElement('input');
             const areaSelect = document.createElement('select');
 
+            inputWrapper.className = 'inputWrapper';
+
             titleWrapper.className = 'titleWrapper';
+
+            areaWrapper.className = 'areaWrapper';
 
             titleInput.id = 'titleInput';
             titleInput.className = 'titleInput';
@@ -76,8 +80,11 @@ export class UploadArticle
             }
 
             titleWrapper.appendChild(titleInput);
-            titleWrapper.appendChild(areaSelect);
-            postWrapper.appendChild(titleWrapper);
+            areaWrapper.appendChild(areaSelect);
+            inputWrapper.appendChild(titleWrapper);
+            inputWrapper.appendChild(areaWrapper);
+
+            postWrapper.appendChild(inputWrapper);
         }
 
         function createEditor(html: string | null = null)
