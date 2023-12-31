@@ -1,3 +1,4 @@
+import { NavigationProgress } from "../Create Navigation Progress";
 import { ArticleCard } from "../Manage Article Page/interface";
 import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
@@ -10,11 +11,15 @@ import { ArticleContent } from "./interface";
  */
 export class SendPost
 {
+    private navigationProgress = new NavigationProgress();
+    constructor(){
+
+    }
     handlePopMsg = new HandlePopMsg();
     private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD>)
     {
         const url = `http://localhost:3000/${api}`;
-    
+        
         return fetch(url, {
             method: 'POST',
             headers: {
@@ -35,7 +40,7 @@ export class SendPost
             {
                 console.error('Error:', error);
                 throw new Error('Backend Not Running');
-            });
+            })
     }
 
     Login(email: string, password: string){
@@ -91,7 +96,7 @@ export class SendPost
      * Check if user has permission to edit article
      * @param articleID articleID
      */
-    CheckPermission(articleID: number)
+    async CheckPermission(articleID: number)
     {
         const UserData = localStorage.getItem('UserData');
         if (UserData !== null)
@@ -101,7 +106,7 @@ export class SendPost
                 UserData: parseUserData,
                 ArticleID: articleID
             };
-            this.postWithUrlParams('articlePermission', params)
+            await this.postWithUrlParams('articlePermission', params)
                 .then((response) =>
                 {
                     if (response.code === 0)
@@ -135,6 +140,7 @@ export class SendPost
 
     UploadArticle(title: string, article: string, area: string, tag: string)
     {
+        this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData !== null)
         {
@@ -164,6 +170,9 @@ export class SendPost
                 .catch((error: any) =>
                 {
                     console.log(error);
+                })
+                .finally(() =>{
+                    this.navigationProgress.end();
                 });
         } else
         {
@@ -176,6 +185,7 @@ export class SendPost
 
     UpdateArticle(id: number, title: string, article: string, area: string, tag: string)
     {
+        this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData !== null)
         {
@@ -205,6 +215,9 @@ export class SendPost
                 .catch((error: any) =>
                 {
                     console.log(error);
+                })
+                .finally(() =>{
+                    this.navigationProgress.end();
                 });
         } else
         {
@@ -217,6 +230,7 @@ export class SendPost
 
     async getArticleData(): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
     {
+        this.navigationProgress.start();
         const params = {};
         return await this.postWithUrlParams('getArticleCardData', params).then((response) =>
         {
@@ -230,11 +244,15 @@ export class SendPost
         {
             console.log(error);
             throw new Error(error);
+        })
+        .finally(() =>{
+            this.navigationProgress.end();
         });
     }
 
     async getArticleDataByArea(area: string): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
     {
+        this.navigationProgress.start();
         const params = {
             area: area
         };
@@ -254,10 +272,14 @@ export class SendPost
         {
             console.log(error);
             throw new Error(error);
+        })
+        .finally(() =>{ 
+            this.navigationProgress.end();
         });
     }
 
     async getUserProfile(id:number){
+        this.navigationProgress.start();
         const params = {
             id: id
         };
@@ -280,11 +302,14 @@ export class SendPost
             {
                 console.log(error);
                 return null
+            }).finally(() =>{
+                this.navigationProgress.end();
             });
     }
 
     async getArticleContent(id: number)
     {
+        this.navigationProgress.start();
         const params = {
             articleId: id
         };
@@ -305,6 +330,9 @@ export class SendPost
             const changePage = new ChangePage(true);
             changePage.to404Page();
             return null
+        })
+        .finally(() =>{
+            this.navigationProgress.end();
         });
 
 
@@ -355,12 +383,15 @@ export class SendPost
                 this.handlePopMsg.popMsg((error as Error).message);
                 const changePage = new ChangePage(true);
                 changePage.toIndex();
+            })
+            .finally(() =>{
             });
     }
 
     
     deleteArticle(articleID: number)
     {
+        this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData !== null)
         {
@@ -389,6 +420,9 @@ export class SendPost
                     this.handlePopMsg.popMsg((error as Error).message);
                     const changePage = new ChangePage(true);
                     changePage.toIndex();
+                })
+                .finally(() =>{
+                    this.navigationProgress.end();
                 });
         } else
         {

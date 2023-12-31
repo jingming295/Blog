@@ -1,6 +1,7 @@
 import { ChangePage } from "./Navigation Bar/changePage";
 import "../scss/IndexPage/index.scss";
 import "../scss/Nav/index.scss";
+import { NavigationProgress } from "./Create Navigation Progress";
 
 /**
  * IndexPageHandler class handles index page functionality.
@@ -13,7 +14,7 @@ class init
      * Constructor for ActivationPage class.
      * @constructor
      */
-    init()
+    async init()
     {
         const hash = window.location.hash;
         const changePage = new ChangePage();
@@ -54,7 +55,7 @@ class init
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                changePage.toEditArticle(parseInt(id));
+                await changePage.toEditArticle(parseInt(id));
             } else
             {
                 changePage.toIndex();
@@ -62,7 +63,6 @@ class init
         } else if (hash.startsWith('#/area'))
         {
             const area = hash.slice(hash.indexOf('?area=') + 6);
-            console.log(area)
             if (area)
             {
                 changePage.toArea(area);
@@ -70,11 +70,12 @@ class init
             {
                 changePage.toIndex();
             }
-        }
-        else
+        } else
         {
             changePage.toIndex();
         }
+        const navigationProgress = new NavigationProgress();
+        navigationProgress.init();
     }
 
 

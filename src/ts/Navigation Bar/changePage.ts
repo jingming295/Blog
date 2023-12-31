@@ -67,11 +67,11 @@ export class ChangePage {
         manageArticle.init();
     }
 
-    toEditArticle(id:number){
+    async toEditArticle(id:number){
         document.title = 'Edit Article';
         window.location.href = urlconfig.url + '/#/editArticle?id=' + id;
         const updateArticle = new UploadArticle();
-        updateArticle.init(id);
+        await updateArticle.init(id);
     }
 
     toArea(area:string){

@@ -5,12 +5,15 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserVerification } from "../User Verification";
 import { ArticleCard } from "./interface";
 import '../../scss/ManageArticlePage/index.scss';
+import { NavigationProgress } from "../Create Navigation Progress";
 
 export class ManageArticle
 {
+    private navigationProgress = new NavigationProgress();
     handlePopMsg = new HandlePopMsg();
     async init()
     {
+        this.navigationProgress.start();
         const userVerification = new UserVerification();
         if (await userVerification.verification())
         {
@@ -62,8 +65,10 @@ export class ManageArticle
             });
             contentDiv.appendChild(manageArticleWrapper);
             body.appendChild(contentDiv);
+            this.navigationProgress.end();
         } else
         {
+            this.navigationProgress.end();
             const changePage = new ChangePage(true);
             changePage.toIndex();
             return;

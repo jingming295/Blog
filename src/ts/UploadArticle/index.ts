@@ -5,25 +5,27 @@ import '../../scss/Editor/style.scss';
 import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
 import { UserVerification } from "../User Verification";
+import { NavigationProgress } from "../Create Navigation Progress";
 export class UploadArticle
 {
-    private handlePopMsg: HandlePopMsg;
-    constructor()
-    {
-        this.handlePopMsg = new HandlePopMsg();
-    }
+    private navigationProgress = new NavigationProgress();
+
     async init(id: number | null = null)
     {
+        this.navigationProgress.start();
         const userVerification = new UserVerification();
         if (await userVerification.verification())
         {
             if (id)
             {
                 const sendPost = new SendPost();
-                sendPost.CheckPermission(id);
+                await sendPost.CheckPermission(id);
             }
-            this.createPostComponents(id);
+            await this.createPostComponents(id);
         }
+        setTimeout(() =>{
+            this.navigationProgress.end();
+        }, 100)
     }
 
     async createPostComponents(id: number | null)

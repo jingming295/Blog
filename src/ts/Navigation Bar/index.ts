@@ -55,7 +55,7 @@ export class NavRelated
             const status = await userVerification.verification();
             if (status)
             {
-                const rightBanner = this.createRightBannerWithUserComponent(parseUserData.userData.avatar, parseUserData.userData.id.toString());
+                const rightBanner = this.createRightBannerWithUserComponent(parseUserData);
                 return rightBanner;
             } else
             {
@@ -98,9 +98,9 @@ export class NavRelated
         return rightBanner;
     };
 
-    private createRightBannerWithUserComponent(avatar: string, id: string): HTMLDivElement
+    private createRightBannerWithUserComponent(userData: UserData): HTMLDivElement
     {
-        function aprUserComponent(avatar: string, id: string)
+        function aprUserComponent(userData: UserData)
         {
             function userDropMenu()
             {
@@ -110,12 +110,12 @@ export class NavRelated
                     userMenuAvatarWrapper.className = 'userMenuAvatarWrapper';
                     const userMenuAvatar = document.createElement('img');
                     userMenuAvatar.className = 'userMenuAvatar';
-                    userMenuAvatar.src = '../avatar/' + avatar;
+                    userMenuAvatar.src = '../avatar/' + userData.userData.avatar;
 
                     userMenuAvatar.onclick = () =>
                     {
                         const changePage = new ChangePage(true);
-                        changePage.toUserProfile(id);
+                        changePage.toUserProfile(userData.userData.id.toString());
                     };
 
                     userMenuAvatarWrapper.appendChild(userMenuAvatar);
@@ -129,7 +129,7 @@ export class NavRelated
                     const userMenuUsername = document.createElement('h5');
                     userMenuUsernameWrapper.className = 'userMenuUsernameWrapper';
                     userMenuUsername.className = 'userMenuUsername';
-                    userMenuUsername.innerText = 'jingming295';
+                    userMenuUsername.innerText = userData.userData.name;
                     userMenuUsernameWrapper.appendChild(userMenuUsername);
                     return userMenuUsernameWrapper;
                 }
@@ -218,7 +218,7 @@ export class NavRelated
                 userAvatarImageWrapper.className = 'userAvatarImageWrapper';
 
                 userAvatarImg.className = 'userAvatar';
-                userAvatarImg.setAttribute('UserId', id);
+                userAvatarImg.setAttribute('UserId', userData.userData.id.toString());
                 userAvatarImg.addEventListener('click', () =>
                 {
                     const avatarId = userAvatarImg.getAttribute('UserId');
@@ -259,7 +259,7 @@ export class NavRelated
 
 
 
-                userAvatarImg.src = '../avatar/' + avatar;
+                userAvatarImg.src = '../avatar/' + userData.userData.avatar;
                 const DropMenu = userDropMenu();
                 userAvatarImageWrapper.appendChild(userAvatarImg);
                 userAvatarDiv.appendChild(userAvatarImageWrapper);
@@ -312,7 +312,7 @@ export class NavRelated
             rightBanner.appendChild(userAvatarDiv);
             return rightBanner;
         };
-        const userComponent = aprUserComponent(avatar, id);
+        const userComponent = aprUserComponent(userData);
         return userComponent;
     }
 
