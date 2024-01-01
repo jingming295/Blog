@@ -70,7 +70,19 @@ class init
             {
                 changePage.toIndex();
             }
-        } else
+        } else if (hash.startsWith('#/search')){
+            const keyword = hash.slice(hash.indexOf('?keyword=') + 9);
+            console.log(keyword)
+            if (keyword)
+            {
+                changePage.toSearch(keyword);
+            } else
+            {
+                changePage.toIndex();
+            }
+        
+        }
+        else
         {
             changePage.toIndex();
         }

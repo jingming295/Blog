@@ -32,7 +32,6 @@ export class NavigationProgress
         if(navigationProgress.style.width === "0px") return;
         if(navigationProgress.style.width === "100%") return;
         if(!navigationProgress.style.width) return;
-        console.log(navigationProgress.style.width);
         if(navigationProgress.style.width !== "100%"){
             navigationProgress.style.transition = "width .1s ease-in-out";
             navigationProgress.style.width = "100%";

@@ -26,7 +26,7 @@ export class UploadArticle
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
             {
                 const articleData = data.ArticleData;
-                if(articleData.id){
+                if(articleData.id && articleData.area && articleData.article && articleData.tag && articleData.title){
                     const dbSelect = new DBSelect()
                     const dbUpdate = new DBUpdate();
 
@@ -47,7 +47,7 @@ export class UploadArticle
                         const returnData = this.returnData.returnClientData(-101, 'You has no permission to edit this article');
                         return returnData;
                     }
-                } else {
+                } else if(articleData.area && articleData.article && articleData.tag && articleData.title){
                     const dbInsert = new DBInsert();
                     const ResultSetHeader = await dbInsert.postArticle(articleData.title, articleData.article, articleData.area, articleData.tag, userData.id);
     
@@ -59,6 +59,9 @@ export class UploadArticle
                     {
                         throw new Error(ResultSetHeader.info);
                     }
+                } else {
+                    const returnData = this.returnData.returnClientData(-101, 'Missing input');
+                    return returnData;
                 }
 
             } else

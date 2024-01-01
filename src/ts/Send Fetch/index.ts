@@ -278,6 +278,31 @@ export class SendPost
         });
     }
 
+    async getArticleDataByKeyword(keyword:string): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
+    {
+        this.navigationProgress.start();
+        const params = {
+            keyword: keyword
+        };
+        return await this.postWithUrlParams('getArticleDataByKeyword', params).then((response) =>
+        {
+            if (response.code === 0)
+            {
+                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
+            } else {
+                this.handlePopMsg.popMsg(response.message);
+                return []
+            }
+        }).catch((error: any) =>
+        {
+            console.log(error);
+            throw new Error(error);
+        })
+        .finally(() =>{
+            this.navigationProgress.end();
+        });
+    }
+
     async getUserProfile(id:number){
         this.navigationProgress.start();
         const params = {

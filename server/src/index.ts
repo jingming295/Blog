@@ -12,6 +12,7 @@ import getArticleDataByAuthor from './routes/GetArticleDataByAuthor';
 import articlePermission from './routes/ArticlePermission';
 import deleteArticle from './routes/DeleteArticle';
 import getArticleByArea from './routes/getArticleDataByArea';
+import getArticleDataByKeyword from './routes/GetArticleDataByKeyword';
 
 const app = express();
 const port = 3000;
@@ -31,7 +32,8 @@ const routers = [
   getArticleDataByAuthor,
   deleteArticle,
   articlePermission,
-  getArticleByArea
+  getArticleByArea,
+  getArticleDataByKeyword
 ];
 app.use('/', routers);
 

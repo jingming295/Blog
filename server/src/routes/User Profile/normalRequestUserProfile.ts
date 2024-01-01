@@ -28,7 +28,6 @@ export class NormalRequestUserProfile
             }
 
             const userProfileData = await dbSelect.selectUserProfile(numericId)
-            console.log(userProfileData)
             const clientUserProfileData = {
                 id: userProfileData[0].u_id,
                 name: userProfileData[0].u_name,

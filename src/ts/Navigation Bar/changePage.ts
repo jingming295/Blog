@@ -7,6 +7,7 @@ import { Page404 } from '../404 Page';
 import { ManageArticle } from '../Manage Article Page';
 import { NavRelated } from '.';
 import { AreaPage } from '../Area Page';
+import { SearchResultPage } from '../Search Result Page';
 export class ChangePage {
     constructor(DeletePrevious:boolean = false) {
         if (!(document.getElementById('navigationBar')))
@@ -80,6 +81,17 @@ export class ChangePage {
         window.location.href = urlconfig.url + '/#/area?area=' + area;
         const areaPage = new AreaPage();
         areaPage.init(area);
+    }
+
+    toSearch(value:string){
+        document.title = 'Search';
+        window.location.href = urlconfig.url + '/#/search?keyword=' + value;
+        const searchResultPage = new SearchResultPage();
+        searchResultPage.init(value);
+    }
+
+    toAdminPage(){
+
     }
 
 }

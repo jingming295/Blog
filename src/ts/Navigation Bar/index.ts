@@ -94,9 +94,43 @@ export class NavRelated
         rightBanner.className = 'rightBanner';
         rightBanner.id = 'rightBanner';
         const LogReg = aprLoginNRegisterComponent();
+        const searchBar = this.aprSearchBar();
+        rightBanner.appendChild(searchBar);
         rightBanner.appendChild(LogReg);
         return rightBanner;
     };
+
+    private aprSearchBar(){
+        const searchBarComponentWrapper = document.createElement('div');
+        const searchBarWrapper = document.createElement('div');
+        searchBarWrapper.className = 'searchBarWrapper';
+        searchBarComponentWrapper.className = 'searchBarComponentWrapper';
+
+        const searchBar = document.createElement('input');
+        searchBar.className = 'searchBar';
+        searchBar.placeholder = 'Search';
+        searchBar.type = 'text';
+        searchBar.onkeydown = function(e){
+            if(e.key === 'Enter'){
+                const changePage = new ChangePage(true);
+                const value = searchBar.value;
+                changePage.toSearch(value);
+            }
+        }
+
+        const btnSearch = document.createElement('div')
+        btnSearch.className = 'btnSearch';
+        btnSearch.innerText = 'Search';
+        btnSearch.onclick = function(){
+            const changePage = new ChangePage(true);
+            const value = searchBar.value;
+            changePage.toSearch(value);
+        }
+        searchBarWrapper.appendChild(searchBar);
+        searchBarComponentWrapper.appendChild(searchBarWrapper);
+        searchBarComponentWrapper.appendChild(btnSearch);
+        return searchBarComponentWrapper;
+    }
 
     private createRightBannerWithUserComponent(userData: UserData): HTMLDivElement
     {
@@ -176,6 +210,24 @@ export class NavRelated
                             }
                         }
                     ];
+                    if (userData.userData.class === 3)
+                    {
+                        const adminPage = [
+                            {
+                                name: 'Admin Page',
+                                func: function ()
+                                {
+                                    const changePage = new ChangePage(true);
+                                    changePage.toAdminPage();
+                                }
+                            }
+                        ];
+                        adminPage.forEach((item) =>
+                        {
+                            menuItem.unshift(item);
+                        });
+                    }
+
                     const userMenuWrapper = document.createElement('div');
                     userMenuWrapper.className = 'userMenuWrapper';
 
@@ -232,24 +284,29 @@ export class NavRelated
 
 
                 // 添加鼠标进入事件
-                userAvatarImg.onmouseenter = function() {
+                userAvatarImg.onmouseenter = function ()
+                {
                     const userMenu = document.getElementsByClassName('userMenu')[0];
                     userMenu.classList.add('showUserMenu');
                 };
 
                 // 添加鼠标离开事件
-                userAvatarDiv.onmouseleave = function() {
+                userAvatarDiv.onmouseleave = function ()
+                {
                     const userMenu = document.getElementsByClassName('userMenu')[0] as HTMLDivElement;
                     // 检查鼠标是否移动到了.userMenu上
 
-                    userMenu.onmouseleave = function() {
+                    userMenu.onmouseleave = function ()
+                    {
                         // 如果鼠标从.userMenu移出，就移除.showUserMenu类使菜单消失
-                        if(!userAvatarDiv.matches(':hover')){
+                        if (!userAvatarDiv.matches(':hover'))
+                        {
                             userMenu.classList.remove('showUserMenu');
                         }
                     };
                     // 如果鼠标没有移动到.userMenu上，就移除.showUserMenu类使菜单消失
-                    if (!userMenu.matches(':hover')) {
+                    if (!userMenu.matches(':hover'))
+                    {
                         userMenu.classList.remove('showUserMenu');
                     }
                 };
@@ -268,52 +325,59 @@ export class NavRelated
                 return userAvatarDiv;
             }
 
-            function createPostArticleBtn()
-            {
-                const postArticleDiv = document.createElement('div');
-                const postArticleBtn = document.createElement('div');
+            // function createPostArticleBtn()
+            // {
+            //     const postArticleDiv = document.createElement('div');
+            //     const postArticleBtn = document.createElement('div');
 
-                postArticleDiv.className = 'articleDiv';
-                postArticleBtn.className = 'articleBtn';
-                postArticleBtn.innerText = 'Post Article';
-                postArticleBtn.onclick = () =>
-                {
-                    const changePage = new ChangePage(true);
-                    changePage.toPostArticle();
-                };
-                postArticleDiv.appendChild(postArticleBtn);
-                return postArticleDiv;
-            }
+            //     postArticleDiv.className = 'articleDiv';
+            //     postArticleBtn.className = 'articleBtn';
+            //     postArticleBtn.innerText = 'Post Article';
+            //     postArticleBtn.onclick = () =>
+            //     {
+            //         const changePage = new ChangePage(true);
+            //         changePage.toPostArticle();
+            //     };
+            //     postArticleDiv.appendChild(postArticleBtn);
+            //     return postArticleDiv;
+            // }
 
-            function createManageArticleBtn()
-            {
-                const manageArticleDiv = document.createElement('div');
-                const manageArticleBtn = document.createElement('div');
-                manageArticleDiv.className = 'articleDiv';
-                manageArticleBtn.className = 'articleBtn';
-                manageArticleBtn.innerText = 'Manage Article';
-                manageArticleBtn.onclick = () =>
-                {
-                    const changePage = new ChangePage(true);
-                    changePage.toManageArticle();
-                };
-                manageArticleDiv.appendChild(manageArticleBtn);
-                return manageArticleDiv;
-            }
+            // function createManageArticleBtn()
+            // {
+            //     const manageArticleDiv = document.createElement('div');
+            //     const manageArticleBtn = document.createElement('div');
+            //     manageArticleDiv.className = 'articleDiv';
+            //     manageArticleBtn.className = 'articleBtn';
+            //     manageArticleBtn.innerText = 'Manage Article';
+            //     manageArticleBtn.onclick = () =>
+            //     {
+            //         const changePage = new ChangePage(true);
+            //         changePage.toManageArticle();
+            //     };
+            //     manageArticleDiv.appendChild(manageArticleBtn);
+            //     return manageArticleDiv;
+            // }
 
-            const rightBanner = document.createElement('div');
-            rightBanner.className = 'rightBanner';
-            rightBanner.id = 'rightBanner';
+            const userConponent = document.createElement('div');
+            userConponent.className = 'userComponent';
+
             const userAvatarDiv = createUserAvatar();
-            const postArticleBtn = createPostArticleBtn();
-            const manageArticleBtn = createManageArticleBtn();
-            rightBanner.appendChild(postArticleBtn);
-            rightBanner.appendChild(manageArticleBtn);
-            rightBanner.appendChild(userAvatarDiv);
-            return rightBanner;
+            // const postArticleBtn = createPostArticleBtn();
+            // const manageArticleBtn = createManageArticleBtn();
+            // userConponent.appendChild(postArticleBtn);
+            // userConponent.appendChild(manageArticleBtn);
+            userConponent.appendChild(userAvatarDiv);
+            return userConponent;
         };
+        const rightBanner = document.createElement('div');
+        rightBanner.className = 'rightBanner';
+        rightBanner.id = 'rightBanner';
+        const searchBar = this.aprSearchBar();
         const userComponent = aprUserComponent(userData);
-        return userComponent;
+        
+        rightBanner.appendChild(searchBar);
+        rightBanner.appendChild(userComponent);
+        return rightBanner;
     }
 
 
