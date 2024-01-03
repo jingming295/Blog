@@ -23,11 +23,15 @@ export class NormalRequestUserProfile
             const dbSelect = new DBSelect();
             if (isNaN(numericId))
             {
-                const returnData = this.returnData.returnClientData(-101, 'id must be numeric');
+                const returnData = this.returnData.returnClientData(-101, 'ID must be numeric');
                 return returnData
             }
 
             const userProfileData = await dbSelect.selectUserProfile(numericId)
+            if(userProfileData.length === 0){
+                const returnData = this.returnData.returnClientData(-101, 'User not found');
+                return returnData
+            }
             const clientUserProfileData = {
                 id: userProfileData[0].u_id,
                 name: userProfileData[0].u_name,

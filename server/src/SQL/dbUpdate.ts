@@ -46,5 +46,17 @@ export class DBUpdate extends DatabaseConnector
             [title, content, area, tag, articleID]
         );
     }
+
+    async updateAvatar(userID: number, avatarName: string): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_user 
+            INNER JOIN tb_avatar ON tb_avatar.avatar_name = ? 
+            SET tb_user.u_avatar = tb_avatar.avatar_id 
+            WHERE tb_user.u_id = ?;
+            `,
+            [avatarName, userID]
+        );
+    }
     
 }

@@ -1,6 +1,6 @@
 import * as mysql from 'mysql2/promise';
 import DatabaseConnector from './dbConnector';
-import { UserResult, UserProfile } from './interface';
+import { UserResult, UserProfile, ArticleCardData } from './interface';
 
 export class DBSelect extends DatabaseConnector
 {
@@ -34,7 +34,7 @@ export class DBSelect extends DatabaseConnector
     async login(email: string, hashedPassword: string): Promise<UserResult[]>
     {
         return this.executeQuery<UserResult>(
-            'SELECT `u_id`, `u_class`, `u_name`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_email` = ? && `u_password` = ?',
+            'SELECT `u_id`, `u_class`, `u_name`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_email` = ? && `u_password` = ? && u_avatar = avatar_id',
             [email, hashedPassword]
         );
     }
@@ -51,29 +51,26 @@ export class DBSelect extends DatabaseConnector
     async selectUserProfile(id: number): Promise<UserProfile[]>
     {
         return this.executeQuery<UserProfile>(
-            'SELECT `u_id`, `u_name`, `u_email`, `u_name`, `u_class`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_id` = ?',
+            'SELECT `u_id`, `u_name`, `u_email`, `u_name`, `u_class`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_id` = ? && u_avatar = avatar_id',
             [id]
         );
     }
 
-    async selectArticleCardData(): Promise<{ article_id: string, article_title: string, u_name: string; }[]>
+    async selectArticleContent(articleId: string): Promise<ArticleCardData[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, u_name: string; }>(
-            'SELECT `article_id`, `article_title`, `u_name` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_alive = 1'
-        );
-    }
-
-    async selectArticleContent(articleId: string): Promise<{ article_id: string, article_title: string, article_area:string, u_name: string, article_content: string; }[]>
-    {
-        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, u_name: string, article_content: string; }>(
-            'SELECT `article_id`, `article_title`,`article_area`, `u_name`, `article_content` FROM `tb_article` JOIN tb_user WHERE article_id = ? && article_author = u_id  && article_alive = 1',
+        return this.executeQuery<ArticleCardData>(
+            `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
+            article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
+            cs_textColor, cs_backgroundColor
+            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            WHERE article_id =? && article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1`,
             [articleId]
         );
     }
 
-    async selectArticleCardByID(userId: number): Promise<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }[]>
+    async selectArticleCardByID(userId: number): Promise<{ article_id: string, article_title: string, article_area: string, article_content: string, u_name: string; }[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
+        return this.executeQuery<{ article_id: string, article_title: string, article_area: string, article_content: string, u_name: string; }>(
             'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_author = ? && article_alive = 1',
             [userId]
         );
@@ -93,19 +90,47 @@ export class DBSelect extends DatabaseConnector
         );
     }
 
-    async selectArticleByArea(area: string): Promise<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }[]>
+    async selectArticleCardData(): Promise<ArticleCardData[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
-            'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_area = ? && article_alive = 1 && article_author = u_id',
+        return this.executeQuery<ArticleCardData>(
+            `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
+            article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
+            cs_textColor, cs_backgroundColor
+            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1`
+        );
+    }
+
+    async selectArticleCardDataByArea(area: string): Promise<ArticleCardData[]>
+    {
+        return this.executeQuery<ArticleCardData>(
+            `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
+            article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar,
+            cs_textColor, cs_backgroundColor
+            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && aa_area = ?` ,
             [area]
         );
     }
 
-    async selectArticleByKeyword(keyword: string): Promise<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }[]>
+    async selectArticleCardDataByKeyword(keyword: string): Promise<ArticleCardData[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, article_area:string, article_content: string, u_name: string; }>(
-            'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_title LIKE ? && article_alive = 1 && article_author = u_id',
+        return this.executeQuery<ArticleCardData>(
+            `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
+            article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
+            cs_textColor, cs_backgroundColor
+            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && article_title LIKE ?`,
             ['%' + keyword + '%']
         );
     }
+
+    async selectSHA256(sha256: string): Promise<{ avatar_name: string; }[]>
+    {
+        return this.executeQuery<{ avatar_name: string; }>(
+            'SELECT `avatar_name` FROM `tb_avatar` WHERE `avatar_sha256` = ?',
+            [sha256]
+        );
+    }
+    
 }

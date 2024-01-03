@@ -9,9 +9,6 @@ $background-color_6: rgba(255, 255, 255, 0);
 $shadow: 0 3px 10px rgba(0,0,0,.1);
 
 // $fontFamily: 'Noto Sans SC', sans-serif;
-/*
-这个是顶栏
-*/
 .navigationBar {
 	position: fixed;
 	top: 0;
@@ -58,6 +55,11 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 					font-size: 22px;
 					letter-spacing: 3px;
 					color: $gray;
+					transition: all .2s ease-in-out;
+				}
+
+				.site-title:hover {
+					color: #04AA6D;
 				}
 			}
 		}
@@ -90,6 +92,7 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 
 				.menu-item {
 					cursor: pointer;
+					transition: all .2s ease-in-out;
 				}
 
 				.menu-item:hover {
@@ -152,8 +155,6 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 						.userAvatar {
 							height: 38px;
 							width: 38px;
-		
-		
 							border-radius: 50%;
 							object-fit: cover;
 							cursor: pointer;

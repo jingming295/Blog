@@ -6,6 +6,7 @@ import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
 import { UserVerification } from "../User Verification";
 import { NavigationProgress } from "../Create Navigation Progress";
+import { RetArticleData } from "../Send Fetch/interface";
 export class UploadArticle
 {
     private navigationProgress = new NavigationProgress();
@@ -30,7 +31,7 @@ export class UploadArticle
 
     async createPostComponents(id: number | null)
     {
-        let article:{articleId: string,  articleTitle: string, articleArea:string, articleAuthor: string, articleContent: string; } | null = null;
+        let article:RetArticleData | null = null;
         if(id){
             const sendPost = new SendPost();
             article = await sendPost.getArticleContent(id)
@@ -150,8 +151,8 @@ export class UploadArticle
         contentDiv.appendChild(postWrapper);
         body.appendChild(contentDiv);
         if(article){
-            createTitleInput(article.articleTitle, article.articleArea);
-            const editor = createEditor(article.articleContent);
+            createTitleInput(article.article.articleTitle, article.article.articleArea);
+            const editor = createEditor(article.article.articleContent);
             createSubmit(editor);
         } else {
             createTitleInput()

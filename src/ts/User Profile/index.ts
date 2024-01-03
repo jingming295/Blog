@@ -4,6 +4,8 @@ import { ChangePage } from '../Navigation Bar/changePage';
 import { ProfileData } from './interface';
 import '../../scss/UserProfile/index.scss';
 import { ArticleCard } from '../Manage Article Page/interface';
+import { HandlePopMsg } from '../Navigation Bar/popMsg';
+import { urlconfig } from '../Url Config/config';
 
 /**
  * MakeUserProfile class 创建User Profile的组件
@@ -15,6 +17,7 @@ export class MakeUserProfile
     /**
      * init
      */
+    handlePopMsg = new HandlePopMsg();
     Init = async () =>
     {
         const sendPost = new SendPost();
@@ -85,20 +88,74 @@ export class MakeUserProfile
              */
             function createUserAvatar(avatar: string): HTMLDivElement
             {
+                function createChangeImgBtn(userData: UserData): HTMLDivElement
+                {
+                    const inputFile = document.createElement('input');
+                    inputFile.type = 'file';
+                    inputFile.className = 'inputFile';
+                    inputFile.accept = 'image/*';
+                    const changeImgBtn = document.createElement('div');
+                    changeImgBtn.className = 'changeImgBtn';
+                    changeImgBtn.innerHTML = 'Change Image';
+                    changeImgBtn.appendChild(inputFile);
+                    let clicked = false;
+                    changeImgBtn.onclick = () => {
+                        if (clicked) return;
+                        inputFile.click();
+                        inputFile.onchange = async () => {
+                            const file = inputFile.files;
+                            if (file && file[0])
+                            {
+                                if (file[0].size > 20 * 1024 * 1024) {
+                                    const handlePopMsg = new HandlePopMsg();
+                                    handlePopMsg.popMsg('Image size must be less than 20MB');
+                                    return;
+                                }
+                                const sendPost = new SendPost();
+                                const data = await sendPost.changeAvatar(userData, file[0], changeImgBtn);
+                                if (data)
+                                {
+                                    localStorage.setItem('UserData', JSON.stringify(data));
+                                    const userAvatar = document.querySelector('.userAvatar') as HTMLImageElement;
+                                    const userMenuAvatar = document.querySelector('.userMenuAvatar') as HTMLImageElement;
+                                    if (userAvatar && userMenuAvatar)
+                                    {
+                                        userAvatar.src = `${urlconfig.avatarUrl}${data.userData.avatar}`;
+                                        userMenuAvatar.src = `${urlconfig.avatarUrl}${data.userData.avatar}`;
+                                    }
+                                    clicked = true;
+                                    const changePage = new ChangePage(true);
+                                    changePage.toUserProfile(data.userData.id.toString());
+                                }
+                            }
+                        };
+                    };
+
+                    return changeImgBtn;
+                }
+                
                 const userImgWarp = document.createElement('div');
+                userImgWarp.className = 'userImgWarp';
                 const userImg = document.createElement('img');
+
 
                 userImgWarp.style.width = '150px';
                 userImgWarp.style.height = '150px';
 
-                userImg.style.width = '100%';
-                userImg.style.height = '100%';
-                userImg.style.objectFit = 'cover';
-                userImg.src = '../avatar/' + avatar;
-                userImg.style.border = '4px solid #fff';
-                userImg.style.borderRadius = '6px';
-                userImg.style.boxSizing = 'border-box';
+                userImg.className = 'userImg';
+                userImg.src = `${urlconfig.avatarUrl}${avatar}`;
                 userImgWarp.appendChild(userImg);
+
+                const userData = localStorage.getItem('UserData');
+                if(userData){
+                    const parsedUserData = JSON.parse(userData) as UserData;
+                    if(parsedUserData.userData.id === profileData.id){
+                        const changeImgBtn = createChangeImgBtn(parsedUserData);
+                        userImgWarp.appendChild(changeImgBtn);
+                        
+                    }
+                }
+
                 return userImgWarp;
             }
 
@@ -141,6 +198,7 @@ export class MakeUserProfile
             const backgroundDiv = document.createElement('div');
             backgroundDiv.id = 'backgroundDiv';
             backgroundDiv.className = 'backgroundDiv';
+            backgroundDiv.style.backgroundImage = `url(../background/1.jpg)`;
 
             const userHeaderComponentWrapper = document.createElement('div');
             userHeaderComponentWrapper.className = 'userHeaderComponentWrapper';
@@ -163,7 +221,6 @@ export class MakeUserProfile
                 const leftPanel = document.createElement('div');
                 leftPanel.className = 'userProfile-Usertab-leftPanel';
                 let i = 0;
-
                 const sideBarItem = [
                     {
                         name: 'User Profile',

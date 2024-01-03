@@ -5,7 +5,8 @@ import { UploadArticle } from './performUploadArticle';
 import { ArticleData as AD } from './interface';
 const router = express.Router();
 
-function transformUserData(body: any): LD {
+function transformUserData(body: any): LD
+{
     return {
         ...body.UserData,
         encUserData: {
@@ -17,17 +18,27 @@ function transformUserData(body: any): LD {
     } as LD;
 }
 
-router.post('/uploadArticle', async (req: Request, res: Response) => {
-    const body = req.body as { UserData: LD, ArticleData: AD };
-    if (body.UserData === undefined || body.ArticleData === undefined) {
-        res.json({ code: -101, message: 'Data is not complete' });
+router.post('/uploadArticle', async (req: Request, res: Response) =>
+{
+    try
+    {
+        const body = req.body as { UserData: LD, ArticleData: AD; };
+        if (body.UserData === undefined || body.ArticleData === undefined)
+        {
+            res.json({ code: -101, message: 'Data is not complete' });
+            return;
+        }
+        const uploadArticle = new UploadArticle();
+        const transformedUserData = transformUserData(body);
+        const data = { UserData: transformedUserData, ArticleData: body.ArticleData };
+        const returndata = await uploadArticle.performUploadArticle(data);
+        res.json(returndata);
+    } catch (error)
+    {
+        res.json({ code: -101, message: 'Error' });
         return;
     }
-    const uploadArticle = new UploadArticle();
-    const transformedUserData = transformUserData(body);
-    const data = {UserData: transformedUserData, ArticleData: body.ArticleData};
-    const returndata = await uploadArticle.performUploadArticle(data)
-    res.json(returndata);
+
 });
 
 export default router;

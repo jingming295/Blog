@@ -9,7 +9,9 @@
  * @type {URLConfig}
  */
 const urlconfig = {
-    url: 'http://localhost:8080'
+    url: 'http://localhost:8080',
+    serverUrl: 'http://localhost:3000/',
+    avatarUrl: 'http://localhost:3000/avatars/'
 };
 
 export { urlconfig };

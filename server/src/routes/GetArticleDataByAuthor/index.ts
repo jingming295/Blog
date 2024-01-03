@@ -17,16 +17,22 @@ function transformUserData(body: any): LD {
 
 router.post('/getArticleDataByAuthor', async (req: Request, res: Response) =>
 {
-    const body = req.body as { UserData: LD};
-    if (body.UserData === undefined)
-    {
-      res.json({ code: -101, message: 'Data is not complete' });
-      return;
+    try {
+        const body = req.body as { UserData: LD};
+        if (body.UserData === undefined)
+        {
+          res.json({ code: -101, message: 'Data is not complete' });
+          return;
+        }
+        const transformedUserData = transformUserData(body);
+    
+        const getArticleDataByAuthor = new GetArticleDataByAuthor();
+        const returnData = await getArticleDataByAuthor.getArticleDataByAuthor(transformedUserData)
+        res.json(returnData);
+    } catch (error) {
+        res.json({ code: -101, message: 'Error' });
+        return;
     }
-    const transformedUserData = transformUserData(body);
 
-    const getArticleDataByAuthor = new GetArticleDataByAuthor();
-    const returnData = await getArticleDataByAuthor.getArticleDataByAuthor(transformedUserData)
-    res.json(returnData);
 });
 export default router;

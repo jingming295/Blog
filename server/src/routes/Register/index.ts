@@ -6,9 +6,17 @@ const router = express.Router();
 
 router.post('/register', async (req: Request, res: Response) =>
 {
-    const register = new Register;
-    const body: RR = req.body as { username: string, email: string, password: string; };
-    const userResult = await register.performRegister(body);
-    res.json(userResult);
+    try
+    {
+        const register = new Register;
+        const body: RR = req.body as { username: string, email: string, password: string; };
+        const userResult = await register.performRegister(body);
+        res.json(userResult);
+    } catch (error)
+    {
+        res.json({ code: -101, message: 'Error' });
+        return;
+    }
+
 });
 export default router;

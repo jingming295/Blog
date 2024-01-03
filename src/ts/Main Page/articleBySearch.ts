@@ -1,35 +1,34 @@
-import { SendPost } from '../Send Fetch';
+import { ChangePage } from "../Navigation Bar/changePage";
+import { SendPost } from "../Send Fetch";
+import { MakeArticleCard } from "./makeArticleCard";
 
-import '../../scss/MainPage/index.scss';
-import { MakeArticleCard } from './makeArticleCard';
-export class MainPage
-{
-    init = () =>
+export class SearchResultPage{
+
+    init = (keyword: string) =>
     {
-        this.createContentDiv();
+        this.createContentDiv(keyword);
     };
 
-    private createContentDiv = async () =>
+    private createContentDiv = async (keyword: string) =>
     {
+
         const sendPost = new SendPost();
         const contentDiv = document.createElement('div');
         const articleCardWrapper = document.createElement('div');
         articleCardWrapper.className = 'articleCardWrapper';
-        contentDiv.id = 'contentDiv';
-        contentDiv.className = 'contentDiv';
-        const articleCardData = await sendPost.getArticleCardData();
-        console.log(articleCardData);
+        const articleCardData = await sendPost.getArticleCardDataByKeyword(keyword);
         articleCardData.forEach((item) => {
             const makeArticleCard = new MakeArticleCard();
             const ArticleCard = makeArticleCard.createArticleCard(item);
             articleCardWrapper.appendChild(ArticleCard);
         })
 
+        contentDiv.id = 'contentDiv';
+        contentDiv.className = 'contentDiv';
         contentDiv.appendChild(articleCardWrapper);
 
         document.body.appendChild(contentDiv);
 
     };
-
 
 }

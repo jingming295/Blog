@@ -4,7 +4,8 @@ import { LoginData as LD } from '../../Return To Client/interface';
 import { ArticlePermission } from './articlePermission';
 const router = express.Router();
 
-function transformUserData(body: any): LD {
+function transformUserData(body: any): LD
+{
     return {
         ...body.UserData,
         encUserData: {
@@ -16,17 +17,27 @@ function transformUserData(body: any): LD {
     } as LD;
 }
 
-router.post('/articlePermission', async (req: Request, res: Response) => {
-    const body = req.body as { UserData: LD, ArticleID: number };
-    if (body.UserData === undefined || body.ArticleID === undefined) {
-        res.json({ code: -101, message: 'Data is not complete' });
+router.post('/articlePermission', async (req: Request, res: Response) =>
+{
+    try
+    {
+        const body = req.body as { UserData: LD, ArticleID: number; };
+        if (body.UserData === undefined || body.ArticleID === undefined)
+        {
+            res.json({ code: -101, message: 'Data is not complete' });
+            return;
+        }
+        const articlePermission = new ArticlePermission();
+        const transformedUserData = transformUserData(body);
+        const data = { UserData: transformedUserData, ArticleID: body.ArticleID };
+        const returndata = await articlePermission.checkArticlePermission(data);
+        res.json(returndata);
+    } catch (error)
+    {
+        res.json({ code: -101, message: 'Error' });
         return;
     }
-    const articlePermission = new ArticlePermission();
-    const transformedUserData = transformUserData(body);
-    const data = {UserData: transformedUserData, ArticleID: body.ArticleID};
-    const returndata = await articlePermission.checkArticlePermission(data)
-    res.json(returndata);
+
 });
 
 export default router;

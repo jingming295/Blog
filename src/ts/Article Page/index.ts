@@ -2,7 +2,7 @@ import { SendPost } from "../Send Fetch";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ChangePage } from "../Navigation Bar/changePage";
 import '../../scss/ArticlePage/index.scss';
-import { ArticleContent } from "../Send Fetch/interface";
+import { ArticleContent, RetArticleData } from "../Send Fetch/interface";
 export class MakeArticlePage
 {
     handlePopMsg = new HandlePopMsg();
@@ -62,27 +62,33 @@ export class MakeArticlePage
         }
     }
 
-    private createArticleTitle(data:ArticleContent){
+    private createArticleTitle(data:RetArticleData){
         const articleTitle = document.createElement('h2');
-        articleTitle.innerText = data.articleTitle;
+        articleTitle.innerText = data.article.articleTitle;
         return articleTitle;
     }
 
-    private createStatusBar(data:ArticleContent){
+    private createStatusBar(data:RetArticleData){
         function createAuthorTab(){
             const articleAuthor = document.createElement('div');
             articleAuthor.className = 'articleAuthor';
-            articleAuthor.innerText = `Author: ${data.articleAuthor}`;
+            articleAuthor.innerText = `Author: ${data.author.articleAuthor}`;
+            articleAuthor.onclick = ()=>{
+                const changePage = new ChangePage(true);
+                changePage.toUserProfile(data.author.articleAuthorID.toString());
+            }
             return articleAuthor;
         }
 
         function createAreaTab(){
             const articleArea = document.createElement('div');
             articleArea.className = 'articleArea';
-            articleArea.innerText = `Area: ${data.articleArea}`;
+            articleArea.innerText = `Area: ${data.article.articleArea}`;
+            articleArea.style.color = data.colorScheme.areaTextColor;
+            articleArea.style.backgroundColor = data.colorScheme.areaBackgroundColor;
             articleArea.onclick = ()=>{
                 const changePage = new ChangePage(true);
-                changePage.toArea(data.articleArea);
+                changePage.toArea(data.article.articleArea);
             }
             return articleArea;
         }
@@ -94,10 +100,10 @@ export class MakeArticlePage
         return statusBar;
     }
 
-    private createArticleContent(data:ArticleContent){
+    private createArticleContent(data:RetArticleData){
         const articleContent = document.createElement('div');
         articleContent.className = 'articleContent';
-        articleContent.innerHTML = data.articleContent;
+        articleContent.innerHTML = data.article.articleContent || '';
         return articleContent;
     }
 

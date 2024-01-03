@@ -46,5 +46,13 @@ export class DBInsert extends DatabaseConnector
             [title, content, area, tag, userID]
         );
     }
+
+    async insertAvatar(avatarName: string, sha256:string): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            'INSERT INTO `tb_avatar`( `avatar_name`, `avatar_sha256`) VALUES (?,?)',
+            [avatarName, sha256]
+        );
+    }
     
 }

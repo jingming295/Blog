@@ -4,7 +4,8 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleContent } from "./interface";
+import { ArticleCardData, ArticleContent, RetArticleData } from "./interface";
+import { urlconfig } from "../Url Config/config";
 
 /**
  * 发送post的class
@@ -12,14 +13,15 @@ import { ArticleContent } from "./interface";
 export class SendPost
 {
     private navigationProgress = new NavigationProgress();
-    constructor(){
+    constructor()
+    {
 
     }
     handlePopMsg = new HandlePopMsg();
-    private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD>)
+    private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD | File>)
     {
-        const url = `http://localhost:3000/${api}`;
-        
+        const url = `${urlconfig.serverUrl}${api}`;
+        console.log(params);
         return fetch(url, {
             method: 'POST',
             headers: {
@@ -40,11 +42,59 @@ export class SendPost
             {
                 console.error('Error:', error);
                 throw new Error('Backend Not Running');
-            })
+            });
     }
 
-    Login(email: string, password: string){
+    private postWithUrlFormData(api: string, params: FormData, progressDiv:HTMLDivElement | null): Promise<XMLHttpRequest["response"]>
+    {
+        const url = `${urlconfig.serverUrl}${api}`;
         
+
+        return new Promise((resolve, reject) =>
+        {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.upload.onprogress = function (event)
+            {
+                if (event.lengthComputable)
+                {
+                    let percentComplete = event.loaded / event.total * 100;
+                    if(progressDiv){
+                        progressDiv.classList.add('changeImgBtnHovered')
+                        progressDiv.style.width = percentComplete.toFixed(0) + '%';
+                        progressDiv.innerHTML = percentComplete.toFixed(0) + '%';
+                        if(percentComplete.toFixed(0) === '100'){
+                            progressDiv.innerHTML = 'Done';
+                            progressDiv.classList.remove('changeImgBtnHovered')
+                            setTimeout(() => {
+                                progressDiv.innerHTML = 'Change Image'
+                            }, 300);
+                        }
+                    }
+                }
+            };
+            xhr.onload = function ()
+            {
+                if (xhr.status === 200)
+                {
+                    resolve(JSON.parse(xhr.response));
+                } else
+                {
+                    reject(new Error('Network response was not ok'));
+                }
+            };
+            xhr.onerror = function ()
+            {
+                reject(new Error('Backend Not Running'));
+            };
+            xhr.send(params);
+        });
+    }
+
+
+    Login(email: string, password: string)
+    {
+
         const params = {
             email: email,
             password: password,
@@ -56,16 +106,17 @@ export class SendPost
                 if (response.code === 0)
                 {
                     localStorage.setItem('UserData', JSON.stringify(response.data));
-                    return true
-                } else {
+                    return true;
+                } else
+                {
                     this.handlePopMsg.popMsg(response.message);
-                    return false
+                    return false;
                 }
             })
             .catch((error) =>
             {
                 this.handlePopMsg.popMsg(error);
-                return false
+                return false;
             });
     }
 
@@ -75,23 +126,24 @@ export class SendPost
      * @param username 
      * @param password 
      */
-    Register(email: string, username: string, password: string){
+    Register(email: string, username: string, password: string)
+    {
         const params = {
             email: email,
             username: username,
             password: password
         };
         this.postWithUrlParams('register', params)
-        .then((response) =>
-        {
-            this.handlePopMsg.popMsg(response.message);
-        })
-        .catch((error: any) =>
-        {
-            console.log(error);
-        });
+            .then((response) =>
+            {
+                this.handlePopMsg.popMsg(response.message);
+            })
+            .catch((error: any) =>
+            {
+                console.log(error);
+            });
     }
-    
+
     /**
      * Check if user has permission to edit article
      * @param articleID articleID
@@ -171,7 +223,8 @@ export class SendPost
                 {
                     console.log(error);
                 })
-                .finally(() =>{
+                .finally(() =>
+                {
                     this.navigationProgress.end();
                 });
         } else
@@ -216,7 +269,8 @@ export class SendPost
                 {
                     console.log(error);
                 })
-                .finally(() =>{
+                .finally(() =>
+                {
                     this.navigationProgress.end();
                 });
         } else
@@ -228,7 +282,7 @@ export class SendPost
         }
     }
 
-    async getArticleData(): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
+    async getArticleCardData(): Promise<ArticleCardData[]>
     {
         this.navigationProgress.start();
         const params = {};
@@ -236,7 +290,7 @@ export class SendPost
         {
             if (response.code === 0)
             {
-                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
+                return response.data as ArticleCardData[];
             }
             this.handlePopMsg.popMsg(response.message);
             throw new Error(response.message);
@@ -245,27 +299,29 @@ export class SendPost
             console.log(error);
             throw new Error(error);
         })
-        .finally(() =>{
-            this.navigationProgress.end();
-        });
+            .finally(() =>
+            {
+                this.navigationProgress.end();
+            });
     }
 
-    async getArticleDataByArea(area: string): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
+    async getArticleCardDataByArea(area: string): Promise<ArticleCardData[]>
     {
         this.navigationProgress.start();
         const params = {
             area: area
         };
-        return await this.postWithUrlParams('getArticleDataByArea', params).then((response) =>
+        return await this.postWithUrlParams('getArticleCardData', params).then((response) =>
         {
             if (response.code === 0)
             {
-                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
-            } else {
+                return response.data as ArticleCardData[];
+            } else
+            {
                 this.handlePopMsg.popMsg(response.message);
                 const changePage = new ChangePage(true);
                 changePage.to404Page();
-                return []
+                return [];
             }
 
         }).catch((error: any) =>
@@ -273,37 +329,41 @@ export class SendPost
             console.log(error);
             throw new Error(error);
         })
-        .finally(() =>{ 
-            this.navigationProgress.end();
-        });
+            .finally(() =>
+            {
+                this.navigationProgress.end();
+            });
     }
 
-    async getArticleDataByKeyword(keyword:string): Promise<{ articleTitle: string, articleAuthor: string, articleId: string; }[]>
+    async getArticleCardDataByKeyword(keyword: string): Promise<ArticleCardData[]>
     {
         this.navigationProgress.start();
         const params = {
             keyword: keyword
         };
-        return await this.postWithUrlParams('getArticleDataByKeyword', params).then((response) =>
+        return await this.postWithUrlParams('getArticleCardData', params).then((response) =>
         {
             if (response.code === 0)
             {
-                return response.data as { articleTitle: string, articleAuthor: string, articleId: string; }[];
-            } else {
+                return response.data as ArticleCardData[];
+            } else
+            {
                 this.handlePopMsg.popMsg(response.message);
-                return []
+                return [];
             }
         }).catch((error: any) =>
         {
             console.log(error);
             throw new Error(error);
         })
-        .finally(() =>{
-            this.navigationProgress.end();
-        });
+            .finally(() =>
+            {
+                this.navigationProgress.end();
+            });
     }
 
-    async getUserProfile(id:number){
+    async getUserProfile(id: number)
+    {
         this.navigationProgress.start();
         const params = {
             id: id
@@ -314,20 +374,22 @@ export class SendPost
 
                 if (response.code === 0)
                 {
-                    
-                    const profileData:ProfileData = response.data as ProfileData;
-                    return profileData
-                    
-                } else {
 
+                    const profileData: ProfileData = response.data as ProfileData;
+                    return profileData;
+
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
                     return null;
                 }
             })
             .catch(error =>
             {
                 console.log(error);
-                return null
-            }).finally(() =>{
+                return null;
+            }).finally(() =>
+            {
                 this.navigationProgress.end();
             });
     }
@@ -342,28 +404,30 @@ export class SendPost
         {
             if (response.code === 0)
             {
-                return response.data as ArticleContent;
+                return response.data as RetArticleData;
             } else
             {
                 this.handlePopMsg.popMsg(response.message);
                 const changePage = new ChangePage(true);
                 changePage.to404Page();
-                return null
+                return null;
             }
         }).catch((error: any) =>
         {
             const changePage = new ChangePage(true);
             changePage.to404Page();
-            return null
+            return null;
         })
-        .finally(() =>{
-            this.navigationProgress.end();
-        });
+            .finally(() =>
+            {
+                this.navigationProgress.end();
+            });
 
 
     }
 
-    async KeepLogin(parseUserData:UD){
+    async KeepLogin(parseUserData: UD)
+    {
         const params = {
             UserData: parseUserData,
         };
@@ -383,11 +447,12 @@ export class SendPost
             .catch((error) =>
             {
                 this.handlePopMsg.popMsg((error as Error).message);
-                return false
+                return false;
             });
     }
 
-    async getArticleDataByAuthor(parseUserData:UD){
+    async getArticleDataByAuthor(parseUserData: UD)
+    {
         const params = {
             UserData: parseUserData,
         };
@@ -409,11 +474,12 @@ export class SendPost
                 const changePage = new ChangePage(true);
                 changePage.toIndex();
             })
-            .finally(() =>{
+            .finally(() =>
+            {
             });
     }
 
-    
+
     deleteArticle(articleID: number)
     {
         this.navigationProgress.start();
@@ -424,7 +490,7 @@ export class SendPost
                 articleID: articleID,
                 UserData: JSON.parse(UserData),
             };
-    
+
             this.postWithUrlParams('deleteArticle', params)
                 .then((response) =>
                 {
@@ -446,7 +512,8 @@ export class SendPost
                     const changePage = new ChangePage(true);
                     changePage.toIndex();
                 })
-                .finally(() =>{
+                .finally(() =>
+                {
                     this.navigationProgress.end();
                 });
         } else
@@ -457,6 +524,31 @@ export class SendPost
             location.reload();
         }
 
+    }
+
+    async changeAvatar(userData: UD, avatar: File, progressDiv:HTMLDivElement)
+    {
+        const params = new FormData();
+        params.append('UserData', JSON.stringify(userData));
+        params.append('avatarFile', avatar);
+
+        return await this.postWithUrlFormData('changeAvatar', params, progressDiv)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    return response.data as UD;
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return null;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return null;
+            });
     }
 
 }

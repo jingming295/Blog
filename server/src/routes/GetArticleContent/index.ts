@@ -5,10 +5,15 @@ const router = express.Router();
 
 router.post('/getArticleContent', async (req: Request, res: Response) =>
 {
-    const id = req.body.articleId;
-    const getArticleContent = new GetArticleContent();
+    try {
+        const id = req.body.articleId;
+        const getArticleContent = new GetArticleContent();
+        const returnData = await getArticleContent.getArticleContent(id)
+        res.json(returnData);
+    } catch (error) {
+        res.json({ code: -101, message: 'Error' });
+        return;
+    }
 
-    const returnData = await getArticleContent.getArticleContent(id)
-    res.json(returnData);
 });
 export default router;

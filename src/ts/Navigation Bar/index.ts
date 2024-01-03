@@ -1,8 +1,8 @@
 import { ChangePage } from "./changePage";
-import { HandleLoginNRegister } from "./LoginNRegister";
 import { UserData } from "./interface";
 import { UserVerification } from "../User Verification";
 import { LoginNRegister } from "../Login And Register Page";
+import { urlconfig } from "../Url Config/config";
 /**
  * 顶栏相关
  * @class
@@ -144,7 +144,7 @@ export class NavRelated
                     userMenuAvatarWrapper.className = 'userMenuAvatarWrapper';
                     const userMenuAvatar = document.createElement('img');
                     userMenuAvatar.className = 'userMenuAvatar';
-                    userMenuAvatar.src = '../avatar/' + userData.userData.avatar;
+                    userMenuAvatar.src = `${urlconfig.avatarUrl}${userData.userData.avatar}`;
 
                     userMenuAvatar.onclick = () =>
                     {
@@ -316,7 +316,7 @@ export class NavRelated
 
 
 
-                userAvatarImg.src = '../avatar/' + userData.userData.avatar;
+                userAvatarImg.src = `${urlconfig.avatarUrl}${userData.userData.avatar}`;
                 const DropMenu = userDropMenu();
                 userAvatarImageWrapper.appendChild(userAvatarImg);
                 userAvatarDiv.appendChild(userAvatarImageWrapper);

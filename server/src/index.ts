@@ -11,13 +11,14 @@ import getArticleContent from './routes/GetArticleContent';
 import getArticleDataByAuthor from './routes/GetArticleDataByAuthor';
 import articlePermission from './routes/ArticlePermission';
 import deleteArticle from './routes/DeleteArticle';
-import getArticleByArea from './routes/getArticleDataByArea';
-import getArticleDataByKeyword from './routes/GetArticleDataByKeyword';
+import changeAvatar from './routes/ChangeAvatar';
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+
+app.use('/avatars', express.static('Avatars'))
 
 app.use(cors());
 
@@ -32,8 +33,7 @@ const routers = [
   getArticleDataByAuthor,
   deleteArticle,
   articlePermission,
-  getArticleByArea,
-  getArticleDataByKeyword
+  changeAvatar
 ];
 app.use('/', routers);
 

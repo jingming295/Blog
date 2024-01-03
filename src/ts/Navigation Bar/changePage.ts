@@ -1,4 +1,4 @@
-import { urlconfig } from '../Url Config/Live Server Url Config';
+import { urlconfig } from '../Url Config/config';
 import { MainPage } from '../Main Page';
 import { MakeUserProfile } from '../User Profile';
 import { UploadArticle } from '../UploadArticle';
@@ -6,8 +6,8 @@ import { MakeArticlePage } from '../Article Page';
 import { Page404 } from '../404 Page';
 import { ManageArticle } from '../Manage Article Page';
 import { NavRelated } from '.';
-import { AreaPage } from '../Area Page';
-import { SearchResultPage } from '../Search Result Page';
+import { AreaPage } from '../Main Page/articleByArea';
+import { SearchResultPage } from '../Main Page/articleBySearch';
 export class ChangePage {
     constructor(DeletePrevious:boolean = false) {
         if (!(document.getElementById('navigationBar')))
@@ -46,6 +46,7 @@ export class ChangePage {
     }
 
     toArticle (id:string) {
+        console.log(id);
         document.title = 'Article';
         window.location.href = urlconfig.url + '/#/p?id=' + id;
         const makeArticlePage = new MakeArticlePage();

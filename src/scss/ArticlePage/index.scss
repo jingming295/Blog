@@ -6,6 +6,7 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
     height: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 20px;
     .articleBox{
       word-wrap: break-word;
       display: flex;
@@ -20,57 +21,65 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
       box-shadow: $shadow;
       
       .statusBar{
+        border-bottom: 1px dashed #eee;
+        margin-bottom: 15px;
         .articleAuthor, .articleArea{
           padding: 4px 10px;
-          color: $themeColor;
           font-size: .875em;
           margin: 10px 10px 28px 0!important;
           border-radius: 5px;
           float: left;
           cursor: pointer;
-          background-color: #dae9ff;
+        }
+
+        .articleAuthor{
+          color: white;
+          background-color: #02a9ff;
+      }
+      }
+
+      .articleContent{
+        margin-bottom: 20px;
+        p, li{
+          white-space: pre-wrap;
+        }
+        blockquote{
+          border-left: 8px solid #d0e5f2;
+          padding: 10px 10px;
+          margin: 10px 0;
+          background-color: #f1f1f1;
+        }
+    
+        code{
+          font-family: monospace;
+          background-color: #eee;
+          padding: 3px;
+          border-radius: 3px;
+        }
+        pre>code{
+          display: block;
+          padding: 10px;
+        }
+        table{
+          border-collapse: collapse;
+        }
+        td, th{
+          border: 1px solid #ccc;
+          min-width: 50px;
+          height: 20px;
+        }
+        th{
+          background-color: #f1f1f1;
+        }
+        ul, ol{
+          padding-left: 20px;
+    
+        }
+        input[type="checkbox"] {
+          margin-right: 5px;
         }
       }
 
-  
-      p, li{
-        white-space: pre-wrap;
-      }
-      blockquote{
-        border-left: 8px solid #d0e5f2;
-        padding: 10px 10px;
-        margin: 10px 0;
-        background-color: #f1f1f1;
-      }
-  
-      code{
-        font-family: monospace;
-        background-color: #eee;
-        padding: 3px;
-        border-radius: 3px;
-      }
-      pre>code{
-        display: block;
-        padding: 10px;
-      }
-      table{
-        border-collapse: collapse;
-      }
-      td, th{
-        border: 1px solid #ccc;
-        min-width: 50px;
-        height: 20px;
-      }
-      th{
-        background-color: #f1f1f1;
-      }
-      ul, ol{
-        padding-left: 20px;
-  
-      }
-      input[type="checkbox"] {
-        margin-right: 5px;
-      }
     }
  
   }

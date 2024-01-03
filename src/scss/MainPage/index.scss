@@ -1,25 +1,111 @@
-.contentDiv{
-    .ArticleCard{
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        background-color: white;
-        color: black;
-        div{
-            width: 100%;
-        }
-        h4{
-            margin: 0px;
-            padding: 5px;
-            cursor: pointer;
-            float: left;
-        }
-        p{
-            padding: 5px;
-            float:left;
-            font-size: 10px;
+$themeColor: #73abff;
+
+    .articleCardWrapper{
+        margin-top: 20px;
+        .ArticleCard{
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-bottom: 1px solid #f3f3f3;
+            color: black;
+
+            .AuthorAreaWrapper{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                .avatarWrapper{
+                    .avatar{
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        margin: 10px;
+                        float: left;
+                        object-fit: cover;
+                        cursor: pointer;
+                    }
+                }
+                .authorStatusBarWrapper{
+                    display: flex;
+                    flex-direction: column;
+                    .authorNameWrapper{
+                        margin-bottom: 6px;
+                        .authorName{
+                            font-size: 14px;
+                            margin: 0px;
+                            cursor: pointer;
+                            float: left;
+                            transition: color .15s ease-in-out;
+                        }
+                        .authorName:hover{
+                            color: #1a73e8;
+                        }
+                    }
+                    .articleTimeWrapper{
+                        margin-bottom: 6px;
+                        .articleTime{
+                            font-size: 12px;
+                            margin: 0px;
+                            cursor: pointer;
+                            float: left;
+                            transition: color .15s ease-in-out;
+                        }
+                    }
+
+                }
+
+            }
+
+            .TitleWrapper{
+                .ArticleTitle{
+                    transition: color .15s ease-in-out;
+                    font-size: 18px;
+                    margin: 0px;
+                    padding: 5px;
+                    cursor: pointer;
+                    float: left;
+                }
+                .ArticleTitle:hover{
+                    color: #1a73e8;
+                }
+            }
+    
+            .StatusWrapper{
+                .ArticleAuthor, .ArticleArea, .ArticleLastEditTime{
+                    padding: 4px 10px;
+                    font-size: .875em;
+                    margin: 10px 10px 28px 5px!important;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    float:left;
+                    cursor: pointer;
+                }
+                .ArticleAuthor{
+                    color: white;
+                    background-color: #02a9ff;
+                }
+                // .ArticleArea{
+                //     color: white;
+                //     background-color: #04AA6D;
+
+                // }
+                .ArticleLastEditTime{
+                    color: white;
+                    background-color: #F0CF65;
+                }
+            }
+    
+            .ArticleFirstLineWrapper{
+                overflow-y: auto;
+                overflow: hidden;
+                .ArticleFirstLine{
+                    font-size: 18px;
+                    padding: 0 5px;
+                    float: left;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                }
+            }
+    
         }
     }
-
-}
