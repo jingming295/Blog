@@ -42,7 +42,9 @@ export class DBInsert extends DatabaseConnector
     async postArticle(title: string, content: string, area: string, tag: string, userID: number): Promise<ResultSetHeader>
     {
         return this.executeQuery(
-            'INSERT INTO `tb_article`(`article_title`, `article_content`, `article_area`, `article_tag`, article_author) VALUES (?,?,?,?,?)',
+            `INSERT INTO tb_article(article_title, article_content, article_area, article_tag, article_author) 
+            VALUES (?, ?, (SELECT aa_id FROM tb_articlearea WHERE aa_area = ?), ?, ?);
+            `,
             [title, content, area, tag, userID]
         );
     }

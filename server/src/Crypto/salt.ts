@@ -9,6 +9,7 @@ export class Salt
         {
             salt += characters.charAt(Math.floor(Math.random() * characters.length));
         }
+        console.log(salt)
         return salt;
     }
 }

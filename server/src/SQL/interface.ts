@@ -4,6 +4,8 @@ export interface UserResult
     u_class: number;
     u_name: string;
     avatar_name: string;
+    u_gender:number;
+    u_desc:string
 }
 
 export interface UserProfile
@@ -13,6 +15,8 @@ export interface UserProfile
     u_email: string;
     u_class: number;
     avatar_name: string;
+    u_gender:number;
+    u_desc:string
 
 }
 

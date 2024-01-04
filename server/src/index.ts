@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import loginRouter from './routes/Login/';
 import registerRouter from './routes/Register';
-import userprofile from './routes/User Profile';
+import getUserProfileData from './routes/GetUserProfileData';
 import keepLogin from './routes/KeepLogin';
 import uploadArticle from './routes/UploadArticle';
 import getArticleCardData from './routes/GetArticleCardData';
@@ -11,7 +11,9 @@ import getArticleContent from './routes/GetArticleContent';
 import getArticleDataByAuthor from './routes/GetArticleDataByAuthor';
 import articlePermission from './routes/ArticlePermission';
 import deleteArticle from './routes/DeleteArticle';
-import changeAvatar from './routes/ChangeAvatar';
+import changeAvatar from './routes/UpdateAvatar';
+import updateUserProfile from './routes/UpdateUserProfile';
+import updateUserPassword from './routes/UpdateUserPassword';
 
 const app = express();
 const port = 3000;
@@ -25,7 +27,7 @@ app.use(cors());
 const routers = [
   loginRouter,
   registerRouter,
-  userprofile,
+  getUserProfileData,
   keepLogin,
   uploadArticle,
   getArticleCardData,
@@ -33,7 +35,9 @@ const routers = [
   getArticleDataByAuthor,
   deleteArticle,
   articlePermission,
-  changeAvatar
+  changeAvatar,
+  updateUserProfile,
+  updateUserPassword
 ];
 app.use('/', routers);
 

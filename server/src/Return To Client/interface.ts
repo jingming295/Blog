@@ -18,5 +18,7 @@ export interface UserData{
   name: string
   email: string
   class: number
+  gender: number
+  userDesc:string
   avatar: string
 }

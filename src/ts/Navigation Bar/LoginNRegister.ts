@@ -75,7 +75,11 @@ export class HandleLoginNRegister
             password: hashedPassword
         };
 
-        sendPost.Register(params.email, params.username, params.password);
+        const response = await sendPost.Register(params.email, params.username, params.password);
+        if(response){
+            const loginNRegister = new LoginNRegister();
+            loginNRegister.closeLoginnRegisterPg();
+        }
     }
 
     async handleLogin()

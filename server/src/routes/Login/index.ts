@@ -12,7 +12,6 @@ router.post('/login', async (req: Request, res: Response) =>
     const login = new Login();
     const body: LR = req.body as { email: string, password: string; };
     const userResult = await login.performLogin(body);
-    console.log(userResult);
     res.json(userResult);
   } catch (error)
   {

@@ -4,7 +4,7 @@ import { NormalRequestUserProfile } from './normalRequestUserProfile';
 
 const router = express.Router();
 
-router.post('/userprofile', async (req: Request, res: Response) =>
+router.post('/getUserProfileData', async (req: Request, res: Response) =>
 {
   try
   {

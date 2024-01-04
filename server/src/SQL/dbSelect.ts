@@ -34,7 +34,8 @@ export class DBSelect extends DatabaseConnector
     async login(email: string, hashedPassword: string): Promise<UserResult[]>
     {
         return this.executeQuery<UserResult>(
-            'SELECT `u_id`, `u_class`, `u_name`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_email` = ? && `u_password` = ? && u_avatar = avatar_id',
+            `SELECT u_id, u_name, u_class, u_gender,u_desc, avatar_name FROM tb_user JOIN tb_avatar 
+            WHERE u_email = ? && u_password = ? && u_avatar = avatar_id`,
             [email, hashedPassword]
         );
     }
@@ -51,7 +52,8 @@ export class DBSelect extends DatabaseConnector
     async selectUserProfile(id: number): Promise<UserProfile[]>
     {
         return this.executeQuery<UserProfile>(
-            'SELECT `u_id`, `u_name`, `u_email`, `u_name`, `u_class`, `avatar_name` FROM `tb_user` JOIN tb_avatar WHERE `u_id` = ? && u_avatar = avatar_id',
+            `SELECT u_id, u_name, u_email, u_class, u_gender,u_desc, avatar_name FROM tb_user JOIN tb_avatar 
+            WHERE u_id = ? && u_avatar = avatar_id`,
             [id]
         );
     }
@@ -68,10 +70,15 @@ export class DBSelect extends DatabaseConnector
         );
     }
 
-    async selectArticleCardByID(userId: number): Promise<{ article_id: string, article_title: string, article_area: string, article_content: string, u_name: string; }[]>
+    async selectArticleCardByID(userId: number): Promise<ArticleCardData[]>
     {
-        return this.executeQuery<{ article_id: string, article_title: string, article_area: string, article_content: string, u_name: string; }>(
-            'SELECT `article_id`, `article_title`, `article_content`, `u_name`, `article_area` FROM `tb_article` JOIN tb_user WHERE article_author = u_id && article_author = ? && article_alive = 1',
+        return this.executeQuery<ArticleCardData>(
+            `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
+            article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
+            cs_textColor, cs_backgroundColor
+            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            WHERE article_author = u_id && article_author = ? && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1
+            ORDER BY article_lastEditTime DESC;`,
             [userId]
         );
     }
@@ -97,7 +104,8 @@ export class DBSelect extends DatabaseConnector
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
             FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
-            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1`
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1
+            ORDER BY article_lastEditTime DESC;`
         );
     }
 
@@ -108,7 +116,8 @@ export class DBSelect extends DatabaseConnector
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar,
             cs_textColor, cs_backgroundColor
             FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
-            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && aa_area = ?` ,
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && aa_area = ?
+            ORDER BY article_lastEditTime DESC;` ,
             [area]
         );
     }
@@ -120,7 +129,8 @@ export class DBSelect extends DatabaseConnector
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
             FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
-            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && article_title LIKE ?`,
+            WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && article_title LIKE ?
+            ORDER BY article_lastEditTime DESC;`,
             ['%' + keyword + '%']
         );
     }
@@ -132,5 +142,5 @@ export class DBSelect extends DatabaseConnector
             [sha256]
         );
     }
-    
+
 }

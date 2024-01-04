@@ -5,4 +5,6 @@ export interface ProfileData
     email: string;
     class: number;
     avatar: string;
+    gender: number;
+    description: string;
 }

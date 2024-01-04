@@ -108,8 +108,10 @@ export class NavRelated
 
         const searchBar = document.createElement('input');
         searchBar.className = 'searchBar';
+        searchBar.name = 'searchBar';
         searchBar.placeholder = 'Search';
         searchBar.type = 'text';
+        searchBar.autocomplete = 'off';
         searchBar.onkeydown = function(e){
             if(e.key === 'Enter'){
                 const changePage = new ChangePage(true);
@@ -449,6 +451,7 @@ export class NavRelated
         const navigationContainer = document.getElementById('navigation-container');
         if (navigationContainer instanceof HTMLDivElement)
         {
+
             this.DeleteRightBanner();
             const rightBanner = await this.createRightBanner();
             navigationContainer.appendChild(rightBanner);

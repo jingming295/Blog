@@ -85,11 +85,12 @@ export class LoginNRegister
                 loginBoxItem0Div.style.visibility = 'hidden';
 
                 const usernameInput = document.createElement('input');
-                usernameInput.type = 'text';
+                usernameInput.type = 'name';
                 usernameInput.id = 'name';
                 usernameInput.tabIndex = 1;
                 usernameInput.spellcheck = false;
                 usernameInput.autocomplete = 'off';
+                
 
                 const usernameInputLabel = document.createElement('span');
                 usernameInputLabel.innerHTML = '<b>Username</b>';
@@ -106,7 +107,8 @@ export class LoginNRegister
                 loginBoxItem1Div.className = 'loginBox-item';
 
                 const usernameInput = document.createElement('input');
-                usernameInput.type = 'email';
+                usernameInput.type = 'text'
+                usernameInput.name = 'email'
                 usernameInput.id = 'email';
                 usernameInput.tabIndex = 1;
                 usernameInput.spellcheck = false;
@@ -129,10 +131,11 @@ export class LoginNRegister
 
                 const passwordInput = document.createElement('input');
                 passwordInput.type = 'password';
+                passwordInput.name = 'password';
                 passwordInput.id = 'password';
                 passwordInput.tabIndex = 2;
                 passwordInput.spellcheck = false;
-                passwordInput.autocomplete = 'off';
+                passwordInput.autocomplete = 'new-password';
 
                 const passwordInputLabel = document.createElement('span');
                 passwordInputLabel.innerHTML = '<b>Password</b>';
@@ -324,7 +327,6 @@ export class LoginNRegister
         };
         const btnLogin = document.getElementById('btnLogin');
         const btnRegister = document.getElementById('btnRegister');
-        console.log(btnLogin, btnRegister);
         const btnCloseLoginnRegisterPg = document.getElementById('closeloginBox');
         if (btnCloseLoginnRegisterPg) btnCloseLoginnRegisterPg.addEventListener('click', this.closeLoginnRegisterPg);
         if (btnLogin) btnLogin.addEventListener('click', showLoginPage);

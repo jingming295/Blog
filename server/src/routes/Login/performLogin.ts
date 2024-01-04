@@ -1,7 +1,6 @@
 import { LoginRequest as LR } from './interface';
 import { LoginData as LD, ReturnClientData as RCD, UserData as UD } from '../../Return To Client/interface';
 
-import { Salt } from '../../Crypto/salt';
 import { SHA256 } from '../../Crypto/sha256';
 import { DBSelect } from '../../SQL/dbSelect';
 import { ReturnData } from '../../Return To Client';
@@ -23,12 +22,12 @@ export class Login
         try
         {
             this.validation(loginRequest);
-            const salt = new Salt();
+            // const salt = new Salt();
             const sha256 = new SHA256();
             const dbSelect = new DBSelect();
             const password = loginRequest.password;
             const email = loginRequest.email;
-            const saltedPassword = password + salt;
+            const saltedPassword = password;
             const hashedPassword = await sha256.hashPassword(saltedPassword);
             const userResult = await dbSelect.login(email, hashedPassword);
             if (!userResult.length)
@@ -42,6 +41,8 @@ export class Login
                 name: userResult[0].u_name,
                 email: loginRequest.email,
                 class: userResult[0].u_class,
+                gender: userResult[0].u_gender,
+                userDesc: userResult[0].u_desc,
                 avatar: userResult[0].avatar_name
             }
 

@@ -10,47 +10,63 @@ import { JSDOM } from 'jsdom';
 export class GetArticleDataByAuthor
 {
     private returnData = new ReturnData();
-    async getArticleDataByAuthor(UserData: LD)
+    async getArticleDataByAuthor(UserID: number)
     {
         try
         {
-            const decUserData: UD = this.decryptUserData(UserData.encUserData, UserData.userData.id.toString());
-            const userData: UD = UserData.userData;
-            if (JSON.stringify(decUserData) === JSON.stringify(userData))
+
+            const dbSelect = new DBSelect();
+            const resultSetHeader = await dbSelect.selectArticleCardByID(UserID);
+
+            if (resultSetHeader.length > 0)
             {
-                const dbSelect = new DBSelect();
-                const resultSetHeader = await dbSelect.selectArticleCardByID(userData.id);
-
-                if (resultSetHeader.length > 0)
+                let manageArticleData = resultSetHeader.map(item =>
                 {
-                    let manageArticleData = resultSetHeader.map(item => {
-                        const dom = new JSDOM(item.article_content);
-                        const firstParagraph = dom.window.document.querySelector('p');
-                    
-                        // Get text content of the first non-empty <p> element
-                        const pText = firstParagraph?.textContent?.trim() || null; // Use null if the <p> is empty
-                    
-                        return {
-                            articleID: item.article_id,
-                            articleTitle: item.article_title,
-                            articleArea: item.article_area,
-                            author: item.u_name,
-                            p: pText,
-                        };
-                    });
+                    const dom = new JSDOM(item.article_content);
+                    const paragraphs = dom.window.document.querySelectorAll('p');
+                    let firstNonEmptyPText = null;
 
-                    const returnData = this.returnData.returnClientData(0, 'Sucessful', manageArticleData);
-                    return returnData;
-                } else
-                {
-                    const returnData = this.returnData.returnClientData(-101, 'You have not post any article yet');
-                    return returnData;
-                }
+                    for (const paragraph of paragraphs)
+                    {
+                        const pText = paragraph.textContent?.trim();
+                        if (pText)
+                        {
+                            firstNonEmptyPText = pText;
+                            break;
+                        }
+                    }
+                    if (!firstNonEmptyPText)
+                    {
+                        const spans = dom.window.document.querySelectorAll('span');
+
+                        for (const span of spans)
+                        {
+                            const spanText = span.textContent?.trim();
+                            if (spanText)
+                            {
+                                firstNonEmptyPText = spanText;
+                                break;
+                            }
+                        }
+                    }
+
+                    return {
+                        articleID: item.article_id,
+                        articleTitle: item.article_title,
+                        articleArea: item.article_area,
+                        author: item.article_author_name,
+                        p: firstNonEmptyPText,
+                    };
+                });
+
+                const returnData = this.returnData.returnClientData(0, 'Sucessful', manageArticleData);
+                return returnData;
             } else
             {
-                const returnData = this.returnData.returnClientData(-101, 'User data not match');
+                const returnData = this.returnData.returnClientData(-101, 'You have not post any article yet');
                 return returnData;
             }
+
         } catch (error)
         {
             // invalid iv
@@ -65,13 +81,6 @@ export class GetArticleDataByAuthor
                 return returnData;
             }
         }
-    }
-
-    decryptUserData(encUserData: AES_256_GCMEncrypted, key: string)
-    {
-        const aes_256_GCM = new AES_256_GCM();
-        const decUserData: UD = JSON.parse(aes_256_GCM.decrypt(encUserData.encryptedData, encUserData.iv, encUserData.tag, key));
-        return decUserData;
     }
 
 }

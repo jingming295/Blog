@@ -7,11 +7,14 @@ $themeColor: #73abff;
 
 .contentDiv {
     .postWrapper {
+        display: flex;
+        flex-direction: column;
         margin-top: 20px;
         width: 100%;
-        height: 100%;
+        height: 85vh;
         padding-left: 3%;
         padding-right: 3%;
+        padding-bottom: 10px;
         border-radius: $borderRadius;
         color: black;
         background-color: $postWrapperBG;
@@ -86,7 +89,6 @@ $themeColor: #73abff;
 
             .editor-container {
                 padding: 2.5px;
-                height: 450px;
             }
         }
 

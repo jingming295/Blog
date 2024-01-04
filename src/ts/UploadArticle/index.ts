@@ -61,6 +61,7 @@ export class UploadArticle
             titleInput.id = 'titleInput';
             titleInput.className = 'titleInput';
             titleInput.placeholder = 'Title';
+            titleInput.autocomplete = 'off';
             if(title){
                 titleInput.value = title;
             }
@@ -90,26 +91,40 @@ export class UploadArticle
             postWrapper.appendChild(inputWrapper);
         }
 
-        function createEditor(html: string | null = null)
-        {
+        function createEditor(html: string | null = null) {
             const editorWarpper = document.createElement('div');
             const toolbar = document.createElement('div');
             const editorContainer = document.createElement('div');
-
+        
             editorWarpper.id = 'editor—wrapper';
             editorWarpper.className = 'editor';
-
+        
             toolbar.id = 'toolbar-container';
-
+        
             editorContainer.id = 'editor-container';
             editorContainer.className = 'editor-container';
-
+        
             editorWarpper.appendChild(toolbar);
             editorWarpper.appendChild(editorContainer);
             postWrapper.appendChild(editorWarpper);
+        
+            // 设置 editorContainer 初始高度
+            setEditorContainerHeight();
+        
+            // 在窗口大小改变时重新设置 editorContainer 的高度
+            window.addEventListener('resize', setEditorContainerHeight);
+        
             const editor = new Editor();
             return editor.createEditor(html);
+        
+            function setEditorContainerHeight() {
+                const postWrapper = document.querySelector('.postWrapper') as HTMLDivElement;   
+                const postWrapperHeight = postWrapper.offsetHeight;
+                const newEditorContainerHeight = postWrapperHeight - 85-63-60; // 90px 是固定值
+                editorContainer.style.height = `${newEditorContainerHeight}px`;
+            }
         }
+        
 
         const createSubmit = (editor: IDomEditor) =>
         {

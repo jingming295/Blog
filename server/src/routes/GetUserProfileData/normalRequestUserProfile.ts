@@ -37,7 +37,9 @@ export class NormalRequestUserProfile
                 name: userProfileData[0].u_name,
                 email: userProfileData[0].u_email,
                 class: userProfileData[0].u_class,
-                avatar: userProfileData[0].avatar_name
+                avatar: userProfileData[0].avatar_name,
+                gender: userProfileData[0].u_gender,
+                description: userProfileData[0].u_desc
             }
             const returnData = this.returnData.returnClientData(0, 'sucess', clientUserProfileData);
             return returnData

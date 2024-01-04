@@ -1,7 +1,6 @@
 import { ReturnClientData as RCD } from '../../Return To Client/interface';
 import { RegisterRequest as RR } from './interface';
 
-import { Salt } from '../../Crypto/salt';
 import { SHA256 } from '../../Crypto/sha256';
 import { DBSelect } from '../../SQL/dbSelect';
 import { ReturnData } from '../../Return To Client';
@@ -22,14 +21,13 @@ export class Register
         try
         {
             this.validation(registerRequest);
-            const salt = new Salt();
             const sha256 = new SHA256();
             const dbSelect = new DBSelect();
             const dbInsert = new DBInsert();
             const username = registerRequest.username;
             const email = registerRequest.email;
             const password = registerRequest.password;
-            const saltedPassword = password + salt;
+            const saltedPassword = password;
             const hashedPassword = await sha256.hashPassword(saltedPassword);
 
             const idResult = await dbSelect.selectEmail(email);

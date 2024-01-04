@@ -81,6 +81,8 @@ class init
                 changePage.toIndex();
             }
         
+        } else if (hash.startsWith('#/admin')){
+            changePage.toAdminPage();
         }
         else
         {

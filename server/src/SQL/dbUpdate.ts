@@ -42,7 +42,14 @@ export class DBUpdate extends DatabaseConnector
     async updateArticle(articleID:number, title: string, content: string, area: string, tag: string): Promise<ResultSetHeader>
     {
         return this.executeQuery(
-            'UPDATE `tb_article` SET `article_title` = ?, `article_content` =? , `article_area` = ?, `article_tag` = ? WHERE `article_id` = ?',
+            `UPDATE tb_article
+            SET article_title = ?, article_content = ?, article_area = (
+                SELECT aa_id
+                FROM tb_articlearea
+                WHERE aa_area = ?
+            ), article_tag = ?,
+            article_lastEditTime = CURRENT_TIMESTAMP
+            WHERE article_id = ?`,
             [title, content, area, tag, articleID]
         );
     }
@@ -58,5 +65,23 @@ export class DBUpdate extends DatabaseConnector
             [avatarName, userID]
         );
     }
-    
+
+    async updateUserProfile(id:number, newUserName:string, newGender:number, newDescription:string){
+        return this.executeQuery(
+            `UPDATE tb_user 
+            SET u_name = ?, u_gender =?, u_desc = ? 
+            WHERE u_id = ?;
+            `,
+            [newUserName, newGender, newDescription, id]
+        );
+    }
+    async updateUserPassword(id:number, newPassword:string){
+        return this.executeQuery(
+            `UPDATE tb_user 
+            SET u_password = ? 
+            WHERE u_id = ?;
+            `,
+            [newPassword, id]
+        );
+    }
 }

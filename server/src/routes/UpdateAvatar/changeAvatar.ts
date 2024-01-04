@@ -144,6 +144,8 @@ export class ChangeAvatar
             name: userResult[0].u_name,
             email: userResult[0].u_email,
             class: userResult[0].u_class,
+            gender: userResult[0].u_gender,
+            userDesc: userResult[0].u_desc,
             avatar: userResult[0].avatar_name
         }
         const encryptedData = aes_256_GCM.encrypt(JSON.stringify(userData), userID.toString());

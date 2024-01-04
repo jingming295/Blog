@@ -14,4 +14,10 @@ const urlconfig = {
     avatarUrl: 'http://localhost:3000/avatars/'
 };
 
+const serverUrlConfig = {
+    url: 'https://blog.mcyuans.com',
+    serverUrl: 'https://blogserver.mcyuans.com//',
+    avatarUrl: 'https://blogserver.mcyuans.com//avatars/'
+};
+
 export { urlconfig };

@@ -18,7 +18,6 @@ export class MainPage
         contentDiv.id = 'contentDiv';
         contentDiv.className = 'contentDiv';
         const articleCardData = await sendPost.getArticleCardData();
-        console.log(articleCardData);
         articleCardData.forEach((item) => {
             const makeArticleCard = new MakeArticleCard();
             const ArticleCard = makeArticleCard.createArticleCard(item);

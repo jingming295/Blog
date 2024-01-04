@@ -38,7 +38,7 @@ export class ManageArticle
             {
                 const parseUserData: UserData = JSON.parse(UserData);
                 const sendPost = new SendPost();
-                return await sendPost.getArticleDataByAuthor(parseUserData);
+                return await sendPost.getArticleDataByAuthor(parseUserData.userData.id);
             } else
             {
                 localStorage.clear();

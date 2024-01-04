@@ -8,6 +8,7 @@ import { ManageArticle } from '../Manage Article Page';
 import { NavRelated } from '.';
 import { AreaPage } from '../Main Page/articleByArea';
 import { SearchResultPage } from '../Main Page/articleBySearch';
+import { AdminPage } from '../Admin Page';
 export class ChangePage {
     constructor(DeletePrevious:boolean = false) {
         if (!(document.getElementById('navigationBar')))
@@ -46,7 +47,6 @@ export class ChangePage {
     }
 
     toArticle (id:string) {
-        console.log(id);
         document.title = 'Article';
         window.location.href = urlconfig.url + '/#/p?id=' + id;
         const makeArticlePage = new MakeArticlePage();
@@ -92,7 +92,10 @@ export class ChangePage {
     }
 
     toAdminPage(){
-
+        document.title = 'Admin Page';
+        window.location.href = urlconfig.url + '/#/admin';
+        const adminPage = new AdminPage()
+        adminPage.init();
     }
 
 }

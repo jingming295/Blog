@@ -26,9 +26,11 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
             padding: 0px 42px 18px 42px;
             display: flex;
             margin-top: -80px;
-            .userImgWarp{
+
+            .userImgWarp {
                 position: relative;
-                .userImg{
+
+                .userImg {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
@@ -36,7 +38,8 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
                     border-radius: 6px;
                     box-sizing: border-box;
                 }
-                .changeImgBtn{
+
+                .changeImgBtn {
                     display: flex;
                     position: absolute;
                     opacity: 0;
@@ -47,23 +50,26 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
                     top: 0;
                     left: 0;
                     transition: all .3s ease;
-                    .inputFile{
+
+                    .inputFile {
                         display: none;
-                    
+
                     }
                 }
-                .changeImgBtn:hover{
+
+                .changeImgBtn:hover {
                     opacity: 1;
                     color: white;
                     background: rgba(0, 0, 0, 0.651);
                     cursor: pointer;
                 }
-                .changeImgBtnHovered{
+
+                .changeImgBtnHovered {
                     opacity: 1;
                     color: white;
                     background: rgba(0, 0, 0, 0.651);
                     cursor: pointer;
-                
+
                 }
             }
         }
@@ -83,6 +89,7 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
 
             .userProfile-Usertab-leftPanel {
                 box-shadow: $shadow;
+
                 .userSideBar {
 
                     padding: 16px;
@@ -205,6 +212,156 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
                 }
 
             }
+
+            .navigationWrapper {
+                display: flex;
+                padding: 10px;
+
+                .navigationItem {
+                    font-size: 14px;
+                    padding: 5px 16px;
+                    margin: 0 5px;
+                    border-radius: 32px;
+                    cursor: pointer;
+                    transition: all .3s ease;
+                    background-color: rgb(242 243 245);
+                    color: rgb(78, 89, 105);
+                }
+
+                .navigationItem:hover {
+                    background-color: rgb(22, 192, 248);
+                    color: white;
+                }
+
+                .navigationItemOnSelect {
+                    background-color: rgb(22, 192, 248);
+                    color: white;
+                }
+            }
+
+            .settingWrapper{
+
+                .basicSettingsWrapper {
+                    padding: 10px;
+    
+    
+                    .changeGenderWrapper {
+                        display: flex;
+                        flex-direction: column;
+                        margin-bottom: 20px;
+    
+                        .changeGenderTitle {
+                            margin-bottom: 8px;
+                            margin-left: 4px;
+                            font-size: 14px;
+                        }
+    
+                        .radioGroupWrapper {
+                            display: flex;
+                            flex-direction: row;
+                            margin-left: 4px;
+    
+                            .radioWrapper {
+                                cursor: pointer;
+    
+                                .radioContainer {
+                                    margin-right: 4px;
+                                    cursor: pointer;
+                                }
+    
+                                label {
+                                    margin-right: 18px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                }
+    
+                                input[type='radio'] {
+                                    appearance: none;
+                                    -webkit-appearance: none;
+                                    -moz-appearance: none;
+                                    width: 14px;
+                                    height: 14px;
+                                    background-color: #f2f2f2;
+                                    border-radius: 50%;
+                                    border: 1px solid #999;
+                                    transition: 0.1s all linear;
+                                    margin-right: 10px;
+                                    outline: none;
+                                }
+    
+                                input[type='radio']:checked {
+                                    border: 5px solid rgb(22, 192, 248);
+                                }
+                            }
+                        }
+                    }
+    
+                }
+
+                .passwordSettingsWrapper{
+                    padding: 10px;
+                }
+
+                .commonSettingsWrapper {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 20px;
+
+                    .commonSettingsTitle {
+                        margin-bottom: 8px;
+                        margin-left: 4px;
+                        font-size: 14px;
+                    }
+                    .commonSettingsInputWrapper{
+                        padding: 0 12px;
+                        border-radius: 10px;
+                        background-color: rgb(242, 243, 245);
+                        display: flex;
+                        flex-direction: column;
+                        transition: all .3s ease;
+                        box-sizing: border-box;
+                        border: 1px solid rgb(242, 243, 245);
+    
+                        .commonSettingsInput {
+                            font-size: 14px;
+                            padding: 4px 0;
+                            background: none;
+                            border: none;
+                        }
+                    }
+                    .commonSettingsInputWrapper:hover {
+                        background-color: rgb(229, 230, 235);
+                    }
+    
+                    .commonSettingsInputWrapper:focus-within {
+                        border: 1px solid rgb( 22,192,248 );
+                        background-color: white;
+                    }
+                }
+
+                .commonButtonSubmitWrapper{
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+
+                    .commomButtonSubmit{
+                        margin-right: 10px;
+                        font-size: 14px;
+                        padding: 8px 16px;
+                        border-radius: 10px;
+                        background-image:linear-gradient(195deg, #73abff 0%, #16e6f8 100%);
+                        color: white;
+                        cursor: pointer;
+                        transition: all .3s ease;
+                    }
+
+                    .commomButtonSubmit:hover{
+                        box-shadow:0 14px 26px -12px rgba(22, 192, 248, 0.4), 0 4px 23px rgba(22, 192, 248, 0.15), 0 8px 10px -5px rgba(22, 192, 248, 0.2)
+                    }
+                }
+            }
+
 
         }
     }

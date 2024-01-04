@@ -21,7 +21,6 @@ export class SendPost
     private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD | File>)
     {
         const url = `${urlconfig.serverUrl}${api}`;
-        console.log(params);
         return fetch(url, {
             method: 'POST',
             headers: {
@@ -45,10 +44,10 @@ export class SendPost
             });
     }
 
-    private postWithUrlFormData(api: string, params: FormData, progressDiv:HTMLDivElement | null): Promise<XMLHttpRequest["response"]>
+    private postWithUrlFormData(api: string, params: FormData, progressDiv: HTMLDivElement | null): Promise<XMLHttpRequest["response"]>
     {
         const url = `${urlconfig.serverUrl}${api}`;
-        
+
 
         return new Promise((resolve, reject) =>
         {
@@ -59,15 +58,18 @@ export class SendPost
                 if (event.lengthComputable)
                 {
                     let percentComplete = event.loaded / event.total * 100;
-                    if(progressDiv){
-                        progressDiv.classList.add('changeImgBtnHovered')
+                    if (progressDiv)
+                    {
+                        progressDiv.classList.add('changeImgBtnHovered');
                         progressDiv.style.width = percentComplete.toFixed(0) + '%';
                         progressDiv.innerHTML = percentComplete.toFixed(0) + '%';
-                        if(percentComplete.toFixed(0) === '100'){
+                        if (percentComplete.toFixed(0) === '100')
+                        {
                             progressDiv.innerHTML = 'Done';
-                            progressDiv.classList.remove('changeImgBtnHovered')
-                            setTimeout(() => {
-                                progressDiv.innerHTML = 'Change Image'
+                            progressDiv.classList.remove('changeImgBtnHovered');
+                            setTimeout(() =>
+                            {
+                                progressDiv.innerHTML = 'Change Image';
                             }, 300);
                         }
                     }
@@ -126,21 +128,30 @@ export class SendPost
      * @param username 
      * @param password 
      */
-    Register(email: string, username: string, password: string)
+    async Register(email: string, username: string, password: string)
     {
         const params = {
             email: email,
             username: username,
             password: password
         };
-        this.postWithUrlParams('register', params)
+        return await this.postWithUrlParams('register', params)
             .then((response) =>
             {
-                this.handlePopMsg.popMsg(response.message);
+                if (response.code === 0)
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return 1;
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return null;
+                }
             })
             .catch((error: any) =>
             {
                 console.log(error);
+                return null;
             });
     }
 
@@ -181,10 +192,10 @@ export class SendPost
                 });
         } else
         {
+            this.handlePopMsg.popMsg('You has no permission to edit this article');
             localStorage.clear();
             const changePage = new ChangePage(true);
             changePage.toIndex();
-            location.reload();
         }
 
 
@@ -214,6 +225,8 @@ export class SendPost
                     if (response.code === 0)
                     {
                         this.handlePopMsg.popMsg(response.message);
+                        const changePage = new ChangePage(true);
+                        changePage.toIndex();
                     } else
                     {
                         this.handlePopMsg.popMsg(response.message);
@@ -368,10 +381,9 @@ export class SendPost
         const params = {
             id: id
         };
-        return await this.postWithUrlParams('userprofile', params)
+        return await this.postWithUrlParams('getUserProfileData', params)
             .then(response =>
             {
-
                 if (response.code === 0)
                 {
 
@@ -451,10 +463,10 @@ export class SendPost
             });
     }
 
-    async getArticleDataByAuthor(parseUserData: UD)
+    async getArticleDataByAuthor(UserID: number)
     {
         const params = {
-            UserData: parseUserData,
+            UserID: UserID,
         };
         return await this.postWithUrlParams('getArticleDataByAuthor', params)
             .then((response) =>
@@ -518,15 +530,15 @@ export class SendPost
                 });
         } else
         {
+            this.handlePopMsg.popMsg('You has no permission to delete this article');
             localStorage.clear();
             const changePage = new ChangePage(true);
             changePage.toIndex();
-            location.reload();
         }
 
     }
 
-    async changeAvatar(userData: UD, avatar: File, progressDiv:HTMLDivElement)
+    async changeAvatar(userData: UD, avatar: File, progressDiv: HTMLDivElement)
     {
         const params = new FormData();
         params.append('UserData', JSON.stringify(userData));
@@ -548,6 +560,60 @@ export class SendPost
             {
                 this.handlePopMsg.popMsg((error as Error).message);
                 return null;
+            });
+    }
+
+    async updateUserProfile(userData: UD, username: string, gender: number, description: string)
+    {
+        const params = {
+            UserData: userData,
+            newUsername: username,
+            newGender: gender,
+            newDescription: description
+        };
+        return await this.postWithUrlParams('updateUserProfile', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return response.data as UD;
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return null;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return null;
+            });
+    }
+
+    async updateUserPassword(userData: UD, password: string)
+    {
+        const params = {
+            UserData: userData,
+            newPassword: password
+        };
+        return await this.postWithUrlParams('updateUserPassword', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return true;
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return false;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return false;
             });
     }
 
