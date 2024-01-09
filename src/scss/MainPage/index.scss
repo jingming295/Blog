@@ -1,7 +1,7 @@
 $themeColor: #73abff;
 
     .articleCardWrapper{
-        margin-top: 20px;
+        margin: 20px 0;
         .ArticleCard{
             display: flex;
             flex-direction: column;
@@ -61,8 +61,14 @@ $themeColor: #73abff;
                     font-size: 18px;
                     margin: 0px;
                     padding: 5px;
+                    max-width: 100%;
+                    box-sizing: border-box;
                     cursor: pointer;
                     float: left;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
                 }
                 .ArticleTitle:hover{
                     color: #1a73e8;

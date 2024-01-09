@@ -7,31 +7,37 @@ $background-color_2: #ffffff;
 $background-color_3: #FF69B4;
 $background-color_4: #e993c5;
 $background-color_5: white;
+$font-family-base: 'Roboto', sans-serif;
 
-
-body, div, input, ul, li, a, button{
-	box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+*{
+    box-sizing: border-box;
 }
-
 body {
 	margin: 0;
 	list-style-type: none;
 	background-color: $background-color_1;
 	margin: 0;
 	padding: 0;
-	padding-top:60px;
 	list-style-type: none;
 	outline: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	text-decoration: none;
 	fill: #ffffff;
+	font-family: $font-family-base;
+
 }
 
 .contentDiv{
-	position: relative;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	padding-top: 60px;
 	z-index: 1;
 	height:100%;
+	width: 100%;
 }
 
 ul {

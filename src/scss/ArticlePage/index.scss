@@ -1,9 +1,7 @@
 $themeColor: #73abff;
 $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
-#contentDiv{
-  min-height: 100%;
+.contentDiv{
   .articleWrapper {
-    height: 100%;
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
@@ -77,6 +75,18 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
         }
         input[type="checkbox"] {
           margin-right: 5px;
+        }
+        video{
+          max-width: 100%;
+        }
+        img{
+          max-width: 100%;
+          height: auto!important;
+        }
+        code{
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
         }
       }
 

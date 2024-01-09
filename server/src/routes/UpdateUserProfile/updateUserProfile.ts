@@ -4,13 +4,17 @@ import { ReturnData } from "../../Return To Client";
 import { LoginData as LD, UserData as UD } from "../../Return To Client/interface";
 import { DBSelect } from "../../SQL/dbSelect";
 import { DBUpdate } from "../../SQL/dbUpdate";
+import { InputControl, ValidationError } from "../../Validators/inputControl";
 
-export class UpdateUserProfile{
+export class UpdateUserProfile
+{
     returnData = new ReturnData();
-    
-    async performUpdateUserProfile(data:{UserData:LD, newUsername:string, newGender:number, newDescription:string}){
+
+    async performUpdateUserProfile(data: { UserData: LD, newUsername: string, newGender: number, newDescription: string; })
+    {
         try
         {
+            this.validation(data.newUsername, data.newDescription, data.newGender);
             const decUserData: UD = this.decryptUserData(data.UserData.encUserData, data.UserData.userData.id.toString());
             const userData: UD = data.UserData.userData;
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
@@ -34,8 +38,13 @@ export class UpdateUserProfile{
             }
         } catch (error)
         {
-            // invalid iv
-            if (error instanceof Error && error.message.includes('Unsupported state or unable to authenticate data'))
+            if (error instanceof ValidationError)
+            {
+                // handle ValidationError
+                const returnData = this.returnData.returnClientData(error.code, error.message, []);
+                return returnData;
+            } 
+            else if (error instanceof Error && error.message.includes('Unsupported state or unable to authenticate data'))
             {
                 const returnData = this.returnData.returnClientData(-102, 'Invalid IV or Auth Tag');
                 return returnData;
@@ -55,7 +64,8 @@ export class UpdateUserProfile{
         return decUserData;
     }
 
-    private async generateUserData(userID:number){
+    private async generateUserData(userID: number)
+    {
         const aes_256_GCM = new AES_256_GCM();
         const dbSelect = new DBSelect();
         const userResult = await dbSelect.selectUserProfile(userID);
@@ -67,12 +77,26 @@ export class UpdateUserProfile{
             gender: userResult[0].u_gender,
             userDesc: userResult[0].u_desc,
             avatar: userResult[0].avatar_name
-        }
+        };
         const encryptedData = aes_256_GCM.encrypt(JSON.stringify(userData), userID.toString());
-        const loginData:LD = {
-            userData:userData,
-            encUserData:encryptedData
-        }
+        const loginData: LD = {
+            userData: userData,
+            encUserData: encryptedData
+        };
         return loginData;
+    }
+
+    /**
+ * Validate the input
+ * @param loginRequest 
+ */
+    validation(newUsername: string, newUserDesc:string, gender:number): void
+    {
+
+        const inputControl = new InputControl();
+        // validate the format of user input
+        inputControl.validateUsername(newUsername);
+        inputControl.validateGender(gender);
+        inputControl.validateUserDesc(newUserDesc);
     }
 }

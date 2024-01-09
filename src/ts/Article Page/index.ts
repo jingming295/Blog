@@ -40,6 +40,7 @@ export class MakeArticlePage
         {
             const contentDiv = document.createElement('div');
             contentDiv.id = 'contentDiv';
+            contentDiv.className = 'contentDiv';
             site.appendChild(contentDiv);
             const sendPost = new SendPost();
             const data = await sendPost.getArticleContent(id);

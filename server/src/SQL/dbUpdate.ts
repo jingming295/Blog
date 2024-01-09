@@ -28,6 +28,7 @@ export class DBUpdate extends DatabaseConnector
         } finally
         {
             connection.end();
+            this._connectionPromise = undefined;
         }
     }
 

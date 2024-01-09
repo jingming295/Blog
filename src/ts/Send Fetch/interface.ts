@@ -46,3 +46,10 @@ interface retArticleData_Article{
     articleContent: string | null;
     articleLastEditTime: Date;
 }
+
+export interface setting_loginandregister
+{
+    id: number;
+    allowUserRegis: number;
+    emailVerification: number;
+}

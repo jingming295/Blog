@@ -143,10 +143,6 @@ export class MakeUserProfile
                 userImgWarp.className = 'userImgWarp';
                 const userImg = document.createElement('img');
 
-
-                userImgWarp.style.width = '150px';
-                userImgWarp.style.height = '150px';
-
                 userImg.className = 'userImg';
                 userImg.src = `${urlconfig.avatarUrl}${avatar}`;
                 userImgWarp.appendChild(userImg);
@@ -174,21 +170,17 @@ export class MakeUserProfile
             function createUserData(userName: string): HTMLDivElement
             {
                 const userDataWarp = document.createElement('div');
-                userDataWarp.style.display = 'flex';
-                userDataWarp.style.flexDirection = 'column';
-                userDataWarp.style.justifyContent = 'flex-end';
-                userDataWarp.style.marginLeft = '10px';
+                userDataWarp.className = 'userDataWarp';
 
                 const userNameWarp = document.createElement('div');
                 userNameWarp.style.display = 'flex';
 
                 const username = document.createElement('h2');
+                username.className = 'username';
                 username.textContent = userName;
-                username.style.color = 'black';
-                username.style.margin = '0';
 
                 const userDesc = document.createElement('p');
-                userDesc.style.color = 'black';
+                userDesc.className = 'userDesc';
                 userDesc.textContent = profileData.description;
 
                 userNameWarp.appendChild(username);

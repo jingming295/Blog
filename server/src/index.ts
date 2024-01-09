@@ -14,6 +14,8 @@ import deleteArticle from './routes/DeleteArticle';
 import changeAvatar from './routes/UpdateAvatar';
 import updateUserProfile from './routes/UpdateUserProfile';
 import updateUserPassword from './routes/UpdateUserPassword';
+import getLoginAndRegisterSettings from './routes/GetLoginAndRegisterSettings';
+import { Init } from './Init';
 
 const app = express();
 const port = 3000;
@@ -37,7 +39,8 @@ const routers = [
   articlePermission,
   changeAvatar,
   updateUserProfile,
-  updateUserPassword
+  updateUserPassword,
+  getLoginAndRegisterSettings
 ];
 app.use('/', routers);
 
@@ -51,3 +54,6 @@ app.listen(port, () =>
 {
   console.log(`server run at: http://localhost:${port}`);
 });
+
+const init = new Init();
+init.init();

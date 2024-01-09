@@ -28,6 +28,7 @@ export class DBInsert extends DatabaseConnector
         } finally
         {
             connection.end();
+            this._connectionPromise = undefined;
         }
     }
 
@@ -54,6 +55,24 @@ export class DBInsert extends DatabaseConnector
         return this.executeQuery(
             'INSERT INTO `tb_avatar`( `avatar_name`, `avatar_sha256`) VALUES (?,?)',
             [avatarName, sha256]
+        );
+    }
+
+    async insertDefaultSettingSendEmail(){
+        return this.executeQuery(
+            `INSERT INTO tb_setting_sendemail (s_SE_id) 
+            VALUES ('1');
+            `,
+            []
+        );
+    }
+
+    async insertDefaultSettingLoginAndRegister(){
+        return this.executeQuery(
+            `INSERT INTO tb_setting_loginandregister (s_LNR_id) 
+            VALUES ('1');
+            `,
+            []
         );
     }
     

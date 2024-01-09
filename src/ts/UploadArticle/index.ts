@@ -1,6 +1,5 @@
 import { SendPost } from "../Send Fetch";
 import { Editor } from "../Editor/Editor";
-import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import '../../scss/Editor/style.scss';
 import '../../scss/NewPostPage/index.scss';
 import { IDomEditor } from "@wangeditor/editor";
@@ -23,9 +22,11 @@ export class UploadArticle
                 await sendPost.CheckPermission(id);
             }
             await this.createPostComponents(id);
+        
         }
         setTimeout(() =>{
             this.navigationProgress.end();
+            this.setEditorContainerHeight();
         }, 100)
     }
 
@@ -44,7 +45,7 @@ export class UploadArticle
 
         postWrapper.className = 'postWrapper';
 
-        function createTitleInput(title:string | null=null, area:string | null=null)
+        function createTitleInput(article:RetArticleData | null)
         {
             const inputWrapper = document.createElement('div');
             const titleWrapper = document.createElement('div');
@@ -62,8 +63,8 @@ export class UploadArticle
             titleInput.className = 'titleInput';
             titleInput.placeholder = 'Title';
             titleInput.autocomplete = 'off';
-            if(title){
-                titleInput.value = title;
+            if(article?.article.articleTitle){
+                titleInput.value = article.article.articleTitle;
             }
 
             areaSelect.id = 'areaSelect';
@@ -79,8 +80,8 @@ export class UploadArticle
                 areaSelect.appendChild(option);
             });
 
-            if(area){
-                areaSelect.value = area;
+            if(article?.article.articleArea){
+                areaSelect.value = article.article.articleArea;
             }
 
             titleWrapper.appendChild(titleInput);
@@ -88,10 +89,10 @@ export class UploadArticle
             inputWrapper.appendChild(titleWrapper);
             inputWrapper.appendChild(areaWrapper);
 
-            postWrapper.appendChild(inputWrapper);
+            return inputWrapper;
         }
 
-        function createEditor(html: string | null = null) {
+        const createEditor = (html: string | null = null) => {
             const editorWarpper = document.createElement('div');
             const toolbar = document.createElement('div');
             const editorContainer = document.createElement('div');
@@ -108,21 +109,13 @@ export class UploadArticle
             editorWarpper.appendChild(editorContainer);
             postWrapper.appendChild(editorWarpper);
         
-            // 设置 editorContainer 初始高度
-            setEditorContainerHeight();
-        
             // 在窗口大小改变时重新设置 editorContainer 的高度
-            window.addEventListener('resize', setEditorContainerHeight);
+            window.addEventListener('resize', this.setEditorContainerHeight);
         
             const editor = new Editor();
             return editor.createEditor(html);
         
-            function setEditorContainerHeight() {
-                const postWrapper = document.querySelector('.postWrapper') as HTMLDivElement;   
-                const postWrapperHeight = postWrapper.offsetHeight;
-                const newEditorContainerHeight = postWrapperHeight - 85-63-60; // 90px 是固定值
-                editorContainer.style.height = `${newEditorContainerHeight}px`;
-            }
+
         }
         
 
@@ -160,21 +153,44 @@ export class UploadArticle
                     sendPost.UpdateArticle(id, title, editor.getHtml(), area, 'blog');
                 };
             }
-
+            return submitWrapper;
 
         };
+        const titleInput = createTitleInput(article);
+
+
+        postWrapper.appendChild(titleInput);
         contentDiv.appendChild(postWrapper);
         body.appendChild(contentDiv);
         if(article){
-            createTitleInput(article.article.articleTitle, article.article.articleArea);
             const editor = createEditor(article.article.articleContent);
-            createSubmit(editor);
+            const submitWrapper = createSubmit(editor);
+            postWrapper.appendChild(submitWrapper);
         } else {
-            createTitleInput()
             const editor = createEditor();
-            createSubmit(editor);
+            const submitWrapper = createSubmit(editor);
+            postWrapper.appendChild(submitWrapper);
         }
+    }
 
+    setEditorContainerHeight() {
+        const editorContainer = document.getElementById('editor-container') as HTMLDivElement;
+        if(!editorContainer) return;
+        const postWrapper = document.querySelector('.postWrapper') as HTMLDivElement;   
+        const postWrapperHeight = postWrapper.offsetHeight;
+        const toolbar = document.getElementById('toolbar-container') as HTMLDivElement;
+        const inputWrapper = document.querySelector('.inputWrapper') as HTMLDivElement;
+        const submitWrapper = document.querySelector('.submitWrapper') as HTMLDivElement;
 
+        const toolbarHeight = toolbar.offsetHeight;
+        const inputWrapperHeight = inputWrapper.offsetHeight;
+        const postWrapperMarginBottom = parseInt(window.getComputedStyle(postWrapper).marginBottom);
+        
+        let submitWrapperHeight = 55;
+        if(submitWrapper){
+            submitWrapperHeight = submitWrapper.offsetHeight;
+        }        
+        const newEditorContainerHeight = postWrapperHeight - toolbarHeight-submitWrapperHeight-inputWrapperHeight-postWrapperMarginBottom-20;
+        editorContainer.style.height = `${newEditorContainerHeight}px`;
     }
 }

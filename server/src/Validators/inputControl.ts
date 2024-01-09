@@ -22,16 +22,17 @@ export class InputControl
         }
     }
 
-    validateEmail(email: string): void
-    {
+    validateEmail(email: string): void {
         // Regular expression for validating email addresses.
-        const Format: RegExp = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-
-        if (!Format.test(email))
-        {
-            throw new ValidationError(-400, 'Please input correct email');
+        const format: RegExp = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    
+        const maxLength = 254; // RFC 5322 Official Standard
+    
+        if (!format.test(email) || email.length > maxLength) {
+            throw new ValidationError(-400, 'Please input a correct email');
         }
     }
+    
 
     validatePassword(password: string): void
     {
@@ -40,6 +41,20 @@ export class InputControl
         if (!Format.test(password))
         {
             throw new ValidationError(-400, 'Please input a correct password');
+        }
+    }
+    validateGender(gender: number): void
+    {
+        if (![0, 1, 2].includes(gender))
+        {
+            throw new ValidationError(-400, 'Please input a correct gender');
+        }
+    }
+    validateUserDesc(userDesc: string): void
+    {
+        if (userDesc.length > 100)
+        {
+            throw new ValidationError(-400, 'Please input a correct user description, must be less than 100 characters.');
         }
     }
 }

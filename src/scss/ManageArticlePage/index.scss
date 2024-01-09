@@ -7,6 +7,10 @@
         height: 100%;
         max-height: 85vh;
         overflow-y: auto;
+        // overflow-x: hidden;
+        @media (max-width: 620px) {
+            margin: 20px 0px;
+        }
         .articleCardWrapper{
             margin: 20px 0;
             padding: 0 10px;
@@ -23,8 +27,12 @@
                 font-size: 18px;
                 font-weight: 600;
                 margin: 8px 0;
+                width: 100%;
                 float: left;
                 cursor: pointer;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .title:hover{
                 color: #e73737;

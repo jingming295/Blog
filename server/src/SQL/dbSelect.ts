@@ -1,6 +1,6 @@
 import * as mysql from 'mysql2/promise';
 import DatabaseConnector from './dbConnector';
-import { UserResult, UserProfile, ArticleCardData } from './interface';
+import { UserResult, UserProfile, ArticleCardData, tb_setting_loginandregister, tb_setting_sendemail } from './interface';
 
 export class DBSelect extends DatabaseConnector
 {
@@ -28,6 +28,7 @@ export class DBSelect extends DatabaseConnector
         } finally
         {
             connection.end();
+            this._connectionPromise = undefined;
         }
     }
 
@@ -140,6 +141,20 @@ export class DBSelect extends DatabaseConnector
         return this.executeQuery<{ avatar_name: string; }>(
             'SELECT `avatar_name` FROM `tb_avatar` WHERE `avatar_sha256` = ?',
             [sha256]
+        );
+    }
+
+    async selectSettingSendEmail(): Promise<tb_setting_sendemail[]>
+    {
+        return await this.executeQuery<tb_setting_sendemail>(
+            `SELECT * FROM tb_setting_sendemail WHERE s_SE_id = 1`
+        );
+    }
+
+    async selectSettingLoginAndRegister(): Promise<tb_setting_loginandregister[]>
+    {
+        return await this.executeQuery<tb_setting_loginandregister>(
+            `SELECT * FROM tb_setting_loginandregister WHERE s_LNR_id = 1`
         );
     }
 

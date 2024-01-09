@@ -4,7 +4,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleCardData, ArticleContent, RetArticleData } from "./interface";
+import { ArticleCardData, ArticleContent, RetArticleData, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
 /**
@@ -492,7 +492,7 @@ export class SendPost
     }
 
 
-    deleteArticle(articleID: number)
+    async deleteArticle(articleID: number)
     {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
@@ -615,6 +615,46 @@ export class SendPost
                 this.handlePopMsg.popMsg((error as Error).message);
                 return false;
             });
+    }
+
+    async getLoginAndRegisterSettings()
+    {
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if(UserData){
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+            };
+            return await this.postWithUrlParams('getLoginAndRegisterSettings', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        return response.data as setting_loginandregister;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        const changePage = new ChangePage(true);
+                        changePage.toIndex();
+                        return null;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    const changePage = new ChangePage(true);
+                    changePage.toIndex();
+                    return null;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+
+
+
     }
 
 }

@@ -18,8 +18,6 @@ export class DeleteArticle
             const decUserData: UD = this.decryptUserData(data.UserData.encUserData, data.UserData.userData.id.toString());
             const userData: UD = data.UserData.userData;
 
-
-
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
             {
                 const dbSelect = new DBSelect();
@@ -64,9 +62,6 @@ export class DeleteArticle
                 return returnData;
             }
         }
-
-
-
     }
 
     decryptUserData(encUserData: AES_256_GCMEncrypted, key: string)

@@ -273,15 +273,6 @@ export class NavRelated
 
                 userAvatarImg.className = 'userAvatar';
                 userAvatarImg.setAttribute('UserId', userData.userData.id.toString());
-                userAvatarImg.addEventListener('click', () =>
-                {
-                    const avatarId = userAvatarImg.getAttribute('UserId');
-                    if (avatarId !== null)
-                    {
-                        const changePage = new ChangePage(true);
-                        changePage.toUserProfile(avatarId);
-                    }
-                });
 
 
 

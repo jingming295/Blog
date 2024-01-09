@@ -4,6 +4,7 @@ import { SHA256 } from "../../Crypto/sha256";
 import { ReturnData } from "../../Return To Client";
 import { LoginData as LD, UserData as UD } from "../../Return To Client/interface";
 import { DBUpdate } from "../../SQL/dbUpdate";
+import { InputControl, ValidationError } from "../../Validators/inputControl";
 
 export class UpdateUserPassword{
     returnData = new ReturnData();
@@ -11,6 +12,7 @@ export class UpdateUserPassword{
     async performUpdateUserPassword(data:{UserData:LD, newPassword:string}){
         try
         {
+            this.validation(data.newPassword);
             const decUserData: UD = this.decryptUserData(data.UserData.encUserData, data.UserData.userData.id.toString());
             const userData: UD = data.UserData.userData;
             if (JSON.stringify(decUserData) === JSON.stringify(userData))
@@ -36,7 +38,11 @@ export class UpdateUserPassword{
             }
         } catch (error)
         {
-            // invalid iv
+            if (error instanceof ValidationError)
+            {
+                const returnData = this.returnData.returnClientData(error.code, error.message, []);
+                return returnData;
+            } 
             if (error instanceof Error && error.message.includes('Unsupported state or unable to authenticate data'))
             {
                 const returnData = this.returnData.returnClientData(-102, 'Invalid IV or Auth Tag');
@@ -55,5 +61,10 @@ export class UpdateUserPassword{
         const aes_256_GCM = new AES_256_GCM();
         const decUserData: UD = JSON.parse(aes_256_GCM.decrypt(encUserData.encryptedData, encUserData.iv, encUserData.tag, key));
         return decUserData;
+    }
+    validation(password: string): void
+    {
+        const inputControl = new InputControl();
+        inputControl.validatePassword(password);
     }
 }

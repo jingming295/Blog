@@ -1,7 +1,6 @@
 // src/routes/Login/index.ts
 import express, { Request, Response } from 'express';
 import { GetArticleDataByAuthor } from './GetArticleDataByAuthor';
-import { LoginData as LD } from '../../Return To Client/interface';
 const router = express.Router();
 
 
