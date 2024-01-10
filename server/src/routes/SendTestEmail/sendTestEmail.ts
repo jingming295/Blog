@@ -4,16 +4,14 @@ import { ReturnData } from "../../Return To Client";
 import { ReturnClientData } from "../../Return To Client/interface";
 import { LoginData as LD } from "../../Return To Client/interface";
 import { UserData as UD } from "../../Return To Client/interface";
-import { DBUpdate } from "../../SQL/dbUpdate";
-import { DBSelect } from "../../SQL/dbSelect";
-import { setting_loginandregisterFromUser } from "./interface";
 import { InputControl, ValidationError } from "../../Validators/inputControl";
+import { Mail } from "../../Mail";
 
-export class UpdateLoginAndRegisterSettings
+export class SendTestEmail
 {
     private returnData = new ReturnData();
 
-    async performUpdateLoginAndRegisterSettings(data: { UserData: LD, settings: setting_loginandregisterFromUser; }): Promise<ReturnClientData>
+    async performAction(data: { UserData: LD, TestEmailAddress: string; }): Promise<ReturnClientData>
     {
         try
         {
@@ -22,19 +20,11 @@ export class UpdateLoginAndRegisterSettings
 
             if (JSON.stringify(decUserData) === JSON.stringify(userData) && userData.class === 3)
             {
-                this.validation(data.settings);
-                const dbUpdate = new DBUpdate();
-                const result = await dbUpdate.updateUserLoginAndRegisterSettings(data.settings.id, data.settings.allowUserRegis, data.settings.emailVerification);
-
-                if (result.affectedRows === 1)
-                {
-                    const returnData = this.returnData.returnClientData(0, 'Update success');
-                    return returnData;
-                } else
-                {
-                    const returnData = this.returnData.returnClientData(-101, 'Update failed');
-                    return returnData;
-                }
+                this.validation(data.TestEmailAddress);
+                const mail = new Mail();
+                const returnMsg = await mail.sendTestEmail(data.TestEmailAddress);
+                const returnData = this.returnData.returnClientData(0, returnMsg);
+                return returnData;
 
 
             } else
@@ -72,11 +62,9 @@ export class UpdateLoginAndRegisterSettings
         return decUserData;
     }
 
-    validation(item: setting_loginandregisterFromUser): void
+    validation(item: string): void
     {
         const inputControl = new InputControl();
-        inputControl.validateCommonSwitch(item.allowUserRegis);
-        inputControl.validateCommonSwitch(item.emailVerification);
-        inputControl.validateCommonSQLID(item.id);
+        inputControl.validateEmail(item);
     }
 }

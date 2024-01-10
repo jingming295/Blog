@@ -32,12 +32,20 @@ export class DBInsert extends DatabaseConnector
         }
     }
 
-    async Register(username: string, email: string, hashedPassword: string): Promise<ResultSetHeader>
+    async Register(username: string, email: string, hashedPassword: string, token:string|null=null): Promise<ResultSetHeader>
     {
-        return this.executeQuery(
-            'INSERT INTO `tb_user`(`u_name`, `u_email`, `u_password`, `u_class`, `u_active`) VALUES (?,?,?,0,1)',
-            [username, email, hashedPassword]
-        );
+        if(token){
+            return this.executeQuery(
+                'INSERT INTO `tb_user`(`u_name`, `u_email`, `u_password`, `u_class`, `u_active`, `u_token`) VALUES (?,?,?,0,0,?)',
+                [username, email, hashedPassword, token]
+            );
+        }else {
+            return this.executeQuery(
+                'INSERT INTO `tb_user`(`u_name`, `u_email`, `u_password`, `u_class`, `u_active`) VALUES (?,?,?,0,1)',
+                [username, email, hashedPassword]
+            );
+        }
+
     }
 
     async postArticle(title: string, content: string, area: string, tag: string, userID: number): Promise<ResultSetHeader>

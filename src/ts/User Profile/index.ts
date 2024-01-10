@@ -7,6 +7,7 @@ import { ArticleCard } from '../Manage Article Page/interface';
 import { HandlePopMsg } from '../Navigation Bar/popMsg';
 import { urlconfig } from '../Url Config/config';
 import { SHA256 } from '../Crypto/sha256';
+import { NavigationProgress } from '../Create Navigation Progress';
 
 /**
  * MakeUserProfile class 创建User Profile的组件
@@ -217,6 +218,8 @@ export class MakeUserProfile
         {
             function createLeftPanel(): HTMLDivElement
             {
+                const navigationProgress = new NavigationProgress();
+                navigationProgress.init();
                 const leftPanel = document.createElement('div');
                 leftPanel.className = 'userProfile-Usertab-leftPanel';
                 let i = 0;
@@ -225,6 +228,7 @@ export class MakeUserProfile
                         name: 'User Profile',
                         func: function ()
                         {
+                            navigationProgress.start();
                             const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
                             if (rightPanel)
                             {
@@ -236,12 +240,14 @@ export class MakeUserProfile
                                     rightPanerWrapper.appendChild(rightPanel);
                                 }
                             }
+                            navigationProgress.end();
                         }
                     },
                     {
                         name: 'Posts',
                         func: async function ()
                         {
+                            navigationProgress.start();
                             async function getArticleDataAndCreateRightPanel(isOwner: boolean)
                             {
                                 const sendPost = new SendPost();
@@ -276,12 +282,14 @@ export class MakeUserProfile
                             {
                                 await getArticleDataAndCreateRightPanel(false);
                             }
+                            navigationProgress.end();
                         }
                     },
                     {
                         name: 'Settings',
                         func: function ()
                         {
+                            navigationProgress.start();
                             const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
                             if (rightPanel)
                             {
@@ -294,6 +302,7 @@ export class MakeUserProfile
 
                                 }
                             }
+                            navigationProgress.end();
                         }
                     },
                 ];

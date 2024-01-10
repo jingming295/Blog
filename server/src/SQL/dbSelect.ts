@@ -35,15 +35,15 @@ export class DBSelect extends DatabaseConnector
     async login(email: string, hashedPassword: string): Promise<UserResult[]>
     {
         return this.executeQuery<UserResult>(
-            `SELECT u_id, u_name, u_class, u_gender,u_desc, avatar_name FROM tb_user JOIN tb_avatar 
+            `SELECT u_id, u_name, u_class, u_gender,u_desc, avatar_name, u_active FROM tb_user JOIN tb_avatar 
             WHERE u_email = ? && u_password = ? && u_avatar = avatar_id`,
             [email, hashedPassword]
         );
     }
 
-    async selectEmail(email: string): Promise<{ id: string; }[]>
+    async selectEmail(email: string): Promise<{ u_id: number; }[]>
     {
-        return this.executeQuery<{ id: string; }>(
+        return this.executeQuery<{ u_id: number; }>(
             'SELECT `u_id` FROM `tb_user` WHERE `u_email` = ?',
             [email]
         );
@@ -155,6 +155,22 @@ export class DBSelect extends DatabaseConnector
     {
         return await this.executeQuery<tb_setting_loginandregister>(
             `SELECT * FROM tb_setting_loginandregister WHERE s_LNR_id = 1`
+        );
+    }
+
+    async selectUserActiveStatusByID(id: number): Promise<{ u_active: number; }[]>
+    {
+        return await this.executeQuery<{ u_active: number; }>(
+            `SELECT u_active FROM tb_user WHERE u_id = ?`,
+            [id]
+        );
+    }
+
+    async selectUserIDStatusByToken(token: string): Promise<{ u_id: number; u_active:number}[]>
+    {
+        return await this.executeQuery<{ u_id: number; u_active:number}>(
+            `SELECT u_id, u_active FROM tb_user WHERE u_token = ?`,
+            [token]
         );
     }
 

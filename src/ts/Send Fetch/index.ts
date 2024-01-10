@@ -4,7 +4,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleCardData, ArticleContent, RetArticleData, setting_loginandregister } from "./interface";
+import { ArticleCardData, ArticleContent, RetArticleData, setting_email, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
 /**
@@ -18,7 +18,7 @@ export class SendPost
 
     }
     handlePopMsg = new HandlePopMsg();
-    private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD | File>)
+    private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD | setting_loginandregister | setting_email>)
     {
         const url = `${urlconfig.serverUrl}${api}`;
         return fetch(url, {
@@ -655,6 +655,177 @@ export class SendPost
 
 
 
+    }
+
+    async updateLoginAndRegisterSettings(setting: setting_loginandregister){
+        const UserData = localStorage.getItem('UserData');
+        if(UserData){
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                setting: setting
+            };
+            return await this.postWithUrlParams('updateLoginAndRegisterSettings', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+
+    }
+
+    async getEmailSettings(){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if(UserData){
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+            };
+            return await this.postWithUrlParams('getEmailSettings', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        return response.data as setting_email;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        const changePage = new ChangePage(true);
+                        changePage.toIndex();
+                        return null;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    const changePage = new ChangePage(true);
+                    changePage.toIndex();
+                    return null;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        } else {
+            const changePage = new ChangePage(true);
+            changePage.toIndex();
+            return null;
+        }
+    }
+
+    async updateEmailSettings(setting: setting_email){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if(UserData){
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                setting: setting
+            };
+            return await this.postWithUrlParams('updateEmailSettings', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async sendTestEmail(testEmailAddress:string){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if(UserData){
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                testEmailAddress: testEmailAddress
+            };
+            return await this.postWithUrlParams('sendTestEmail', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async sendActivateAccountRequest(token:string){
+        this.navigationProgress.start();
+        const params = {
+            token: token
+        };
+        return await this.postWithUrlParams('activateAccountRequest', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return true;
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return false;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return false;
+            }
+            ).finally(() =>
+            {
+                this.navigationProgress.end();
+            });
     }
 
 }

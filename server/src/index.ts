@@ -15,6 +15,11 @@ import changeAvatar from './routes/UpdateAvatar';
 import updateUserProfile from './routes/UpdateUserProfile';
 import updateUserPassword from './routes/UpdateUserPassword';
 import getLoginAndRegisterSettings from './routes/GetLoginAndRegisterSettings';
+import updateLoginAndRegisterSettings from './routes/UpdateLoginAndRegisterSettings';
+import getEmailSettings from './routes/GetEmailSettings';
+import updateEmailSettings from './routes/UpdateEmailSettings';
+import sendTestEmail from './routes/SendTestEmail';
+import activateAccountRequest from './routes/ActivateAccountRequest';
 import { Init } from './Init';
 
 const app = express();
@@ -40,7 +45,12 @@ const routers = [
   changeAvatar,
   updateUserProfile,
   updateUserPassword,
-  getLoginAndRegisterSettings
+  getLoginAndRegisterSettings,
+  updateLoginAndRegisterSettings,
+  getEmailSettings,
+  updateEmailSettings,
+  sendTestEmail,
+  activateAccountRequest
 ];
 app.use('/', routers);
 

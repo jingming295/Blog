@@ -8,6 +8,11 @@ import { InputControl, ValidationError } from '../../Validators/inputControl';
 
 import { DBInsert } from '../../SQL/dbInsert';
 
+import crypto from 'crypto';
+import { Mail } from '../../Mail';
+import { DBUpdate } from '../../SQL/dbUpdate';
+
+
 export class Register
 {
     private returnData: ReturnData;
@@ -31,20 +36,75 @@ export class Register
             const hashedPassword = await sha256.hashPassword(saltedPassword);
 
             const idResult = await dbSelect.selectEmail(email);
+
             if (idResult.length)
             {
+                const activeResult = await dbSelect.selectUserActiveStatusByID(idResult[0].u_id);
+                if(activeResult.length && activeResult[0].u_active === 0){
+                    const token = this.generateToken();
+                    const dbUpdate = new DBUpdate();
+                    const ResultSetHeader = await dbUpdate.updateUserToken(idResult[0].u_id, token);
+                    if (!ResultSetHeader.warningStatus && ResultSetHeader.affectedRows)
+                    {
+                        const mail = new Mail();
+                        mail.sendActivateAccountEmail(email, token);
+                        const returnData = this.returnData.returnClientData(0, 'Your account is not activated, a new activation email has been sent to your email');
+                        return returnData;
+                    } else
+                    {
+                        throw new Error(ResultSetHeader.info);
+                    }
+                }
                 const returnData = this.returnData.returnClientData(-201, 'The email already register');
                 return returnData;
             }
 
-            const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword);
-            if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
+            const LoginAndRegisterSettings = await dbSelect.selectSettingLoginAndRegister();
+
+            if (LoginAndRegisterSettings.length)
             {
-                const returnData = this.returnData.returnClientData(0, 'Register Sucessful');
-                return returnData;
+                const LoginAndRegisterSetting = LoginAndRegisterSettings[0];
+                if (!LoginAndRegisterSetting.s_LNR_allowUserRegis)
+                {
+                    const returnData = this.returnData.returnClientData(-201, 'Register is not allowed');
+                    return returnData;
+                }
+                if (LoginAndRegisterSetting.s_LNR_emailVerification)
+                {
+                    const token = this.generateToken();
+                    const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword, token);
+                    if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
+                    {
+                        const mail = new Mail();
+                        mail.sendActivateAccountEmail(email, token);
+                        const returnData = this.returnData.returnClientData(0, 'Register sucessful, please check your email to activate your account');
+                        return returnData;
+                    } else
+                    {
+                        throw new Error(ResultSetHeader.info);
+                    }
+                } else {
+                    const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword);
+                    if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
+                    {
+                        const returnData = this.returnData.returnClientData(0, 'Register Sucessful');
+                        return returnData;
+                    } else
+                    {
+                        throw new Error(ResultSetHeader.info);
+                    }
+                }
             } else
             {
-                throw new Error(ResultSetHeader.info);
+                const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword);
+                if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
+                {
+                    const returnData = this.returnData.returnClientData(0, 'Register Sucessful');
+                    return returnData;
+                } else
+                {
+                    throw new Error(ResultSetHeader.info);
+                }
             }
 
 
@@ -86,5 +146,11 @@ export class Register
 
 
     }
+
+    generateToken()
+    {
+        return crypto.randomBytes(32).toString('hex');
+    }
+
 }
 

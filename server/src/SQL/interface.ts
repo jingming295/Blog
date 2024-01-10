@@ -5,7 +5,8 @@ export interface UserResult
     u_name: string;
     avatar_name: string;
     u_gender:number;
-    u_desc:string
+    u_desc:string;
+    u_active: number;
 }
 
 export interface UserProfile

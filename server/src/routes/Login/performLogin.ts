@@ -6,6 +6,10 @@ import { DBSelect } from '../../SQL/dbSelect';
 import { ReturnData } from '../../Return To Client';
 import { InputControl, ValidationError } from '../../Validators/inputControl';
 import { AES_256_GCM } from '../../Crypto/AES-256-GCM';
+import { Mail } from '../../Mail';
+
+import crypto from 'crypto';
+import { DBUpdate } from '../../SQL/dbUpdate';
 
 
 
@@ -33,6 +37,23 @@ export class Login
             if (!userResult.length)
             {
                 const returnData = this.returnData.returnClientData(-101, 'Username and password not match');
+                return returnData;
+            }
+
+            if (userResult[0].u_active === 0)
+            {
+                const token = this.generateToken();
+                const dbUpdate = new DBUpdate();
+
+                const ResultSetHeader = await dbUpdate.updateUserToken(userResult[0].u_id, token);
+
+                if(!ResultSetHeader.warningStatus && ResultSetHeader.affectedRows === 1){
+                    const mail = new Mail()
+                    mail.sendActivateAccountEmail(email, token)
+                    const returnData = this.returnData.returnClientData(-102, 'Your account is not activated, an activation email has been sent to your email address, please check your email and activate your account.');
+                    return returnData;
+                }
+                const returnData = this.returnData.returnClientData(-103, 'Your account is not activated, please contact the administrator.');
                 return returnData;
             }
 
@@ -104,6 +125,11 @@ export class Login
         const UD:UD = JSON.parse(data)
         // console.log(UD)
         return EncryptedData;
+    }
+
+    generateToken()
+    {
+        return crypto.randomBytes(32).toString('hex');
     }
     
 }

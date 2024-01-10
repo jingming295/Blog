@@ -16,4 +16,5 @@ dist/
 !webpack.config.js
 
 # Avatar Folder
-server/Avatars
+server/Avatars/*
+!server/Avatars/1.png

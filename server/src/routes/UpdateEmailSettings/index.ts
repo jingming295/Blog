@@ -1,8 +1,8 @@
 // src/routes/Register/index.ts
 import express, { Request, Response } from 'express';
 import { LoginData as LD } from '../../Return To Client/interface';
-import { UpdateLoginAndRegisterSettings } from './updateLoginAndRegisterSettings';
-import { setting_loginandregisterFromUser } from './interface';
+import { UpdateEmailSettings } from './updateEmailSettings';
+import { setting_emailFromUser } from './interface';
 const router = express.Router();
 
 function transformUserData(body: any): LD
@@ -18,20 +18,20 @@ function transformUserData(body: any): LD
     } as LD;
 }
 
-router.post('/updateLoginAndRegisterSettings', async (req: Request, res: Response) =>
+router.post('/updateEmailSettings', async (req: Request, res: Response) =>
 {
     try
     {
-        const body = req.body as { UserData: LD, setting: setting_loginandregisterFromUser; };
+        const body = req.body as { UserData: LD, setting: setting_emailFromUser; };
         if (body.UserData === undefined || body.setting === undefined)
         {
             res.json({ code: -101, message: 'Data is not complete' });
             return;
         }
-        const updateLoginAndRegisterSettings = new UpdateLoginAndRegisterSettings();
+        const updateEmailSettings = new UpdateEmailSettings();
         const transformedUserData = transformUserData(body);
         const data = { UserData: transformedUserData, settings: body.setting };
-        const returndata = await updateLoginAndRegisterSettings.performUpdateLoginAndRegisterSettings(data);
+        const returndata = await updateEmailSettings.performAction(data);
         res.json(returndata);
     } catch (error)
     {

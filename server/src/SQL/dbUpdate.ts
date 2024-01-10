@@ -1,6 +1,7 @@
 import * as mysql from 'mysql2/promise';
 import DatabaseConnector from './dbConnector';
 import { ResultSetHeader } from 'mysql2/promise';
+import { tb_setting_sendemail } from './interface';
 
 export class DBUpdate extends DatabaseConnector
 {
@@ -15,7 +16,7 @@ export class DBUpdate extends DatabaseConnector
         return this._connectionPromise;
     }
 
-    private async executeQuery(query: string, values: (string|number)[]): Promise<ResultSetHeader>
+    private async executeQuery(query: string, values: (string|number|null)[]): Promise<ResultSetHeader>
     {
         const connection = await this.connection;
         try
@@ -83,6 +84,50 @@ export class DBUpdate extends DatabaseConnector
             WHERE u_id = ?;
             `,
             [newPassword, id]
+        );
+    }
+
+    async updateUserLoginAndRegisterSettings(id: number, s_LNR_allowUserRegis: number, s_LNR_emailVerification:number): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_setting_loginandregister 
+            SET s_LNR_allowUserRegis = ? , s_LNR_emailVerification = ?
+            WHERE s_LNR_id = ?;
+            `,
+            [s_LNR_allowUserRegis, s_LNR_emailVerification, id]
+        );
+    }
+
+    async updateEmailSettings(EmailSettings: tb_setting_sendemail): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_setting_sendemail 
+            SET s_SE_senderName = ?, s_SE_senderEmail = ?, s_SE_smtpServer = ?, s_SE_smtpPort = ?, s_SE_smtpUsername = ?, s_SE_smtpPassword = ?, s_SE_replyEmail = ?, s_SE_forceSSL = ?
+            WHERE s_SE_id = ?;
+            `,
+            [EmailSettings.s_SE_senderName, EmailSettings.s_SE_senderEmail, EmailSettings.s_SE_smtpServer, EmailSettings.s_SE_smtpPort, EmailSettings.s_SE_smtpUsername, EmailSettings.s_SE_smtpPassword, EmailSettings.s_SE_replyEmail, EmailSettings.s_SE_forceSSL, EmailSettings.s_SE_id]
+        );
+    }
+
+    async updateUserToken(id: number, token: string): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_user 
+            SET u_token = ?
+            WHERE u_id = ?;
+            `,
+            [token, id]
+        );
+    }
+
+    async updateUserActiveStatusByID(id: number): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_user 
+            SET u_active = 1, u_token = NULL
+            WHERE u_id = ?;
+            `,
+            [id]
         );
     }
 }

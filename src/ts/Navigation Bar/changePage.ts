@@ -9,6 +9,7 @@ import { NavRelated } from '.';
 import { AreaPage } from '../Main Page/articleByArea';
 import { SearchResultPage } from '../Main Page/articleBySearch';
 import { AdminPage } from '../Admin Page';
+import { ActivateAccountPage } from '../Activate Account Page';
 export class ChangePage {
     constructor(DeletePrevious:boolean = false) {
         if (!(document.getElementById('navigationBar')))
@@ -97,5 +98,10 @@ export class ChangePage {
         const adminPage = new AdminPage()
         adminPage.init();
     }
-
+    
+    toActivateAccountPage(){
+        document.title = 'Activate Account';
+        const activateAccountPage = new ActivateAccountPage();
+        activateAccountPage.init();
+    }
 }

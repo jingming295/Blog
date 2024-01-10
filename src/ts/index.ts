@@ -83,6 +83,16 @@ class init
         
         } else if (hash.startsWith('#/admin')){
             changePage.toAdminPage();
+        } else if(hash.startsWith('#/activateAccount')){
+            const token = hash.slice(hash.indexOf('?token=') + 7);
+            if (token)
+            {
+                changePage.toActivateAccountPage();
+            } else
+            {
+                changePage.toIndex();
+            }
+        
         }
         else
         {

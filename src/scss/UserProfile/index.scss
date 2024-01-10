@@ -202,6 +202,7 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
 
                     .userInfoItem-title {
                         margin-right: 10px;
+
                     }
 
                     span {
@@ -231,9 +232,13 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
                 .title {
                     font-size: 18px;
                     font-weight: 600;
+                    width: 100%;
                     margin: 8px 0;
                     float: left;
                     cursor: pointer;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
 
                 .title:hover {
