@@ -20,6 +20,7 @@ import getEmailSettings from './routes/GetEmailSettings';
 import updateEmailSettings from './routes/UpdateEmailSettings';
 import sendTestEmail from './routes/SendTestEmail';
 import activateAccountRequest from './routes/ActivateAccountRequest';
+import getAllArticleArea from './routes/GetAllArticleArea';
 import { Init } from './Init';
 
 const app = express();
@@ -50,7 +51,8 @@ const routers = [
   getEmailSettings,
   updateEmailSettings,
   sendTestEmail,
-  activateAccountRequest
+  activateAccountRequest,
+  getAllArticleArea
 ];
 app.use('/', routers);
 

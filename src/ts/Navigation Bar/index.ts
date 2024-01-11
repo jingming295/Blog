@@ -3,6 +3,7 @@ import { UserData } from "./interface";
 import { UserVerification } from "../User Verification";
 import { LoginNRegister } from "../Login And Register Page";
 import { urlconfig } from "../Url Config/config";
+import { SendPost } from "../Send Fetch";
 /**
  * 顶栏相关
  * @class
@@ -35,7 +36,7 @@ export class NavRelated
         const navigationContainer = document.createElement('div');
         navigationContainer.className = 'navigation-container';
         navigationContainer.id = 'navigation-container';
-        const leftBanner = this.createLeftBanner();
+        const leftBanner = await this.createLeftBanner();
 
         const rightBanner = await this.createRightBanner();
         navigationContainer.appendChild(leftBanner);
@@ -274,7 +275,13 @@ export class NavRelated
                 userAvatarImg.className = 'userAvatar';
                 userAvatarImg.setAttribute('UserId', userData.userData.id.toString());
 
-
+                userAvatarImg.onclick = () =>
+                {
+                    if (window.innerWidth > 640) {
+                        const changePage = new ChangePage(true);
+                        changePage.toUserProfile(userData.userData.id.toString());
+                    }
+                };
 
                 // 添加鼠标进入事件
                 userAvatarImg.onmouseenter = function ()
@@ -303,12 +310,6 @@ export class NavRelated
                         userMenu.classList.remove('showUserMenu');
                     }
                 };
-
-
-
-
-
-
                 userAvatarImg.src = `${urlconfig.avatarUrl}${userData.userData.avatar}`;
                 const DropMenu = userDropMenu();
                 userAvatarImageWrapper.appendChild(userAvatarImg);
@@ -318,47 +319,10 @@ export class NavRelated
                 return userAvatarDiv;
             }
 
-            // function createPostArticleBtn()
-            // {
-            //     const postArticleDiv = document.createElement('div');
-            //     const postArticleBtn = document.createElement('div');
-
-            //     postArticleDiv.className = 'articleDiv';
-            //     postArticleBtn.className = 'articleBtn';
-            //     postArticleBtn.innerText = 'Post Article';
-            //     postArticleBtn.onclick = () =>
-            //     {
-            //         const changePage = new ChangePage(true);
-            //         changePage.toPostArticle();
-            //     };
-            //     postArticleDiv.appendChild(postArticleBtn);
-            //     return postArticleDiv;
-            // }
-
-            // function createManageArticleBtn()
-            // {
-            //     const manageArticleDiv = document.createElement('div');
-            //     const manageArticleBtn = document.createElement('div');
-            //     manageArticleDiv.className = 'articleDiv';
-            //     manageArticleBtn.className = 'articleBtn';
-            //     manageArticleBtn.innerText = 'Manage Article';
-            //     manageArticleBtn.onclick = () =>
-            //     {
-            //         const changePage = new ChangePage(true);
-            //         changePage.toManageArticle();
-            //     };
-            //     manageArticleDiv.appendChild(manageArticleBtn);
-            //     return manageArticleDiv;
-            // }
-
             const userConponent = document.createElement('div');
             userConponent.className = 'userComponent';
 
             const userAvatarDiv = createUserAvatar();
-            // const postArticleBtn = createPostArticleBtn();
-            // const manageArticleBtn = createManageArticleBtn();
-            // userConponent.appendChild(postArticleBtn);
-            // userConponent.appendChild(manageArticleBtn);
             userConponent.appendChild(userAvatarDiv);
             return userConponent;
         };
@@ -374,7 +338,7 @@ export class NavRelated
     }
 
 
-    private createLeftBanner(): HTMLDivElement
+    private async createLeftBanner(): Promise<HTMLDivElement>
     {
 
         /**
@@ -407,31 +371,82 @@ export class NavRelated
          * make menu
          * @returns 
          */
-        function makeMenu()
+        async function makeMenu()
         {
-            const area = ['Programming', 'Anime'];
-            const ul = document.createElement('ul');
-            area.forEach((value) =>
-            {
-                const li = document.createElement('li');
+            const sendPost = new SendPost();
+
+            const AllArticleArea = await sendPost.getAllArticleArea();
+            const areaItemWrapper = document.createElement('div');
+            areaItemWrapper.className = 'areaItemWrapper';
+            AllArticleArea.forEach((item) =>{
+                const areaItem = document.createElement('div');
+                areaItem.className = 'areaItem';
                 const areaLink = document.createElement('div');
-                areaLink.textContent = value;
+                areaLink.textContent = item.AreaName;
                 areaLink.className = 'menu-item';
-                areaLink.onclick = () =>
-                {
-                    const changePage = new ChangePage(true);
-                    changePage.toArea(value);
-                };
-                li.appendChild(areaLink);
-                ul.appendChild(li);
-            });
-            return ul;
+
+                areaItem.appendChild(areaLink);
+
+                if(item.subArea[0]){
+                    const DropMenuWrapper = document.createElement('div');
+                    const DropMenu = document.createElement('div');
+                    DropMenuWrapper.className = 'dropMenuWrapper';
+                    DropMenu.className = 'dropMenu';
+                    DropMenuWrapper.appendChild(DropMenu);
+
+                    areaLink.onmouseenter = () =>{
+                        DropMenuWrapper.classList.add('showDropMenuWrapper');
+                    }
+
+                    areaLink.onmouseleave = function ()
+                    {
+    
+                        DropMenuWrapper.onmouseleave = function ()
+                        {
+                            if (!areaItem.matches(':hover'))
+                            {
+                                DropMenuWrapper.classList.remove('showDropMenuWrapper');
+                            }
+                        };
+                        if (!DropMenuWrapper.matches(':hover'))
+                        {
+                            DropMenuWrapper.classList.remove('showDropMenuWrapper');
+                        }
+                    };
+
+                    item.subArea.forEach((subItem) =>{
+                        if(subItem === null) return;
+                        const subAreaLink = document.createElement('div');
+    
+                        subAreaLink.textContent = subItem;
+    
+                        subAreaLink.className = 'subAreaLink';
+
+                        subAreaLink.onclick = () =>{
+                            const changePage = new ChangePage(true);
+                            changePage.toArea(subItem);
+                        }
+    
+                        DropMenu.appendChild(subAreaLink);
+                    })
+                    areaItem.appendChild(DropMenuWrapper);
+                }
+                
+                
+                areaItemWrapper.appendChild(areaItem);
+
+
+                
+            })
+
+
+            return areaItemWrapper;
         }
 
         const leftBanner = document.createElement('div');
         leftBanner.className = 'leftBanner';
         const logo = makeLogo();
-        const menu = makeMenu();
+        const menu = await makeMenu();
         leftBanner.appendChild(logo);
         leftBanner.appendChild(menu);
         return leftBanner;

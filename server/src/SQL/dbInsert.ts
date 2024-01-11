@@ -52,7 +52,7 @@ export class DBInsert extends DatabaseConnector
     {
         return this.executeQuery(
             `INSERT INTO tb_article(article_title, article_content, article_area, article_tag, article_author) 
-            VALUES (?, ?, (SELECT aa_id FROM tb_articlearea WHERE aa_area = ?), ?, ?);
+            VALUES (?, ?, (SELECT aa_id FROM tb_subarea WHERE aa_area = ?), ?, ?);
             `,
             [title, content, area, tag, userID]
         );

@@ -65,7 +65,7 @@ export class DBSelect extends DatabaseConnector
             `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
-            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            FROM tb_article JOIN tb_user , tb_subarea, tb_colorscheme, tb_avatar
             WHERE article_id =? && article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1`,
             [articleId]
         );
@@ -77,7 +77,7 @@ export class DBSelect extends DatabaseConnector
             `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
-            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            FROM tb_article JOIN tb_user , tb_subarea, tb_colorscheme, tb_avatar
             WHERE article_author = u_id && article_author = ? && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1
             ORDER BY article_lastEditTime DESC;`,
             [userId]
@@ -104,7 +104,7 @@ export class DBSelect extends DatabaseConnector
             `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
-            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            FROM tb_article JOIN tb_user , tb_subarea, tb_colorscheme, tb_avatar
             WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1
             ORDER BY article_lastEditTime DESC;`
         );
@@ -116,7 +116,7 @@ export class DBSelect extends DatabaseConnector
             `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar,
             cs_textColor, cs_backgroundColor
-            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            FROM tb_article JOIN tb_user , tb_subarea, tb_colorscheme, tb_avatar
             WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && aa_area = ?
             ORDER BY article_lastEditTime DESC;` ,
             [area]
@@ -129,7 +129,7 @@ export class DBSelect extends DatabaseConnector
             `SELECT article_id, article_title, aa_area as article_area, article_content, article_lastEditTime, 
             article_author as article_author_id, u_name as article_author_name, avatar_name as article_author_avatar, 
             cs_textColor, cs_backgroundColor
-            FROM tb_article JOIN tb_user , tb_articlearea, tb_colorscheme, tb_avatar
+            FROM tb_article JOIN tb_user , tb_subarea, tb_colorscheme, tb_avatar
             WHERE article_author = u_id && article_area = aa_id && u_avatar = avatar_id && aa_colorscheme = cs_id && article_alive = 1 && article_title LIKE ?
             ORDER BY article_lastEditTime DESC;`,
             ['%' + keyword + '%']
@@ -171,6 +171,18 @@ export class DBSelect extends DatabaseConnector
         return await this.executeQuery<{ u_id: number; u_active:number}>(
             `SELECT u_id, u_active FROM tb_user WHERE u_token = ?`,
             [token]
+        );
+    }
+
+    async selectAllArticleArea(){
+        return await this.executeQuery<{ba_name:string; aa_area:string;}>(
+            `SELECT tb_bigarea.ba_name, tb_subarea.aa_area
+            FROM tb_bigarea
+            LEFT JOIN tb_subarea
+            ON tb_bigarea.ba_id = tb_subarea.bigarea AND tb_subarea.aa_alive = 1
+            WHERE tb_bigarea.ba_alive = 1
+            ORDER BY tb_bigarea.ba_id, tb_subarea.aa_id;            
+            `
         );
     }
 

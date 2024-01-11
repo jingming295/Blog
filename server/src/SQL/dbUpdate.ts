@@ -47,7 +47,7 @@ export class DBUpdate extends DatabaseConnector
             `UPDATE tb_article
             SET article_title = ?, article_content = ?, article_area = (
                 SELECT aa_id
-                FROM tb_articlearea
+                FROM tb_subarea
                 WHERE aa_area = ?
             ), article_tag = ?,
             article_lastEditTime = CURRENT_TIMESTAMP

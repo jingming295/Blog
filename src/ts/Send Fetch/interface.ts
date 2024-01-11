@@ -65,3 +65,8 @@ export interface setting_email{
     replyEmail: string | null;
     forceSSL: number;
 }
+
+export interface ArticleArea {
+    AreaName: string;
+    subArea: (string | null)[];
+}

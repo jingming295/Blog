@@ -4,7 +4,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleCardData, ArticleContent, RetArticleData, setting_email, setting_loginandregister } from "./interface";
+import { ArticleArea, ArticleCardData, ArticleContent, RetArticleData, setting_email, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
 /**
@@ -825,6 +825,30 @@ export class SendPost
             ).finally(() =>
             {
                 this.navigationProgress.end();
+            });
+    }
+
+    async getAllArticleArea(){
+        const params = {};
+        return await this.postWithUrlParams('getAllArticleArea', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    return response.data as ArticleArea[];
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return [];
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return [];
+            }
+            ).finally(() =>
+            {
             });
     }
 

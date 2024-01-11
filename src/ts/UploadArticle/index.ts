@@ -22,102 +22,250 @@ export class UploadArticle
                 await sendPost.CheckPermission(id);
             }
             await this.createPostComponents(id);
-        
+
         }
-        setTimeout(() =>{
+        setTimeout(() =>
+        {
             this.navigationProgress.end();
             this.setEditorContainerHeight();
-        }, 100)
+        }, 100);
     }
 
     async createPostComponents(id: number | null)
     {
-        let article:RetArticleData | null = null;
-        if(id){
+        let article: RetArticleData | null = null;
+        if (id)
+        {
             const sendPost = new SendPost();
-            article = await sendPost.getArticleContent(id)
+            article = await sendPost.getArticleContent(id);
         }
         const body = document.body;
         const contentDiv = document.createElement('div');
         const postWrapper = document.createElement('div');
         contentDiv.id = 'contentDiv';
         contentDiv.className = 'contentDiv';
+        contentDiv.style.paddingLeft = '5%';
+        contentDiv.style.paddingRight = '5%';
 
         postWrapper.className = 'postWrapper';
 
-        function createTitleInput(article:RetArticleData | null)
+        async function createTitleInput(article: RetArticleData | null)
         {
-            const inputWrapper = document.createElement('div');
-            const titleWrapper = document.createElement('div');
-            const areaWrapper = document.createElement('div');
-            const titleInput = document.createElement('input');
-            const areaSelect = document.createElement('select');
 
-            inputWrapper.className = 'inputWrapper';
-
-            titleWrapper.className = 'titleWrapper';
-
-            areaWrapper.className = 'areaWrapper';
-
-            titleInput.id = 'titleInput';
-            titleInput.className = 'titleInput';
-            titleInput.placeholder = 'Title';
-            titleInput.autocomplete = 'off';
-            if(article?.article.articleTitle){
-                titleInput.value = article.article.articleTitle;
-            }
-
-            areaSelect.id = 'areaSelect';
-            areaSelect.className = 'areaSelect';
-
-            const areaOptions = ['Programming', 'Anime'];
-
-            areaOptions.forEach(optionValue =>
+            async function createSelect()
             {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.innerHTML = optionValue;
-                areaSelect.appendChild(option);
-            });
+                const sendPost = new SendPost();
+                const allArea = await sendPost.getAllArticleArea();
+                const areaOptions = allArea.map(area => area.subArea);
+                const areaWrapper = document.createElement('div');
+                const areaSelect = document.createElement('select');
+                areaWrapper.className = 'areaWrapper';
+                areaSelect.id = 'areaSelect';
+                areaSelect.className = 'areaSelect';
+                areaOptions.forEach(optionValue =>
+                {
+                    optionValue.forEach(optionValue =>
+                    {
+                        if (!optionValue) return;
+                        const option = document.createElement('option');
+                        option.value = optionValue;
+                        option.innerHTML = optionValue;
+                        areaSelect.appendChild(option);
+                    });
+                });
 
-            if(article?.article.articleArea){
-                areaSelect.value = article.article.articleArea;
+                if (article?.article.articleArea)
+                {
+                    areaSelect.value = article.article.articleArea;
+                }
+                areaWrapper.appendChild(areaSelect);
+                return areaWrapper;
+
             }
 
-            titleWrapper.appendChild(titleInput);
-            areaWrapper.appendChild(areaSelect);
+            async function createTitleInput(){
+                const titleWrapper = document.createElement('div');
+                const titleInput = document.createElement('input');
+                titleWrapper.className = 'titleWrapper';
+                titleInput.placeholder = 'Title';
+                titleInput.autocomplete = 'off';
+                titleInput.id = 'titleInput';
+                titleInput.className = 'titleInput';
+
+                titleInput.onfocus = () =>{
+                    titleWrapper.style.backgroundColor = 'white'
+                    titleWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset'
+                    
+                }
+
+                titleInput.onblur = () =>{
+                    titleWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
+                    titleWrapper.style.boxShadow = 'none'
+                }
+
+                if (article?.article.articleTitle)
+                {
+                    titleInput.value = article.article.articleTitle;
+                }
+                titleWrapper.appendChild(titleInput);
+                return titleWrapper;
+            }
+
+            async function createAreaInput(){
+                function createDropDownMenu(){
+                    const dropDownWrapper = document.createElement('div');
+
+                    dropDownWrapper.className = 'dropDownWrapper';
+    
+                    const bigAreaWrapper = document.createElement('div');
+                    bigAreaWrapper.className = 'bigAreaWrapper';
+
+                    const subAreaWrapper = document.createElement('div');
+                    subAreaWrapper.className = 'subAreaWrapper';
+
+                    allArea.forEach(area => {
+                        const bigAreaBtn = document.createElement('div');
+                        bigAreaBtn.className = 'bigAreaBtn';
+                        bigAreaBtn.innerHTML = area.AreaName;
+                        bigAreaBtn.onclick = () =>{
+                            const subAreaBtn = document.querySelectorAll('.subAreaBtn') as NodeListOf<HTMLDivElement>;
+                            subAreaBtn.forEach(btn => {
+                                btn.remove();
+                            })
+                            area.subArea.forEach(subArea => {
+                                if(subArea){
+                                    const subAreaBtn = document.createElement('div');
+                                    subAreaBtn.className = 'subAreaBtn';
+                                    subAreaBtn.innerHTML = subArea;
+                                    subAreaWrapper.appendChild(subAreaBtn);
+
+                                    subAreaBtn.onclick = () =>{
+                                        areaInput.value = area.AreaName + ' - ' + subArea;
+                                        areaHiddenInput.value = subArea;
+                                        areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
+                                        areaInputWrapper.style.boxShadow = 'none'
+                                        areaWrapper.style.width = '30%'
+                                        dropDownWrapper.classList.remove('showDropDownWrapper');
+                                    }
+                                }
+                            })
+                            subAreaWrapper.style.width =bigAreaWrapper.offsetWidth + 'px';
+                        }
+                        bigAreaWrapper.appendChild(bigAreaBtn);
+                    })
+
+                    dropDownWrapper.appendChild(bigAreaWrapper);
+                    dropDownWrapper.appendChild(subAreaWrapper);
+
+                    return dropDownWrapper;
+                }
+                const allArea = await sendPost.getAllArticleArea();
+                console.log(allArea);
+
+                const areaWrapper = document.createElement('div');
+                areaWrapper.className = 'areaWrapper';
+
+                const areaInputWrapper = document.createElement('div');
+                areaInputWrapper.className = 'areaInputWrapper';
+
+                const areaInput = document.createElement('input');
+                areaInput.placeholder = 'Please Select Area';
+                areaInput.className = 'areaInput';
+                areaInput.readOnly = true;
+
+                const areaHiddenInput = document.createElement('input');
+                areaHiddenInput.type = 'hidden';
+                areaHiddenInput.className = 'areaHiddenInput';
+                areaHiddenInput.id = 'areaHiddenInput';
+                
+                if (article?.article.articleArea)
+                {
+                    const foundArea = allArea.find(area => area.subArea.includes(article.article.articleArea));
+                    if(foundArea){
+                        areaInput.value = foundArea.AreaName + ' - ' + article.article.articleArea;
+                        areaHiddenInput.value = article.article.articleArea;
+                    }
+                }
+
+                const dropDownWrapper = createDropDownMenu();
+                areaInputWrapper.appendChild(areaInput);
+                areaInputWrapper.appendChild(areaHiddenInput);
+                areaInputWrapper.appendChild(dropDownWrapper);
+                areaWrapper.appendChild(areaInputWrapper);
+
+                areaInput.onfocus = () =>{
+                    areaInputWrapper.style.backgroundColor = 'white'
+                    areaInputWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset'
+                    areaWrapper.style.width = '50%'
+                    const dropDownWrapper = document.querySelector('.dropDownWrapper') as HTMLDivElement;
+                    if(dropDownWrapper){
+                        dropDownWrapper.classList.add('showDropDownWrapper');
+                    }
+
+                }
+
+                areaInput.onblur = () =>{
+                    const dropDownWrapper = document.querySelector('.dropDownWrapper') as HTMLDivElement;
+                    if(dropDownWrapper.matches(':hover')){
+                        dropDownWrapper.onmouseleave = () =>{
+                            areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
+                            areaInputWrapper.style.boxShadow = 'none'
+                            areaWrapper.style.width = '30%'
+                            dropDownWrapper.classList.remove('showDropDownWrapper');
+                        }
+                        return;
+                    }
+                    areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
+                    areaInputWrapper.style.boxShadow = 'none'
+                    areaWrapper.style.width = '30%'
+                    dropDownWrapper.classList.remove('showDropDownWrapper');
+                }
+
+                return areaWrapper;
+            }
+
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'inputWrapper';
+            const sendPost = new SendPost();
+
+            
+            const titleWrapper = await createTitleInput();
+            const areaInput = await createAreaInput();
+            
+            
             inputWrapper.appendChild(titleWrapper);
-            inputWrapper.appendChild(areaWrapper);
+            inputWrapper.appendChild(areaInput);
 
             return inputWrapper;
         }
 
-        const createEditor = (html: string | null = null) => {
+        const createEditor = (html: string | null = null) =>
+        {
             const editorWarpper = document.createElement('div');
             const toolbar = document.createElement('div');
             const editorContainer = document.createElement('div');
-        
+
             editorWarpper.id = 'editor—wrapper';
             editorWarpper.className = 'editor';
-        
+
             toolbar.id = 'toolbar-container';
-        
+
             editorContainer.id = 'editor-container';
             editorContainer.className = 'editor-container';
-        
+
             editorWarpper.appendChild(toolbar);
             editorWarpper.appendChild(editorContainer);
             postWrapper.appendChild(editorWarpper);
-        
+
             // 在窗口大小改变时重新设置 editorContainer 的高度
             window.addEventListener('resize', this.setEditorContainerHeight);
-        
+
             const editor = new Editor();
             return editor.createEditor(html);
-        
 
-        }
-        
+
+        };
+
 
         const createSubmit = (editor: IDomEditor) =>
         {
@@ -137,7 +285,7 @@ export class UploadArticle
                 submitBtn.onclick = () =>
                 {
                     const titleInput = document.getElementById('titleInput') as HTMLInputElement;
-                    const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
+                    const areaSelect = document.getElementById('areaHiddenInput') as HTMLInputElement;
                     const area = areaSelect.value;
                     const title = titleInput.value;
                     sendPost.UploadArticle(title, editor.getHtml(), area, 'blog');
@@ -147,7 +295,7 @@ export class UploadArticle
                 submitBtn.onclick = () =>
                 {
                     const titleInput = document.getElementById('titleInput') as HTMLInputElement;
-                    const areaSelect = document.getElementById('areaSelect') as HTMLSelectElement;
+                    const areaSelect = document.getElementById('areaHiddenInput') as HTMLInputElement;
                     const area = areaSelect.value;
                     const title = titleInput.value;
                     sendPost.UpdateArticle(id, title, editor.getHtml(), area, 'blog');
@@ -156,27 +304,30 @@ export class UploadArticle
             return submitWrapper;
 
         };
-        const titleInput = createTitleInput(article);
+        const titleInput = await createTitleInput(article);
 
 
         postWrapper.appendChild(titleInput);
         contentDiv.appendChild(postWrapper);
         body.appendChild(contentDiv);
-        if(article){
+        if (article)
+        {
             const editor = createEditor(article.article.articleContent);
             const submitWrapper = createSubmit(editor);
             postWrapper.appendChild(submitWrapper);
-        } else {
+        } else
+        {
             const editor = createEditor();
             const submitWrapper = createSubmit(editor);
             postWrapper.appendChild(submitWrapper);
         }
     }
 
-    setEditorContainerHeight() {
+    setEditorContainerHeight()
+    {
         const editorContainer = document.getElementById('editor-container') as HTMLDivElement;
-        if(!editorContainer) return;
-        const postWrapper = document.querySelector('.postWrapper') as HTMLDivElement;   
+        if (!editorContainer) return;
+        const postWrapper = document.querySelector('.postWrapper') as HTMLDivElement;
         const postWrapperHeight = postWrapper.offsetHeight;
         const toolbar = document.getElementById('toolbar-container') as HTMLDivElement;
         const inputWrapper = document.querySelector('.inputWrapper') as HTMLDivElement;
@@ -185,12 +336,13 @@ export class UploadArticle
         const toolbarHeight = toolbar.offsetHeight;
         const inputWrapperHeight = inputWrapper.offsetHeight;
         const postWrapperMarginBottom = parseInt(window.getComputedStyle(postWrapper).marginBottom);
-        
+
         let submitWrapperHeight = 55;
-        if(submitWrapper){
+        if (submitWrapper)
+        {
             submitWrapperHeight = submitWrapper.offsetHeight;
-        }        
-        const newEditorContainerHeight = postWrapperHeight - toolbarHeight-submitWrapperHeight-inputWrapperHeight-postWrapperMarginBottom-20;
+        }
+        const newEditorContainerHeight = postWrapperHeight - toolbarHeight - submitWrapperHeight - inputWrapperHeight - postWrapperMarginBottom - 20;
         editorContainer.style.height = `${newEditorContainerHeight}px`;
     }
 }

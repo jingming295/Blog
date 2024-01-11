@@ -28,13 +28,14 @@ $themeColor: #73abff;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            
 
             .titleWrapper {
                 background-color: $inputBgColor;
-                width: 50%;
-                border-right: 1px solid $inputBgColorHover;
-                border-radius: $borderRadius 0 0 $borderRadius ;
-
+                width: 100%;
+                border-radius: $borderRadius 0 0 $borderRadius;
+                padding: 0 12px;
+                transition: all 0.2s ease-in-out;
                 .titleInput {
                     width: 100%;
                     height: 100%;
@@ -46,12 +47,6 @@ $themeColor: #73abff;
 
             }
 
-            .titleWrapper,
-            .areaWrapper {
-                padding: 0 12px;
-                transition: background-color 0.2s ease-in-out;
-            }
-
             .titleWrapper:hover,
             .areaSelect:hover {
                 background-color: $inputBgColorHover !important;
@@ -60,9 +55,12 @@ $themeColor: #73abff;
             .areaWrapper {
                 display: flex;
                 align-items: center;
+                padding: 6px 12px;
                 border-radius: 0 $borderRadius $borderRadius 0;
                 background-color: $inputBgColor;
-                width: 50%;
+                width: 30%;
+                border-left: 1px solid $inputBgColorHover;
+                transition: all 0.2s ease-in-out;
 
                 .areaSelect {
                     width: 100%;
@@ -71,6 +69,77 @@ $themeColor: #73abff;
                     border: none;
                     border-radius: $borderRadius;
                     transition: background-color 0.2s ease-in-out;
+                }
+
+                .areaInputWrapper{
+                    position: relative;
+                    width: 100%;
+                    background-color: $inputBgColor;
+                    border-radius: $borderRadius;
+                    transition: all 0.2s ease-in-out;
+
+                    .areaInput{
+                        width: 100%;
+                        height: 100%;
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        border: none;
+                        background: none;
+                    }
+
+                    .areaHiddenInput{
+                        visibility: hidden;
+                    }
+
+                    .dropDownWrapper{
+                        visibility: hidden;
+                        opacity: 0;
+                        position: absolute;
+                        display: flex;
+                        flex-direction: row;
+                        overflow: hidden;
+                        z-index: 1;
+                        margin-top: 4px;
+                        background-color: white;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 10px rgba(0,0,0,.1);
+                        transition: all 0.2s ease-in-out;
+
+                        .bigAreaWrapper{
+                            user-select: none;
+                            font-size: 14px;
+                            .bigAreaBtn{
+                                transition: all 0.2s ease-in-out;
+                                padding: 10px 10px;
+                                cursor: pointer;
+                            }
+
+                            .bigAreaBtn:hover{
+                                background-color: $inputBgColorHover;
+                            }
+                        }
+                        .subAreaWrapper{
+                            width: 0px;
+                            font-size: 14px;
+                            border-left: 1px solid #eee;
+                            transition: all .2s ease-in-out;
+                            .subAreaBtn{
+                                padding: 10px 10px;
+                                cursor: pointer;
+                            }
+                            .subAreaBtn:hover{
+                                background-color: $inputBgColorHover;
+                            }
+                        }
+                    }
+
+                    .showDropDownWrapper{
+                        visibility: visible;
+                        opacity: 1;
+                    }
+                }
+                .areaInputWrapper:hover {
+                    background-color: $inputBgColorHover;
                 }
             }
         }

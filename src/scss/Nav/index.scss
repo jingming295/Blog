@@ -6,7 +6,7 @@ $gray: #333;
 $lightGray: #b2bac2;
 $darkGray: #666;
 $background-color_6: rgba(255, 255, 255, 0);
-$shadow: 0 3px 10px rgba(0,0,0,.1);
+$shadow: 0 3px 10px rgba(0, 0, 0, .1);
 
 // $fontFamily: 'Noto Sans SC', sans-serif;
 .navigationBar {
@@ -73,35 +73,69 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 			-ms-flex-align: center;
 			align-items: center;
 
-			ul {
+			.areaItemWrapper {
 				margin-left: 20px;
+				height: 100%;
 				display: -webkit-box;
 				display: -ms-flexbox;
 				display: flex;
 				-webkit-box-align: center;
 				-ms-flex-align: center;
 				align-items: center;
+
+				.areaItem {
+					position: relative;
+
+					@media (max-width: 620px) {
+						margin-right: 15px;
+					}
+
+					a {
+						color: $gray;
+					}
+
+					.menu-item {
+						cursor: pointer;
+						transition: all .2s ease-in-out;
+						padding: 10px 20px 10px 0;
+					}
+
+					.menu-item:hover {
+						color: $themeColor;
+					}
+
+					.dropMenuWrapper{
+						visibility: hidden;
+						opacity: 0;
+						padding: 20px;
+						min-width: 200px;
+						box-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+						left:-20px;
+						border-radius: 10px;
+						background-color: $white;
+						position: absolute;
+						transition: all .2s ease-in-out;
+						.subAreaLink{
+							padding: 5px 16px;
+							border-radius: 6px;
+							transition: all .3s ease-in-out;
+							cursor: pointer;
+						}
+
+						.subAreaLink:hover{
+							background-color: #f0f2f5;
+						}
+
+					}
+
+					.showDropMenuWrapper{
+						visibility: visible;
+						opacity: 1;
+						transition: visibility 0s linear 0s, opacity 0.3s 0s;
+					}
+				}
 			}
 
-			li {
-				margin-right: 26px;
-				@media (max-width: 620px) {
-					margin-right: 15px;
-				}
-
-				a {
-					color: $gray;
-				}
-
-				.menu-item {
-					cursor: pointer;
-					transition: all .2s ease-in-out;
-				}
-
-				.menu-item:hover {
-					color: $themeColor;
-				}
-			}
 		}
 
 		.rightBanner {
@@ -138,26 +172,30 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 			.btnRegister {
 				background-color: $themeColor;
 				color: $white;
+
 				@media (max-width: 620px) {
 					display: none;
 				}
 			}
 
 
-			
-			.userComponent{
+
+			.userComponent {
 				right: 0;
 				display: flex;
 				height: 100%;
 				align-items: center;
+
 				.userAvatarWrapper {
 					width: 58px;
 					height: 100%;
-					.userAvatarImageWrapper{
+
+					.userAvatarImageWrapper {
 						height: 100%;
 						display: flex;
 						align-items: center;
 						justify-content: center;
+
 						.userAvatar {
 							height: 38px;
 							width: 38px;
@@ -166,8 +204,8 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 							cursor: pointer;
 						}
 					}
-	
-	
+
+
 					.userMenu {
 						visibility: hidden;
 						opacity: 0;
@@ -182,11 +220,11 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 						right: 0 !important;
 						// transform: perspective(1px) scale(1.1);
 						transition: visibility 0s linear 0.3s, opacity 0.3s 0s, transform 0.3s;
-	
+
 						.userMenuAvatarWrapper {
 							width: 100%;
 							height: 100%;
-	
+
 							.userMenuAvatar {
 								width: 50px;
 								height: 50px;
@@ -195,57 +233,57 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 								cursor: pointer;
 							}
 						}
-	
+
 						.userMenuUsernameWrapper {
 							margin: 10px 0;
-	
+
 							.userMenuUsername {
 								margin: 0;
 								font-size: 1.25rem;
 								--webkit-font-smoothing: antialiased;
 								font-weight: 700;
 								color: $gray;
-	
+
 								cursor: pointer;
 							}
 						}
-	
+
 						.userMenuWrapper {
 							div {
 								padding: 8px 5px;
 								cursor: pointer;
-	
+
 							}
-	
+
 							div:hover {
 								background-color: #f0f2f5;
 							}
-	
+
 							.LogoutWrapper:hover {
 								background-color: #f0f2f5;
 								outline: 1px solid red;
 								color: red;
-	
+
 							}
 						}
-	
-	
-	
+
+
+
 					}
-	
+
 					.showUserMenu {
 						visibility: visible;
 						opacity: 1;
 						// transform: perspective(1px) scale(1);
 						transition: visibility 0s linear 0s, opacity 0.3s 0s, transform 0.3s;
 					}
-	
-	
+
+
 				}
-	
+
 				.articleDiv {
 					margin-left: 10px;
-	
+
 					.articleBtn {
 						padding: 6px;
 						border-radius: 15px;
@@ -257,21 +295,24 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 				}
 			}
 
-			.searchBarComponentWrapper{
+			.searchBarComponentWrapper {
 				display: flex;
 				height: 50%;
 				margin-right: 10px;
+
 				@media (max-width: 620px) {
 					display: none;
 				}
-				.searchBarWrapper{
+
+				.searchBarWrapper {
 					display: flex;
 					align-items: center;
 					padding: 0px 0px 0px 15px;
 					border: 1px solid #e8e8e8;
 					transition: all 0.3s ease-in-out;
 					border-radius: 10px 0 0 10px;
-					.searchBar{
+
+					.searchBar {
 						height: 100%;
 						width: 100%;
 						border: none;
@@ -280,7 +321,7 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 
 				}
 
-				.btnSearch{
+				.btnSearch {
 					font-size: 13px;
 					height: 100%;
 					padding: 0 10px;
@@ -293,15 +334,15 @@ $shadow: 0 3px 10px rgba(0,0,0,.1);
 					cursor: pointer;
 				}
 
-				.btnSearch:hover{
-					background-color: rgb(229, 230, 235) !important;
-				}	
-
-				.searchBarWrapper:hover{
+				.btnSearch:hover {
 					background-color: rgb(229, 230, 235) !important;
 				}
-	
-				.searchBarWrapper:focus-within{
+
+				.searchBarWrapper:hover {
+					background-color: rgb(229, 230, 235) !important;
+				}
+
+				.searchBarWrapper:focus-within {
 					border: 1px solid $themeColor;
 				}
 			}
