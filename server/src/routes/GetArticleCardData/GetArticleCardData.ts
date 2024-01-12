@@ -59,7 +59,7 @@ export class GetArticleCardData
     private generateReturnData(articleCardData:ArticleCardData[]){
         if (articleCardData.length > 0)
         {
-            let manageArticleData = articleCardData.map(item =>
+            const manageArticleData = articleCardData.map(item =>
             {
                 const dom = new JSDOM(item.article_content);
                 const paragraphs = dom.window.document.querySelectorAll('p');

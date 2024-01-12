@@ -121,9 +121,6 @@ export class Login
         const aes_256_GCM = new AES_256_GCM();
         const dataToEncrypt  = JSON.stringify(userData)
         const EncryptedData = aes_256_GCM.encrypt(dataToEncrypt, keyid.toString())
-        const data = aes_256_GCM.decrypt(EncryptedData.encryptedData,EncryptedData.iv, EncryptedData.tag, keyid.toString())
-        const UD:UD = JSON.parse(data)
-        // console.log(UD)
         return EncryptedData;
     }
 

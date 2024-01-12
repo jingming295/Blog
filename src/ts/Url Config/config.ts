@@ -21,3 +21,4 @@ const serverUrlConfig = {
 };
 
 export { urlconfig };
+export { serverUrlConfig };

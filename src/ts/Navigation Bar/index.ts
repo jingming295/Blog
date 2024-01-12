@@ -99,7 +99,7 @@ export class NavRelated
         rightBanner.appendChild(searchBar);
         rightBanner.appendChild(LogReg);
         return rightBanner;
-    };
+    }
 
     private aprSearchBar(){
         const searchBarComponentWrapper = document.createElement('div');

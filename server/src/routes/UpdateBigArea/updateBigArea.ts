@@ -5,7 +5,6 @@ import { LoginData as LD, ReturnClientData, UserData as UD } from "../../Return 
 import { DBSelect } from "../../SQL/dbSelect";
 import { DBUpdate } from "../../SQL/dbUpdate";
 import { InputControl, ValidationError } from "../../Validators/inputControl";
-import { setting_emailFromUser } from "../UpdateEmailSettings/interface";
 export class UpdateBigArea{
     
     private returnData = new ReturnData();

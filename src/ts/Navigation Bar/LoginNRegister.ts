@@ -25,8 +25,9 @@ export class HandleLoginNRegister
     {
         const loginBoxButtonDiv = document.getElementById('loginBox-button');
         const loginBoxButton = loginBoxButtonDiv?.querySelector('button');
-        loginBoxButton?.addEventListener('click', async (event: MouseEvent) =>
-        {
+        if(!loginBoxButton) return;
+        
+        loginBoxButton.onclick = async () =>{
             try
             {
                 // handle click event here
@@ -36,8 +37,7 @@ export class HandleLoginNRegister
                 const handlePopMsg = new HandlePopMsg();
                 handlePopMsg.popMsg((error as Error).message);
             }
-
-        });
+        }
     }
 
     async handleRequest(loginBoxButton: HTMLButtonElement)

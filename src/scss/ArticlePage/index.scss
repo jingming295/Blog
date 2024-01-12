@@ -43,7 +43,7 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
         }
         blockquote{
           border-left: 8px solid #d0e5f2;
-          padding: 10px 10px;
+          padding: 10px;
           margin: 10px 0;
           background-color: #f1f1f1;
         }
@@ -53,6 +53,9 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
           background-color: #eee;
           padding: 3px;
           border-radius: 3px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
         }
         pre>code{
           display: block;
@@ -82,11 +85,6 @@ $shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
         img{
           max-width: 100%;
           height: auto!important;
-        }
-        code{
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-          white-space: pre-wrap;
         }
       }
 

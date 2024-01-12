@@ -91,8 +91,8 @@ export class ChangeAvatar
     getFileName(originalPath: string, targetDir: string, filename: string, extension: string, index = 1): string
     {
         // 生成新的文件名
-        let newFilename = path.join(`${index > 0 ? index : ''}${extension}`);
-        let newFilepath = path.join(targetDir, newFilename);
+        const newFilename = path.join(`${index > 0 ? index : ''}${extension}`);
+        const newFilepath = path.join(targetDir, newFilename);
         // 检查文件是否存在
         if (fs.existsSync(newFilepath))
         {
@@ -108,8 +108,8 @@ export class ChangeAvatar
     {
         return new Promise((resolve, reject) =>
         {
-            let hash = crypto.createHash('sha256');
-            let stream = fs.createReadStream(filename);
+            const hash = crypto.createHash('sha256');
+            const stream = fs.createReadStream(filename);
 
             stream.on('data', (data) =>
             {

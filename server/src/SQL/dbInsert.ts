@@ -20,7 +20,7 @@ export class DBInsert extends DatabaseConnector
         const connection = await this.connection;
         try
         {
-            const [ResultSetHeader, fields]: [mysql.ResultSetHeader, mysql.FieldPacket[]] = await connection.query(
+            const [ResultSetHeader]: [mysql.ResultSetHeader, mysql.FieldPacket[]] = await connection.query(
                 query,
                 values
             );

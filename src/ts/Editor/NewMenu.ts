@@ -1,5 +1,5 @@
-import { Boot, DomEditor, IDomEditor, IModalMenu, IModuleConf, SlateElement, SlateNode } from '@wangeditor/editor';
-import { h, VNode } from 'snabbdom';
+import { Boot, DomEditor, IDomEditor, IModalMenu, IModuleConf, SlateNode } from '@wangeditor/editor';
+// import { h, VNode } from 'snabbdom';
 import formulaModule from '@wangeditor/plugin-formula';
 
 export class NewMenu {
@@ -38,27 +38,27 @@ class MyModalMenu implements IModalMenu {
     }
 
     // 菜单是否需要激活（如选中加粗文本，“加粗”菜单会激活），用不到则返回 false
-    isActive (editor: IDomEditor): boolean {
+    isActive (): boolean {
         return false;
     }
 
     // 获取菜单执行时的 value ，用不到则返回空 字符串或 false
-    getValue (editor: IDomEditor): string | boolean {
+    getValue (): string | boolean {
         return '';
     }
 
     // 菜单是否需要禁用（如选中 H1 ，“引用”菜单被禁用），用不到则返回 false
-    isDisabled (editor: IDomEditor): boolean {
+    isDisabled (): boolean {
         return false;
     }
 
     // 点击菜单时触发的函数
-    exec (editor: IDomEditor, value: string | boolean) {
+    exec () {
         // Modal menu ，这个函数不用写，空着即可
     }
 
     // 弹出框 modal 的定位：1. 返回某一个 SlateNode； 2. 返回 null （根据当前选区自动定位）
-    getModalPositionNode (editor: IDomEditor): SlateNode | null {
+    getModalPositionNode (): SlateNode | null {
         return null;
     }
 

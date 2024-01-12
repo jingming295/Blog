@@ -1,6 +1,6 @@
 // src/routes/Register/index.ts
 import express, { Request, Response } from 'express';
-import { LoginData as LD, LoginDataFromClient } from '../../Return To Client/interface';
+import { LoginDataFromClient } from '../../Return To Client/interface';
 import { DeleteColorScheme } from './deleteColorScheme';
 import { DataFromClient } from '../../Data From Client';
 const router = express.Router();

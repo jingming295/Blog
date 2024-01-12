@@ -1,4 +1,3 @@
-import { NavRelated } from "../Navigation Bar";
 import '../../scss/404Page/index.scss';
 
 export class Page404{

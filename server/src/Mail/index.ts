@@ -29,9 +29,9 @@ export class Mail
             return 'Please set email setting first';
         }
 
-        let secure = emailSetting.s_SE_forceSSL === 0 ? false : true;
-        let port = secure ? 465 : emailSetting.s_SE_smtpPort;
-        let transporter = nodemailer.createTransport({
+        const secure = emailSetting.s_SE_forceSSL === 0 ? false : true;
+        const port = secure ? 465 : emailSetting.s_SE_smtpPort;
+        const transporter = nodemailer.createTransport({
             host: emailSetting.s_SE_smtpServer,
             port: port,
             secure: secure, // true for 465, false for other ports
@@ -41,7 +41,7 @@ export class Mail
             }
         });
 
-        let info = await transporter.sendMail({
+        await transporter.sendMail({
             from: `${emailSetting.s_SE_senderName} ${emailSetting.s_SE_senderEmail}`, // sender address
             to: ToEmail, // list of receivers
             subject: 'Test Email', // Subject line
@@ -76,11 +76,11 @@ export class Mail
             return 'Please set email setting first';
         }
 
-        let secure = emailSetting.s_SE_forceSSL === 0 ? false : true;
-        let port = secure ? 465 : emailSetting.s_SE_smtpPort;
+        const secure = emailSetting.s_SE_forceSSL === 0 ? false : true;
+        const port = secure ? 465 : emailSetting.s_SE_smtpPort;
         const mailFormat = new MailFormat();
         const mailContent = mailFormat.RegisterMailFormat(ToEmail, token);
-        let transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
             host: emailSetting.s_SE_smtpServer,
             port: port,
             secure: secure, // true for 465, false for other ports
@@ -90,7 +90,7 @@ export class Mail
             }
         });
 
-        let info = await transporter.sendMail({
+        await transporter.sendMail({
             from: `${emailSetting.s_SE_senderName} ${emailSetting.s_SE_senderEmail}`, // sender address
             to: ToEmail, // list of receivers
             subject: 'Activate Account', // Subject line

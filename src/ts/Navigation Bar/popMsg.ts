@@ -55,7 +55,7 @@ export class HandlePopMsg
             await delay(5);
             displayMsg(msgwarpDiv, msgSpan);
             await delay(1500);
-            hideMsg(msgwarpDiv, msgSpan);
+            hideMsg(msgwarpDiv);
 
             await delay(200);
             msgContainerDiv.removeChild(msgwarpDiv);
@@ -68,7 +68,7 @@ export class HandlePopMsg
             msgwarpDiv.style.opacity = '1';
         }
 
-        function hideMsg(msgwarpDiv: HTMLDivElement, msgSpan: HTMLSpanElement)
+        function hideMsg(msgwarpDiv: HTMLDivElement)
         {
             msgwarpDiv.style.padding = '0';
             msgwarpDiv.style.opacity = '0';

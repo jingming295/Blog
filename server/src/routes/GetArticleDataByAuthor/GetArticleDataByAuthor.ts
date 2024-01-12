@@ -1,8 +1,5 @@
-import { AES_256_GCM } from "../../Crypto/AES-256-GCM";
-import { AES_256_GCMEncrypted } from "../../Crypto/interface";
+
 import { ReturnData } from "../../Return To Client";
-import { LoginData as LD } from "../../Return To Client/interface";
-import { UserData as UD } from "../../Return To Client/interface";
 import { DBSelect } from "../../SQL/dbSelect";
 
 import { JSDOM } from 'jsdom';
@@ -21,7 +18,7 @@ export class GetArticleDataByAuthor
 
             if (resultSetHeader.length > 0)
             {
-                let manageArticleData:ManageArticleData[] = resultSetHeader.map(item =>
+                const manageArticleData:ManageArticleData[] = resultSetHeader.map(item =>
                 {
                     const dom = new JSDOM(item.article_content);
                     const paragraphs = dom.window.document.querySelectorAll('p');

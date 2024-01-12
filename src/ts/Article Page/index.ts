@@ -2,7 +2,7 @@ import { SendPost } from "../Send Fetch";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ChangePage } from "../Navigation Bar/changePage";
 import '../../scss/ArticlePage/index.scss';
-import { ArticleContent, RetArticleData } from "../Send Fetch/interface";
+import { RetArticleData } from "../Send Fetch/interface";
 export class MakeArticlePage
 {
     handlePopMsg = new HandlePopMsg();

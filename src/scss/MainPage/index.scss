@@ -83,7 +83,6 @@ $themeColor: #73abff;
                     border-radius: 5px;
                     cursor: pointer;
                     float:left;
-                    cursor: pointer;
                 }
                 .ArticleAuthor{
                     color: white;
@@ -101,8 +100,8 @@ $themeColor: #73abff;
             }
     
             .ArticleFirstLineWrapper{
-                overflow-y: auto;
                 overflow: hidden;
+                overflow-y: auto;
                 .ArticleFirstLine{
                     font-size: 18px;
                     padding: 0 5px;

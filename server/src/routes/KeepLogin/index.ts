@@ -1,7 +1,7 @@
 // src/routes/Login/index.ts
 import express, { Request, Response } from 'express';
 import { KeepLogin } from './performKeepLogin';
-import { LoginData as LD, LoginDataFromClient } from '../../Return To Client/interface';
+import { LoginDataFromClient } from '../../Return To Client/interface';
 import { DataFromClient } from '../../Data From Client';
 const router = express.Router();
 router.post('/keeplogin', async (req: Request, res: Response) =>
