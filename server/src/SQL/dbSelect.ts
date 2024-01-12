@@ -20,7 +20,7 @@ export class DBSelect extends DatabaseConnector
         const connection = await this.connection;
         try
         {
-            const [rows, fields]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
+            const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(
                 query,
                 values
             );

@@ -221,7 +221,6 @@ export class MakeUserProfile
                 navigationProgress.init();
                 const leftPanel = document.createElement('div');
                 leftPanel.className = 'userProfile-Usertab-leftPanel';
-                let i = 0;
                 const sideBarItem = [
                     {
                         name: 'User Profile',
@@ -699,7 +698,7 @@ export class MakeUserProfile
                                 const parsedUserData: UserData = JSON.parse(userData);
                                 const changeNameInput = document.getElementById('changeNameInput') as HTMLInputElement;
                                 const changeUserDescriptionInput = document.getElementById('changeUserDescriptionInput') as HTMLInputElement;
-                                let selectedGender = document.querySelector('input[name="gender"]:checked');
+                                const selectedGender = document.querySelector('input[name="gender"]:checked');
                                 if (selectedGender)
                                 {
                                     const name = changeNameInput.value;

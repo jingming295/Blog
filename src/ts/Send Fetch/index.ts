@@ -4,7 +4,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleArea, ArticleCardData, ArticleContent, ColorScheme, RetArticleData, setting_email, setting_loginandregister } from "./interface";
+import { ArticleArea, ArticleCardData, ColorScheme, RetArticleData, setting_email, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
 /**
@@ -57,13 +57,13 @@ export class SendPost
 
         return new Promise((resolve, reject) =>
         {
-            let xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);
             xhr.upload.onprogress = function (event)
             {
                 if (event.lengthComputable)
                 {
-                    let percentComplete = event.loaded / event.total * 100;
+                    const percentComplete = event.loaded / event.total * 100;
                     if (progressDiv)
                     {
                         progressDiv.classList.add('changeImgBtnHovered');

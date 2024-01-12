@@ -23,7 +23,7 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
 
         .userHeaderComponentWrapper {
             max-width: 100%;
-            padding: 0px 42px 18px 42px;
+            padding: 0px 42px 18px;
             display: flex;
             margin-top: -80px;
 
@@ -254,8 +254,6 @@ $shadow: 0 3px 10px rgba(0, 0, 0, .1);
                     line-height: 1.4;
                     max-height: calc(1.4 * 2);
                     overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
                     text-overflow: ellipsis;
                     margin-bottom: 4px;
                 }

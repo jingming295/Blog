@@ -91,7 +91,7 @@ export class NavRelated
             return LogRegWrapper;
         }
 
-        let rightBanner = document.createElement('div');
+        const rightBanner = document.createElement('div');
         rightBanner.className = 'rightBanner';
         rightBanner.id = 'rightBanner';
         const LogReg = aprLoginNRegisterComponent();
@@ -325,7 +325,7 @@ export class NavRelated
             const userAvatarDiv = createUserAvatar();
             userConponent.appendChild(userAvatarDiv);
             return userConponent;
-        };
+        }
         const rightBanner = document.createElement('div');
         rightBanner.className = 'rightBanner';
         rightBanner.id = 'rightBanner';
