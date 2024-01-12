@@ -7,17 +7,11 @@ import { ProfileData } from "../User Profile/interface";
 import { ArticleArea, ArticleCardData, ColorScheme, RetArticleData, setting_email, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
-/**
- * 发送post的class
- */
 export class SendPost
 {
     private navigationProgress = new NavigationProgress();
-    constructor()
-    {
-
-    }
     handlePopMsg = new HandlePopMsg();
+
     private postWithUrlParams(api: string, params: Record<string, string | number | UD | AD | setting_loginandregister | setting_email>)
     {
         const url = `${urlconfig.serverUrl}${api}`;

@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/ts/index.ts",  // 入口文件路径
+  entry: "./src/ts/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -33,7 +33,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html", // HTML 模板路径
+      template: "./src/index.html",
     }),
   ],
 };

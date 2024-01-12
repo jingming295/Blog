@@ -11,7 +11,7 @@ import { NavigationProgress } from "./Create Navigation Progress";
 class init
 {
     /**
-     * Constructor for ActivationPage class.
+     * 
      * @constructor
      */
     async init()
@@ -149,8 +149,6 @@ class init
 
         const navigationProgress = new NavigationProgress();
         navigationProgress.init();
-
-
     }
 
 
