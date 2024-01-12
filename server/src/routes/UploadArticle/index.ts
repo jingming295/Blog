@@ -5,7 +5,7 @@ import { UploadArticle } from './performUploadArticle';
 import { ArticleData as AD } from './interface';
 const router = express.Router();
 
-function transformUserData(body: any): LD
+function transformUserData(body: { UserData:any; ArticleData?: AD; }): LD
 {
     return {
         ...body.UserData,

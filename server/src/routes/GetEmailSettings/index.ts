@@ -1,27 +1,16 @@
 // src/routes/Register/index.ts
 import express, { Request, Response } from 'express';
-import { LoginData as LD } from '../../Return To Client/interface';
+import { LoginDataFromClient } from '../../Return To Client/interface';
 import { GetEmailSettings } from './getEmailSettings';
+import { DataFromClient } from '../../Data From Client';
 const router = express.Router();
 
-function transformUserData(body: any): LD
-{
-    return {
-        ...body.UserData,
-        encUserData: {
-            ...body.UserData.encUserData,
-            iv: Buffer.from(body.UserData.encUserData.iv.data),
-            encryptedData: Buffer.from(body.UserData.encUserData.encryptedData.data),
-            tag: Buffer.from(body.UserData.encUserData.tag.data)
-        }
-    } as LD;
-}
 
 router.post('/getEmailSettings', async (req: Request, res: Response) =>
 {
     try
     {
-        const body = req.body as { UserData: LD};
+        const body = req.body as { UserData: LoginDataFromClient};
         if (body.UserData === undefined)
         {
             res.json({ code: -101, message: 'Data is not complete' });
@@ -29,7 +18,8 @@ router.post('/getEmailSettings', async (req: Request, res: Response) =>
         }
 
         const getEmailSettings = new GetEmailSettings();
-        const transformedUserData = transformUserData(body);
+        const dataFromClient = new DataFromClient();
+        const transformedUserData = dataFromClient.transformLoginDataFromUser(body);
         const returndata = await getEmailSettings.performAction(transformedUserData);
         res.json(returndata);
     } catch (error)

@@ -154,7 +154,7 @@ export class SendPost
                     return null;
                 }
             })
-            .catch((error: any) =>
+            .catch((error) =>
             {
                 console.log(error);
                 return null;
@@ -240,7 +240,7 @@ export class SendPost
                         this.handlePopMsg.popMsg(response.message);
                     }
                 })
-                .catch((error: any) =>
+                .catch((error) =>
                 {
                     console.log(error);
                 })
@@ -286,7 +286,7 @@ export class SendPost
                         this.handlePopMsg.popMsg(response.message);
                     }
                 })
-                .catch((error: any) =>
+                .catch((error) =>
                 {
                     console.log(error);
                 })
@@ -315,7 +315,7 @@ export class SendPost
             }
             this.handlePopMsg.popMsg(response.message);
             throw new Error(response.message);
-        }).catch((error: any) =>
+        }).catch((error) =>
         {
             console.log(error);
             throw new Error(error);
@@ -345,7 +345,7 @@ export class SendPost
                 return [];
             }
 
-        }).catch((error: any) =>
+        }).catch((error) =>
         {
             console.log(error);
             throw new Error(error);
@@ -372,7 +372,7 @@ export class SendPost
                 this.handlePopMsg.popMsg(response.message);
                 return [];
             }
-        }).catch((error: any) =>
+        }).catch((error) =>
         {
             console.log(error);
             throw new Error(error);
@@ -432,8 +432,9 @@ export class SendPost
                 await changePage.to404Page();
                 return null;
             }
-        }).catch(async (error: any) =>
+        }).catch(async (error) =>
         {
+            console.log(error)
             const changePage = new ChangePage(true);
             await changePage.to404Page();
             return null;

@@ -6,6 +6,7 @@ import { UserData as UD } from "../../Return To Client/interface";
 import { DBSelect } from "../../SQL/dbSelect";
 
 import { JSDOM } from 'jsdom';
+import { ManageArticleData } from "./interface";
 
 export class GetArticleDataByAuthor
 {
@@ -20,7 +21,7 @@ export class GetArticleDataByAuthor
 
             if (resultSetHeader.length > 0)
             {
-                let manageArticleData = resultSetHeader.map(item =>
+                let manageArticleData:ManageArticleData[] = resultSetHeader.map(item =>
                 {
                     const dom = new JSDOM(item.article_content);
                     const paragraphs = dom.window.document.querySelectorAll('p');

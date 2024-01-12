@@ -1024,7 +1024,7 @@ export class AdminPage
                 };
 
                 return editWrapper;
-            };
+            }
 
             function createBtn()
             {

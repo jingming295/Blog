@@ -113,12 +113,12 @@ export class Register
             if (error instanceof ValidationError)
             {
                 // handle ValidationError
-                const returnData = this.returnData.returnClientData(error.code, error.message, []);
+                const returnData = this.returnData.returnClientData(error.code, error.message);
                 return returnData;
             } else
             {
                 // handle common error
-                const returnData = this.returnData.returnClientData(-400, 'Error', []);
+                const returnData = this.returnData.returnClientData(-400, 'Error');
                 console.log(error);
                 return returnData;
             }

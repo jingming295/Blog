@@ -1,5 +1,6 @@
 import { ReturnData } from "../../Return To Client";
 import { DBSelect } from "../../SQL/dbSelect";
+import { ReformColorSchemeData } from "./interface";
 
 export class GetAllColorScheme
 {
@@ -15,7 +16,7 @@ export class GetAllColorScheme
                 const returnData = this.returnData.returnClientData(-101, 'Color Scheme not found');
                 return returnData
             } else {
-                const reformColorSchemeData = colorSchemeData.map((colorScheme) => {
+                const reformColorSchemeData:ReformColorSchemeData[] = colorSchemeData.map((colorScheme) => {
                     return {
                         id: colorScheme.cs_id,
                         textColor: colorScheme.cs_textColor,

@@ -1,34 +1,22 @@
 // src/routes/Login/index.ts
 import express, { Request, Response } from 'express';
 import { KeepLogin } from './performKeepLogin';
-import { LoginData as LD } from '../../Return To Client/interface';
+import { LoginData as LD, LoginDataFromClient } from '../../Return To Client/interface';
+import { DataFromClient } from '../../Data From Client';
 const router = express.Router();
-
-function transformUserData(body: any): LD
-{
-  return {
-    ...body.UserData,
-    encUserData: {
-      ...body.UserData.encUserData,
-      iv: Buffer.from(body.UserData.encUserData.iv.data),
-      encryptedData: Buffer.from(body.UserData.encUserData.encryptedData.data),
-      tag: Buffer.from(body.UserData.encUserData.tag.data)
-    }
-  } as LD;
-}
-
 router.post('/keeplogin', async (req: Request, res: Response) =>
 {
   try
   {
     const keepLogin = new KeepLogin();
-    const body = req.body as { UserData: LD; };
+    const body = req.body as { UserData: LoginDataFromClient; };
     if (body.UserData === undefined)
     {
       res.json({ code: -101, message: 'Data is not complete' });
       return;
     }
-    const transformedUserData = transformUserData(body);
+    const dataFromClient = new DataFromClient();
+    const transformedUserData = dataFromClient.transformLoginDataFromUser(body);
 
     const userResult = await keepLogin.performKeepLogin(transformedUserData);
     res.json(userResult);

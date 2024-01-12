@@ -4,7 +4,7 @@ export interface RetArticleCardData{
     colorScheme: colorScheme;
 }
 
-interface Article{
+export interface Article{
     articleID: number;
     articleTitle: string;
     articleArea: string;
@@ -12,13 +12,13 @@ interface Article{
     articleLastEditTime: Date;
 }
 
-interface author{
+export interface author{
     articleAuthorID: number;
     articleAuthor: string;
     articleAuthorAvatar: string;
 }
 
-interface colorScheme{
+export interface colorScheme{
     areaTextColor: string;
     areaBackgroundColor: string;
 }

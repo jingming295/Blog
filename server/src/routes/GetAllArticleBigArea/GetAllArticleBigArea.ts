@@ -1,5 +1,6 @@
 import { ReturnData } from "../../Return To Client";
 import { DBSelect } from "../../SQL/dbSelect";
+import { AllArticleBigArea } from "./interface";
 
 export class GetAllArticleBigArea
 {
@@ -11,7 +12,7 @@ export class GetAllArticleBigArea
             const dbSelect = new DBSelect();
             const result = await dbSelect.selectAllArticleBigArea();
 
-            const returnResult = result.map((item) =>
+            const returnResult:AllArticleBigArea[] = result.map((item) =>
             {
                 return {
                     id: item.ba_id,
