@@ -18,88 +18,141 @@ class init
     {
         const hash = window.location.hash;
         const changePage = new ChangePage();
-        if (hash.startsWith('#/u'))
-        {
-            const id = hash.slice(hash.indexOf('?id=') + 4);
-            if (id && Number.isInteger(parseInt(id)))
+        let conformPromis: Promise<boolean> | null = null;
+
+        ([{
+            inc: ['#/u'],
+            fn: async () =>
             {
-                await changePage.toUserProfile(id);
-            } else
-            {
-                await changePage.toIndex();
+                const id = hash.slice(hash.indexOf('?id=') + 4);
+                if (id && Number.isInteger(parseInt(id)))
+                {
+                    await changePage.toUserProfile(id);
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
             }
-        } else if (hash === '')
-        {
-            await changePage.toIndex();
-        } else if (hash.startsWith('#/newpost'))
-        {
-            await changePage.toPostArticle();
-        } else if (hash.startsWith('#/p'))
-        {
-            const id = hash.slice(hash.indexOf('?id=') + 4);
-            if (id && Number.isInteger(parseInt(id)))
+        }, {
+            inc: ['#/newpost'],
+            fn: async () =>
             {
-                await changePage.toArticle(id);
-            } else
-            {
-                await changePage.toIndex();
+                await changePage.toPostArticle();
+                return true;
             }
-        } else if (hash.startsWith('#/404'))
-        {
-            changePage.to404Page();
-        } else if (hash.startsWith('#/manage%20article'))
-        {
-            await changePage.toManageArticle();
-        } else if (hash.startsWith('#/editArticle'))
-        {
-            const id = hash.slice(hash.indexOf('?id=') + 4);
-            if (id && Number.isInteger(parseInt(id)))
+        }, {
+            inc: ['#/p'],
+            fn: async () =>
             {
-                await changePage.toEditArticle(parseInt(id));
-            } else
-            {
-                await changePage.toIndex();
+                const id = hash.slice(hash.indexOf('?id=') + 4);
+                if (id && Number.isInteger(parseInt(id)))
+                {
+                    await changePage.toArticle(id);
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
             }
-        } else if (hash.startsWith('#/area'))
+        }, {
+            inc: ['#/404'],
+            fn: async () =>
+            {
+                changePage.to404Page();
+                return true;
+            }
+        }, {
+            inc: ['#/manage%20article'],
+            fn: async () =>
+            {
+                await changePage.toManageArticle();
+                return true;
+            }
+        }, {
+            inc: ['#/editArticle'],
+            fn: async () =>
+            {
+                const id = hash.slice(hash.indexOf('?id=') + 4);
+                if (id && Number.isInteger(parseInt(id)))
+                {
+                    await changePage.toEditArticle(parseInt(id));
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
+            }
+        }, {
+            inc: ['#/area'],
+            fn: async () =>
+            {
+                const area = hash.slice(hash.indexOf('?area=') + 6);
+                if (area)
+                {
+                    await changePage.toArea(area);
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
+            }
+        }, {
+            inc: ['#/search'],
+            fn: async () =>
+            {
+                const keyword = hash.slice(hash.indexOf('?keyword=') + 9);
+                console.log(keyword);
+                if (keyword)
+                {
+                    await changePage.toSearch(keyword);
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
+            }
+        }, {
+            inc: ['#/admin'],
+            fn: async () =>
+            {
+                await changePage.toAdminPage();
+                return true;
+            }
+        }, {
+            inc: ['#/activateAccount'],
+            fn: async () =>
+            {
+                const token = hash.slice(hash.indexOf('?token=') + 7);
+                if (token)
+                {
+                    await changePage.toActivateAccountPage();
+                } else
+                {
+                    await changePage.toIndex();
+                }
+                return true;
+            }
+        }]).some(o =>
         {
-            const area = hash.slice(hash.indexOf('?area=') + 6);
-            if (area)
+            if (o.inc.every(k => hash.startsWith(k)))
             {
-                await changePage.toArea(area);
-            } else
-            {
-                await changePage.toIndex();
+                conformPromis = o.fn();
+                console.log(conformPromis);
+                return true;
             }
-        } else if (hash.startsWith('#/search')){
-            const keyword = hash.slice(hash.indexOf('?keyword=') + 9);
-            console.log(keyword)
-            if (keyword)
-            {
-                await changePage.toSearch(keyword);
-            } else
-            {
-                await changePage.toIndex();
-            }
-        
-        } else if (hash.startsWith('#/admin')){
-            await changePage.toAdminPage();
-        } else if(hash.startsWith('#/activateAccount')){
-            const token = hash.slice(hash.indexOf('?token=') + 7);
-            if (token)
-            {
-                await changePage.toActivateAccountPage();
-            } else
-            {
-                await changePage.toIndex();
-            }
-        
-        }else
-        {
+            else
+                return false;
+        });
+        console.log(conformPromis);
+        console.log(hash);
+        if(!conformPromis){
             await changePage.toIndex();
         }
+
         const navigationProgress = new NavigationProgress();
         navigationProgress.init();
-        
+
 
     }
 
