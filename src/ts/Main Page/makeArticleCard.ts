@@ -16,10 +16,10 @@ export class MakeArticleCard
                 const avatar = document.createElement('img');
                 avatar.className = 'avatar';
                 avatar.src = `${urlconfig.avatarUrl}${ArticleCardData.author.articleAuthorAvatar}`;
-                avatar.onclick = () =>
+                avatar.onclick = async () =>
                 {
                     const changePage = new ChangePage(true);
-                    changePage.toUserProfile(ArticleCardData.author.articleAuthorID.toString());
+                    await changePage.toUserProfile(ArticleCardData.author.articleAuthorID.toString());
                 };
                 avatarWrapper.appendChild(avatar);
                 return avatarWrapper;
@@ -32,10 +32,10 @@ export class MakeArticleCard
                     const authorName = document.createElement('p');
                     authorName.className = 'authorName';
                     authorName.innerHTML = ArticleCardData.author.articleAuthor;
-                    authorName.onclick = () =>
+                    authorName.onclick = async () =>
                     {
                         const changePage = new ChangePage(true);
-                        changePage.toUserProfile(ArticleCardData.author.articleAuthorID.toString());
+                        await changePage.toUserProfile(ArticleCardData.author.articleAuthorID.toString());
                     };
                     authorNameWrapper.appendChild(authorName);
                     return authorNameWrapper;
@@ -78,10 +78,10 @@ export class MakeArticleCard
             const ArticleTitle = document.createElement('h4');
             ArticleTitle.className = 'ArticleTitle';
 
-            ArticleTitle.onclick = () =>
+            ArticleTitle.onclick = async () =>
             {
                 const changePage = new ChangePage(true);
-                changePage.toArticle(ArticleCardData.article.articleID.toString());
+                await changePage.toArticle(ArticleCardData.article.articleID.toString());
             };
 
             ArticleTitle.innerHTML = ArticleCardData.article.articleTitle;
@@ -119,10 +119,10 @@ export class MakeArticleCard
             ArticleArea.innerHTML = ArticleCardData.article.articleArea;
             ArticleArea.style.color = ArticleCardData.colorScheme.areaTextColor;
             ArticleArea.style.backgroundColor = ArticleCardData.colorScheme.areaBackgroundColor;
-            ArticleArea.onclick = () =>
+            ArticleArea.onclick = async () =>
             {
                 const changePage = new ChangePage(true);
-                changePage.toArea(ArticleCardData.article.articleArea);
+                await changePage.toArea(ArticleCardData.article.articleArea);
             };
 
             const ArticleLastEditTime = document.createElement('p');

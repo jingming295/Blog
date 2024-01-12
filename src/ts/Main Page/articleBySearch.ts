@@ -4,9 +4,9 @@ import { MakeArticleCard } from "./makeArticleCard";
 
 export class SearchResultPage{
 
-    init = (keyword: string) =>
+    init = async (keyword: string) =>
     {
-        this.createContentDiv(keyword);
+        await this.createContentDiv(keyword);
     };
 
     private createContentDiv = async (keyword: string) =>

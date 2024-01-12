@@ -17,7 +17,7 @@ export class UserVerification{
         {
             localStorage.clear();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
             location.reload();
             return false
         }

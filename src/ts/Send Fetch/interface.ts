@@ -66,7 +66,21 @@ export interface setting_email{
     forceSSL: number;
 }
 
+interface Subarea {
+    subAreaID: number | null;
+    subareaName: string | null;
+    colorscheme: ColorScheme | null;
+}
+
 export interface ArticleArea {
-    AreaName: string;
-    subArea: (string | null)[];
+    bigareaID: number;
+    bigAreaName:string;
+    subarea: Subarea[];
+}
+
+
+export interface ColorScheme{
+    id: number
+    textColor: string
+    backgroundColor: string
 }

@@ -54,9 +54,9 @@ export class InputControl
     }
     validateUserDesc(userDesc: string): void
     {
-        if (userDesc.length > 100)
+        if (userDesc.length < 1 || userDesc.length > 100)
         {
-            throw new ValidationError(-400, 'Please input a correct user description, must be less than 100 characters.');
+            throw new ValidationError(-400, 'Please input a correct user description, must be less than 100 characters or more than 1 character and contain only alphanumeric characters and spaces.');
         }
     }
 
@@ -72,9 +72,9 @@ export class InputControl
     {
         const domainRegex = /^(?:(?:[a-zA-Z0-9][a-zA-Z0-9\-]{0,61})?[a-zA-Z0-9]\.)+[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]$/;
 
-        if (domainname.length > 254)
+        if (domainname.length < 1 || domainname.length > 254)
         {
-            throw new ValidationError(-400, 'Domain name is too long');
+            throw new ValidationError(-400, 'Domain name is too long or too short');
         } else if (!domainRegex.test(domainname))
         {
             throw new ValidationError(-400, 'Domain name is invalid');
@@ -83,9 +83,9 @@ export class InputControl
 
     validateSMTPPassword(password: string): void
     {
-        if (password.length > 200)
+        if (password.length < 1 || password.length > 200)
         {
-            throw new ValidationError(-400, 'SMTP password is too long');
+            throw new ValidationError(-400, 'SMTP password is too long or too short');
         }
     }
 
@@ -115,5 +115,23 @@ export class InputControl
             throw new ValidationError(-400, 'Please input a correct token');
         }
     }
+
+    validateBigAreaName(name: string): void
+    {
+        if (name.length < 1 || name.length > 20 || !/^[a-zA-Z0-9 ]*$/.test(name))
+        {
+            throw new ValidationError(-400, 'Please input a correct big area name, must be less than 20 characters and contain only alphanumeric characters and spaces.');
+        }
+    }
+
+    validateSubAreaName(name: string): void
+    {
+        if (name.length < 1 || name.length > 20 || !/^[a-zA-Z0-9 ]*$/.test(name))
+        {
+            throw new ValidationError(-400, 'Please input a correct sub area name, must be less than 20 characters and contain only alphanumeric characters and spaces.');
+        }
+    }
+
+
 
 }

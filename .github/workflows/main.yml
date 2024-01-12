@@ -1,0 +1,39 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Set Up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies of frontend
+        run: npm install
+    
+      - name: Install Typescript for frontend
+        run: npm install typescript --save-dev
+
+      - name: Run Build for frontend
+        run: npm run build
+
+      - name: Install Dependencies of backend
+        run: cd server && npm install
+
+      - name: Install Typescript for backend
+        run: cd server && npm install typescript --save-dev
+
+      - name: Run Start for backend
+        run: cd server && npm run start

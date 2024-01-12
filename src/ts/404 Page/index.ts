@@ -14,6 +14,7 @@ export class Page404{
     private append404Page(site:HTMLElement){
         const contentDiv = document.createElement('div');
         contentDiv.id = 'contentDiv';
+        contentDiv.className = 'contentDiv';
         
         const wrapper404 = document.createElement('div');
 

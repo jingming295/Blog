@@ -83,5 +83,32 @@ export class DBInsert extends DatabaseConnector
             []
         );
     }
+
+    async addColorScheme(textColor: string, backgroundColor: string): Promise<ResultSetHeader>{
+        return this.executeQuery(
+            `INSERT INTO tb_colorscheme (cs_textColor, cs_backgroundColor) 
+            VALUES (?, ?);
+            `,
+            [textColor, backgroundColor]
+        );
+    }
+
+    async addBigArea(name: string): Promise<ResultSetHeader>{
+        return this.executeQuery(
+            `INSERT INTO tb_bigarea (ba_name) 
+            VALUES (?);
+            `,
+            [name]
+        );
+    }
+
+    async addSubArea(name: string, bigAreaID: number, colorSchemeID: number): Promise<ResultSetHeader>{
+        return this.executeQuery(
+            `INSERT INTO tb_subarea (aa_area, bigarea, aa_colorscheme) 
+            VALUES (?, ?, ?);
+            `,
+            [name, bigAreaID, colorSchemeID]
+        );
+    }
     
 }

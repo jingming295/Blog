@@ -130,4 +130,57 @@ export class DBUpdate extends DatabaseConnector
             [id]
         );
     }
+
+    async deleteColorScheme(id:number): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_colorscheme
+            SET cs_alive = 0
+            WHERE cs_id = ?;
+            `,
+            [id]
+        );
+    }
+
+    async deleteBigArea(id:number): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_bigarea
+            SET ba_alive = 0
+            WHERE ba_id = ?;
+            `,
+            [id]
+        );
+    }
+    async updateBigArea(id:number, name:string): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_bigarea
+            SET ba_name = ?
+            WHERE ba_id = ?;
+            `,
+            [name, id]
+        );
+    }
+
+    async updateSubAreaData(id:number, name:string, bigAreaID:number, colorSchemeID:number): Promise<ResultSetHeader>
+    {
+        return this.executeQuery(
+            `UPDATE tb_subarea
+            SET aa_area = ?, bigarea = ?, aa_colorscheme = ?
+            WHERE aa_id = ?;
+            `,
+            [name, bigAreaID, colorSchemeID, id]
+        );
+    }
+
+    async deleteSubArea(id:number): Promise<ResultSetHeader>{
+        return this.executeQuery(
+            `UPDATE tb_subarea
+            SET aa_alive = 0
+            WHERE aa_id = ?;
+            `,
+            [id]
+        );
+    }
 }

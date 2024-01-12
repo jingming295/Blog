@@ -4,9 +4,9 @@ import { MakeArticleCard } from "./makeArticleCard";
 
 export class AreaPage
 {
-    init = (area: string) =>
+    init = async (area: string) =>
     {
-        this.createContentDiv(area);
+        await this.createContentDiv(area);
     };
 
     private createContentDiv = async (area: string) =>

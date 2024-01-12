@@ -21,6 +21,16 @@ import updateEmailSettings from './routes/UpdateEmailSettings';
 import sendTestEmail from './routes/SendTestEmail';
 import activateAccountRequest from './routes/ActivateAccountRequest';
 import getAllArticleArea from './routes/GetAllArticleArea';
+import getAllColorScheme from './routes/GetAllColorScheme';
+import deleteColorScheme from './routes/DeleteColorScheme';
+import addColorScheme from './routes/AddColorScheme';
+import getAllArticleBigArea from './routes/GetAllArticleBigArea';
+import deleteBigArea from './routes/DeleteBigArea';
+import updateBigArea from './routes/UpdateBigArea';
+import addBigArea from './routes/AddBigArea';
+import updateSubArea from './routes/UpdateSubArea';
+import deleteSubArea from './routes/DeleteSubArea';
+import addSubArea from './routes/AddSubArea';
 import { Init } from './Init';
 
 const app = express();
@@ -28,7 +38,7 @@ const port = 3000;
 
 app.use(express.json());
 
-app.use('/avatars', express.static('Avatars'))
+app.use('/avatars', express.static('Avatars'));
 
 app.use(cors());
 
@@ -52,7 +62,17 @@ const routers = [
   updateEmailSettings,
   sendTestEmail,
   activateAccountRequest,
-  getAllArticleArea
+  getAllArticleArea,
+  getAllColorScheme,
+  deleteColorScheme,
+  addColorScheme,
+  getAllArticleBigArea,
+  deleteBigArea,
+  updateBigArea,
+  addBigArea,
+  updateSubArea,
+  deleteSubArea,
+  addSubArea
 ];
 app.use('/', routers);
 

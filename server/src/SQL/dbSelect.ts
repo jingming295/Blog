@@ -166,23 +166,102 @@ export class DBSelect extends DatabaseConnector
         );
     }
 
-    async selectUserIDStatusByToken(token: string): Promise<{ u_id: number; u_active:number}[]>
+    async selectUserIDStatusByToken(token: string): Promise<{ u_id: number; u_active: number; }[]>
     {
-        return await this.executeQuery<{ u_id: number; u_active:number}>(
+        return await this.executeQuery<{ u_id: number; u_active: number; }>(
             `SELECT u_id, u_active FROM tb_user WHERE u_token = ?`,
             [token]
         );
     }
 
-    async selectAllArticleArea(){
-        return await this.executeQuery<{ba_name:string; aa_area:string;}>(
-            `SELECT tb_bigarea.ba_name, tb_subarea.aa_area
+    async selectAllArticleArea()
+    {
+        return await this.executeQuery<{ ba_id: number, ba_name: string, aa_id: number, aa_area: string, cs_id: number, cs_textColor: string, cs_backgroundColor: string; }>(
+            `SELECT tb_bigarea.ba_id, tb_bigarea.ba_name, tb_subarea.aa_id, tb_subarea.aa_area, tb_subarea.aa_colorscheme,tb_colorscheme.cs_id, tb_colorscheme.cs_textColor, tb_colorscheme.cs_backgroundColor
             FROM tb_bigarea
             LEFT JOIN tb_subarea
             ON tb_bigarea.ba_id = tb_subarea.bigarea AND tb_subarea.aa_alive = 1
+            LEFT JOIN tb_colorscheme
+            ON tb_subarea.aa_colorscheme = tb_colorscheme.cs_id
             WHERE tb_bigarea.ba_alive = 1
-            ORDER BY tb_bigarea.ba_id, tb_subarea.aa_id;            
+            ORDER BY tb_bigarea.ba_id, tb_subarea.aa_id;
+            
+                  
             `
+        );
+    }
+    async selectAllColorScheme()
+    {
+        return await this.executeQuery<{ cs_id: number; cs_textColor: string; cs_backgroundColor: string; }>(
+            `SELECT cs_id, cs_textColor, cs_backgroundColor FROM tb_colorscheme WHERE cs_alive = 1`
+        );
+    }
+
+    async checkColorSchemeConstraint(id: number)
+    {
+        return await this.executeQuery<{ aa_colorscheme: number; }>(
+            `SELECT tb_subarea.*, tb_colorscheme.*
+            FROM tb_subarea
+            LEFT JOIN tb_colorscheme ON tb_subarea.aa_colorscheme = tb_colorscheme.cs_id
+            WHERE tb_colorscheme.cs_id = ? AND tb_subarea.aa_alive = 1;
+            `,
+            [id]
+        );
+    }
+
+    async selectAllArticleBigArea()
+    {
+        return await this.executeQuery<{ ba_id: number; ba_name: string; }>(
+            `SELECT * FROM tb_bigarea WHERE ba_alive = 1`
+        );
+    }
+
+    async checkBigAreaConstraint(id: number)
+    {
+        return await this.executeQuery<{ aa_area: number; }>(
+            `SELECT tb_bigarea.ba_id
+            FROM tb_bigarea
+            JOIN tb_subarea ON tb_bigarea.ba_id = tb_subarea.bigarea
+            WHERE tb_subarea.aa_alive = 1 AND tb_bigarea.ba_id = ?;            
+            `,
+            [id]
+        );
+    }
+
+    async selectBigAreaByID(id: number)
+    {
+        return await this.executeQuery<{ ba_id: number; ba_name: string; }>(
+            `SELECT * FROM tb_bigarea WHERE ba_id = ?`,
+            [id]
+        );
+    }
+
+    async selectSubAreaByID(id: number)
+    {
+        return await this.executeQuery<{ aa_id: number; aa_area: string; aa_colorscheme: number; }>(
+            `SELECT * FROM tb_subarea WHERE aa_id = ?`,
+            [id]
+        );
+    }
+
+    async selectColorSchemeByID(id: number)
+    {
+        return await this.executeQuery<{ cs_id: number; cs_textColor: string; cs_backgroundColor: string; }>(
+            `SELECT * FROM tb_colorscheme WHERE cs_id = ?`,
+            [id]
+        );
+    }
+
+    async checkSubAreaConstraint(id: number)
+    {
+        return await this.executeQuery<{ aa_area: number; }>(
+            `SELECT tb_subarea.aa_id
+            FROM tb_subarea
+            INNER JOIN tb_article
+            ON tb_subarea.aa_id = tb_article.article_area
+            WHERE tb_subarea.aa_id = ? AND tb_article.article_alive = 1;                     
+            `,
+            [id]
         );
     }
 

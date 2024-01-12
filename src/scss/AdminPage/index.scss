@@ -1,8 +1,9 @@
-.contentDiv{
-    .adminPageWrapper{
+.contentDiv {
+    .adminPageWrapper {
         height: 100%;
         display: flex;
-        .sideNavBarWrapper{
+
+        .sideNavBarWrapper {
             width: 20%;
             height: 100%;
             left: 0;
@@ -11,9 +12,10 @@
             flex-direction: column;
             border-right: 1px solid rgba(0, 0, 0, 0.12);
 
-            .adminPageSideBarCommonBtnWrapper{
+            .adminPageSideBarCommonBtnWrapper {
                 user-select: none;
-                .adminPageSideBarCommonBtn{
+
+                .adminPageSideBarCommonBtn {
                     width: 100%;
                     height: 50px;
                     padding-left: 10px;
@@ -26,10 +28,12 @@
                     position: relative;
                     overflow: hidden;
                 }
-                .adminPageSideBarCommonBtn:hover{
+
+                .adminPageSideBarCommonBtn:hover {
                     background-color: #ebebeb;
                 }
-                .adminPageSideBarCommonBtnActive{
+
+                .adminPageSideBarCommonBtnActive {
                     background-color: rgb(216, 220, 240);
                     color: #3f51b5;
                     width: 100%;
@@ -44,7 +48,8 @@
                     position: relative;
                     overflow: hidden;
                 }
-                .adminPageSideBarCommonBtnActive:hover{
+
+                .adminPageSideBarCommonBtnActive:hover {
                     background-color: rgb(197, 202, 232);
                 }
 
@@ -57,38 +62,48 @@
                     animation: rippleAnimation .6s linear;
                     pointer-events: none;
                 }
-                
+
                 @keyframes rippleAnimation {
                     to {
                         transform: scale(4);
                         opacity: 0;
                     }
                 }
-                
+
             }
 
-            .subItemBtnWrapper{
+            .subItemBtnWrapper {
                 height: 0px;
                 overflow: hidden;
                 transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-                .subItemBtn{
-                    
+
+                .subItemBtn {
+
                     padding-left: 20px;
                     height: 50px;
                 }
             }
         }
 
-        .MainWrapper{
-            background-color: white;
+        .MainWrapper {
+            background-color: #fafafa;
             width: 80%;
             display: flex;
             flex-direction: column;
             overflow: auto;
-            .Title{
+
+            .commonFullScreenTrackClickWrapper{
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+
+            .Title {
                 width: 100%;
                 padding: 15px 0;
-                display: flex; 
+                display: flex;
                 align-items: center;
                 justify-content: flex-start;
                 padding-left: 20px;
@@ -97,25 +112,29 @@
                 border-bottom: 1px solid rgba(0, 0, 0, 0.12);
             }
 
-            .mainItemWrapper{
+            .mainItemWrapper {
                 padding: 24px 24px;
                 display: flex;
                 flex-direction: column;
-                .mainItemControlWrapper{
+
+                .mainItemControlWrapper {
                     width: 100%;
                     float: left;
-                    .switchWrapper{
+
+                    .switchWrapper {
                         display: flex;
                         align-items: center;
                         cursor: pointer;
                         float: left;
-                        .switchRoot{
+
+                        .switchRoot {
                             position: relative;
                             width: 55px;
                             height: 36px;
                             padding: 10px;
                             cursor: pointer;
-                            .switchTrack{
+
+                            .switchTrack {
                                 background-color: black;
                                 opacity: 0.4;
                                 width: 100%;
@@ -124,10 +143,12 @@
                                 z-index: -1;
                                 transition: all 0.2s ease-in-out;
                             }
-                            .switchTrackActive{
+
+                            .switchTrackActive {
                                 background-color: #f50057;
                             }
-                            .switchButtonWrapper{
+
+                            .switchButtonWrapper {
                                 position: absolute;
                                 top: 0;
                                 left: 0;
@@ -135,63 +156,72 @@
                                 z-index: 1;
                                 border-radius: 50%;
                                 transition: 0.2s ease-in-out all;
-                                .switchButton{
+
+                                .switchButton {
                                     width: 20px;
                                     height: 20px;
                                     border-radius: 50%;
                                     background-color: white;
-                                    box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+                                    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
                                     transition: 0.2s ease-in-out all;
                                 }
                             }
-                            .switchButtonWrapperActive{
+
+                            .switchButtonWrapperActive {
                                 transform: translateX(20px);
-                                .switchButton{
+
+                                .switchButton {
                                     background-color: #f50057;
                                 }
                             }
-                            .switchButtonWrapper:hover{
-                                background-color:rgba(0, 0, 0, 0.04)
+
+                            .switchButtonWrapper:hover {
+                                background-color: rgba(0, 0, 0, 0.04)
                             }
-                            .switchButtonWrapperActive:hover{
+
+                            .switchButtonWrapperActive:hover {
                                 background-color: rgba(245, 0, 87, 0.04) !important;
                             }
                         }
-                        .switchRoot:hover{
-                            .switchButtonWrapper{
-                                background-color:rgba(0, 0, 0, 0.04)
+
+                        .switchRoot:hover {
+                            .switchButtonWrapper {
+                                background-color: rgba(0, 0, 0, 0.04)
                             }
                         }
-                        .switchTitle{
+
+                        .switchTitle {
                             font-size: 16px;
                             margin-left: 10px;
                         }
                     }
-                    
-                    .inputWrapper{
-                        .input{
+
+                    .inputWrapper {
+                        .input {
                             padding: 6px 0;
                             width: 80%;
                             border: none;
-                            box-sizing: border-box!important;
+                            box-sizing: border-box !important;
                             box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.42) inset;
-                            transition:  all .3s ease;
+                            transition: all .3s ease;
                         }
 
-                        .input:hover{
+                        .input:hover {
                             box-shadow: 0 -2px 0 0 rgba(0, 0, 0) inset;
                         }
-                    
-                        .input:focus{
+
+                        .input:focus {
                             outline: none;
                             box-shadow: 0 -2px 0 0 #f50057 inset;
                         }
                     }
-                    
+
 
 
                 }
-                .mainItemDescription, .mainItemTitle{
+
+                .mainItemDescription,
+                .mainItemTitle {
                     margin-top: 3px;
                     font-size: 14px;
                     color: rgba(0, 0, 0, 0.54);
@@ -199,45 +229,343 @@
                 }
             }
 
-            .commonButtonSubmitWrapper{
+            .commonButtonSubmitWrapper {
+
                 display: flex;
                 justify-content: flex-end;
                 margin-top: 20px;
                 margin-bottom: 20px;
                 user-select: none;
 
-                .commomButtonSubmit{
+                .commomButtonSubmit {
                     margin-right: 30px;
                     font-size: 14px;
                     padding: 8px 16px;
                     border-radius: 10px;
-                    background-image:linear-gradient(195deg, #73abff 0%, #16e6f8 100%);
+                    background-image: linear-gradient(195deg, #73abff 0%, #16e6f8 100%);
                     color: white;
                     cursor: pointer;
                     transition: all .3s ease;
                 }
 
-                .sendTestEmailButtonSubmit{
+                .commonButtonSecondSubmit {
                     margin-right: 10px;
                     font-size: 14px;
                     padding: 8px 16px;
                     border-radius: 10px;
-                    box-shadow: 0 0 0 1px #16e6f8;
+                    box-shadow: 0 0 0 1px #16e6f8 inset;
                     color: #5095fc;
                     cursor: pointer;
                     transition: all .3s ease;
                 }
 
-                .sendTestEmailButtonSubmit:hover{
-                    box-shadow: 0 0 0 1px currentColor;
+                .commonButtonSecondSubmit:hover {
+                    box-shadow: 0 0 0 1px currentColor inset;
                     background-color: #f5f5ff;
                 }
-                
 
-                .commomButtonSubmit:hover{
-                    box-shadow:0 14px 26px -12px rgba(22, 192, 248, 0.4), 0 4px 23px rgba(22, 192, 248, 0.15), 0 8px 10px -5px rgba(22, 192, 248, 0.2);
-                    
+
+                .commomButtonSubmit:hover {
+                    box-shadow: 0 14px 26px -12px rgba(22, 192, 248, 0.4), 0 4px 23px rgba(22, 192, 248, 0.15), 0 8px 10px -5px rgba(22, 192, 248, 0.2);
+
                 }
+            }
+
+            .commonFullScreenWrapper {
+                visibility: hidden;
+                opacity: 0;
+                z-index: 9999;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                top: 0;
+                left: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all .3s ease;
+
+                .commonFullScreenMainWrapper {
+                    margin: 32px;
+                    border-radius: 12px;
+                    background-color: white;
+
+                    .inputAreaWrapper {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        .commonItemWrapper {
+                            padding: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            width: 35%;
+                            min-width: 220px;
+                            position: relative;
+
+                            .commonTitle {
+                                font-size: 20px;
+                                margin-bottom: 16px;
+                                user-select: none;
+                            }
+
+                            .commonInput {
+                                font: inherit;
+                                border: none;
+                                box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.42) inset;
+                                transition: all .3s ease;
+                                padding: 6px 0 6px;
+                            }
+
+                            
+                            .commonInput:hover {
+                                box-shadow: 0 -2px 0 0 rgba(0, 0, 0) inset;
+                            }
+
+                            .commonInput:focus {
+                                outline: none;
+                                box-shadow: 0 -2px 0 0 #f50057 inset;
+                            }
+
+                            .selectInput{
+                                cursor: pointer;
+                                user-select: none;
+                            }
+
+                            .colorGroupWrapper {
+                                display: flex;
+                                justify-content: center;
+                                .fontColor,
+                                .backgroundColor {
+                                    width: 20px;
+                                    height: 20px;
+                                    border-radius: 50%;
+                                    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+                                }
+        
+                                .backgroundColor {
+                                    margin-left: 15px;
+                                }
+                            }
+
+                            .commonDropMenuWrapper{
+                                visibility: hidden;
+                                opacity: 0;
+                                z-index: 1;
+                                position: absolute;
+                                top: 100px;
+                                min-width: 200px;
+                                box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+                                border-radius: 10px;
+                                background-color: #fff;
+                                transition: all 0.2s ease-in-out;
+                                padding: 10px;
+        
+                                .commonDropMenu{
+                                    padding: 5px 16px;
+                                    border-radius: 6px;
+                                    transition: all 0.3s ease-in-out;
+                                    cursor: pointer;
+                                }
+        
+                                .commonDropMenu:hover{
+                                    background-color: #f0f2f5;
+                                }
+        
+                            }
+        
+                            .commonDropMenuWrapperActive{
+                                visibility: visible;
+                                opacity: 1;
+                            }
+
+                            .colorInput:hover {
+                                box-shadow: 0 -2px 0 0 rgba(0, 0, 0) inset;
+                            }
+
+                            .colorInput:focus {
+                                outline: none;
+                                box-shadow: 0 -2px 0 0 #f50057 inset;
+                            }
+
+                            .colorPlatteInput {
+                                margin-top: 8px;
+                                width: 100%;
+                                height: 50px;
+                                border: none;
+                                border-radius: 5px;
+                                background: #fafafa;
+                                transition: all .3s ease;
+                            }
+
+                        }
+
+                        .sampleWrapper {
+                            padding: 20px;
+                            display: flex;
+                            min-width: 220px;
+                            width: 30%;
+
+                            .colorScheme-tagExample {
+                                user-select: none;
+                                margin: auto;
+                                padding: 4px 10px;
+                                font-size: 0.875em;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                color: white;
+                                background-color: #000000;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            .commonFullScreenMainWrapperActive {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .commonTableWrapper {
+                user-select: none;
+                padding: 24px 20%;
+                border-spacing: 0;
+                border-collapse: separate;
+
+                .commonTitleWrapper {
+
+                    .commonTitle {
+                        border-bottom: 1px solid rgba(224, 224, 224, 1);
+                        padding: 12px;
+                    }
+                }
+
+                .commonItemWrapper {
+                    td {
+                        border-bottom: 1px solid rgba(224, 224, 224, 1);
+                        text-align: center;
+                        position: relative;
+                    }
+
+                    .colorWrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px 0;
+                    }
+
+
+                    .colorGroupWrapper {
+                        display: flex;
+                        justify-content: center;
+                        .fontColor,
+                        .backgroundColor {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .backgroundColor {
+                            margin-left: 15px;
+                        }
+                    }
+
+                    .tagExampleWrapper {
+                        display: flex;
+
+                        .tagExample {
+                            margin: auto;
+                            padding: 4px 10px;
+                            font-size: 0.875em;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .actionWrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-evenly;
+
+                        .commonBtnWrapper {
+                            padding: 8px;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            transition: all .3s ease;
+
+                            .commonBtn {
+                                float: left;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .commonBtnWrapper:hover {
+                            background-color: rgba(18, 18, 18, 0.06) !important;
+                        }
+                    }
+
+                    .commonDropMenuWrapper{
+                        visibility: hidden;
+                        opacity: 0;
+                        z-index: 1;
+                        position: absolute;
+                        top: 48px;
+                        min-width: 200px;
+                        box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+                        border-radius: 10px;
+                        background-color: #fff;
+                        transition: all 0.2s ease-in-out;
+                        padding: 10px;
+
+                        .commonDropMenu{
+                            padding: 5px 16px;
+                            border-radius: 6px;
+                            transition: all 0.3s ease-in-out;
+                            cursor: pointer;
+                        }
+
+                        .commonDropMenu:hover{
+                            background-color: #f0f2f5;
+                        }
+
+                    }
+
+                    .commonDropMenuWrapperActive{
+                        visibility: visible;
+                        opacity: 1;
+                    }
+                }
+
+                td{
+                    padding: 0 12px;
+                }
+
+                .commonInput {
+                    border: none;
+                    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.42) inset;
+                    transition: all 0.3s ease;
+                    padding: 6px 0 6px;
+                    width: 100%;
+                    margin: 12px 0;
+                    font-size: 17px;
+                }
+
+                .commonInput:hover {
+                    box-shadow: 0 -2px 0 0 rgba(0, 0, 0) inset;
+                }
+
+                .commonInput:focus {
+                    outline: none;
+                    box-shadow: 0 -2px 0 0 #f50057 inset;
+                }
+
+                .selectInput {
+                    cursor: pointer;
+                    user-select: none;
+                }
+
             }
         }
     }

@@ -62,7 +62,7 @@ export class NavRelated
             {
                 localStorage.clear();
                 const changePage = new ChangePage(true);
-                changePage.toIndex();
+                await changePage.toIndex();
                 return await this.createRightBanner();
             }
         } else
@@ -113,21 +113,21 @@ export class NavRelated
         searchBar.placeholder = 'Search';
         searchBar.type = 'text';
         searchBar.autocomplete = 'off';
-        searchBar.onkeydown = function(e){
+        searchBar.onkeydown = async function(e){
             if(e.key === 'Enter'){
                 const changePage = new ChangePage(true);
                 const value = searchBar.value;
-                changePage.toSearch(value);
+                await changePage.toSearch(value);
             }
         }
 
         const btnSearch = document.createElement('div')
         btnSearch.className = 'btnSearch';
         btnSearch.innerText = 'Search';
-        btnSearch.onclick = function(){
+        btnSearch.onclick = async function(){
             const changePage = new ChangePage(true);
             const value = searchBar.value;
-            changePage.toSearch(value);
+            await changePage.toSearch(value);
         }
         searchBarWrapper.appendChild(searchBar);
         searchBarComponentWrapper.appendChild(searchBarWrapper);
@@ -149,10 +149,10 @@ export class NavRelated
                     userMenuAvatar.className = 'userMenuAvatar';
                     userMenuAvatar.src = `${urlconfig.avatarUrl}${userData.userData.avatar}`;
 
-                    userMenuAvatar.onclick = () =>
+                    userMenuAvatar.onclick = async () =>
                     {
                         const changePage = new ChangePage(true);
-                        changePage.toUserProfile(userData.userData.id.toString());
+                        await changePage.toUserProfile(userData.userData.id.toString());
                     };
 
                     userMenuAvatarWrapper.appendChild(userMenuAvatar);
@@ -186,18 +186,18 @@ export class NavRelated
                     const menuItem = [
                         {
                             name: 'Post Article',
-                            func: function ()
+                            func: async function ()
                             {
                                 const changePage = new ChangePage(true);
-                                changePage.toPostArticle();
+                                await changePage.toPostArticle();
                             }
                         },
                         {
                             name: 'Manage Article',
-                            func: function ()
+                            func: async function ()
                             {
                                 const changePage = new ChangePage(true);
-                                changePage.toManageArticle();
+                                await changePage.toManageArticle();
                             }
                         },
                         {
@@ -218,10 +218,10 @@ export class NavRelated
                         const adminPage = [
                             {
                                 name: 'Admin Page',
-                                func: function ()
+                                func: async function ()
                                 {
                                     const changePage = new ChangePage(true);
-                                    changePage.toAdminPage();
+                                    await changePage.toAdminPage();
                                 }
                             }
                         ];
@@ -234,12 +234,12 @@ export class NavRelated
                     const userMenuWrapper = document.createElement('div');
                     userMenuWrapper.className = 'userMenuWrapper';
 
-                    menuItem.forEach((item) =>
+                    menuItem.forEach(async (item) =>
                     {
                         const userMenu = document.createElement('div');
                         userMenu.className = `${item.name}Wrapper`;
                         userMenu.innerText = item.name;
-                        userMenu.onclick = item.func; // 绑定函数到onclick事件
+                        userMenu.onclick = await item.func; // 绑定函数到onclick事件
                         userMenuWrapper.appendChild(userMenu);
                     });
 
@@ -352,10 +352,10 @@ export class NavRelated
             logo.className = 'logo';
             const logoLink = document.createElement('a');
             logoLink.rel = 'home';
-            logoLink.onclick = () =>
+            logoLink.onclick = async () =>
             {
                 const changePage = new ChangePage(true);
-                changePage.toIndex();
+                await changePage.toIndex();
             };
 
             const siteTitle = document.createElement('p');
@@ -378,16 +378,16 @@ export class NavRelated
             const AllArticleArea = await sendPost.getAllArticleArea();
             const areaItemWrapper = document.createElement('div');
             areaItemWrapper.className = 'areaItemWrapper';
+            if(!AllArticleArea) return areaItemWrapper;
             AllArticleArea.forEach((item) =>{
                 const areaItem = document.createElement('div');
                 areaItem.className = 'areaItem';
                 const areaLink = document.createElement('div');
-                areaLink.textContent = item.AreaName;
+                areaLink.textContent = item.bigAreaName;
                 areaLink.className = 'menu-item';
 
                 areaItem.appendChild(areaLink);
-
-                if(item.subArea[0]){
+                if(item.subarea[0].subAreaID){
                     const DropMenuWrapper = document.createElement('div');
                     const DropMenu = document.createElement('div');
                     DropMenuWrapper.className = 'dropMenuWrapper';
@@ -414,17 +414,19 @@ export class NavRelated
                         }
                     };
 
-                    item.subArea.forEach((subItem) =>{
-                        if(subItem === null) return;
+                    item.subarea.forEach((subItem) =>{
+                        if(subItem.subareaName === null) return;
+
                         const subAreaLink = document.createElement('div');
     
-                        subAreaLink.textContent = subItem;
+                        subAreaLink.textContent = subItem.subareaName;
     
                         subAreaLink.className = 'subAreaLink';
 
-                        subAreaLink.onclick = () =>{
+                        subAreaLink.onclick = async () =>{
+                            if(subItem.subareaName === null) return;
                             const changePage = new ChangePage(true);
-                            changePage.toArea(subItem);
+                            await changePage.toArea(subItem.subareaName);
                         }
     
                         DropMenu.appendChild(subAreaLink);

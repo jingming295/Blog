@@ -18,40 +18,42 @@ export class ChangePage {
             navRelated.init();
         }
         if(DeletePrevious){
-            const contentDiv = document.getElementById('contentDiv');
-            if (contentDiv)
-            {
-                contentDiv.remove();
-            }
+            const contentDivs = document.querySelectorAll('.contentDiv');
+            contentDivs.forEach((contentDiv) => {
+                if(contentDiv.parentNode)
+                contentDiv.parentNode.removeChild(contentDiv);
+            });
         }
+        
+        
 
     }
-    toUserProfile (id:string) {
+    async toUserProfile (id:string) {
         document.title = 'User';
         const makeUserProfile = new MakeUserProfile();
         window.location.href = urlconfig.url + '/#/u?id=' + id;
-        makeUserProfile.Init();
+        await makeUserProfile.Init();
     }
 
-    toPostArticle () {
+    async toPostArticle () {
         document.title = 'Post Article';
         window.location.href = urlconfig.url + '/#/newpost';
         const createNewPost = new UploadArticle();
-        createNewPost.init();
+        await createNewPost.init();
     }
 
-    toIndex () {
+    async toIndex () {
         document.title = 'Blog';
         window.location.href = urlconfig.url + '/#';
         const mainPage = new MainPage();
-        mainPage.init();
+        await mainPage.init();
     }
 
-    toArticle (id:string) {
+    async toArticle (id:string) {
         document.title = 'Article';
         window.location.href = urlconfig.url + '/#/p?id=' + id;
         const makeArticlePage = new MakeArticlePage();
-        makeArticlePage.init();
+        await makeArticlePage.init();
     }
 
     to404Page(){
@@ -63,11 +65,11 @@ export class ChangePage {
         page404.init();
     }
 
-    toManageArticle(){
+    async toManageArticle(){
         document.title = 'Manage Article';
         window.location.href = urlconfig.url + '/#/manage article';
         const manageArticle = new ManageArticle();
-        manageArticle.init();
+        await manageArticle.init();
     }
 
     async toEditArticle(id:number){
@@ -77,31 +79,31 @@ export class ChangePage {
         await updateArticle.init(id);
     }
 
-    toArea(area:string){
+    async toArea(area:string){
 
         document.title = area;
         window.location.href = urlconfig.url + '/#/area?area=' + area;
         const areaPage = new AreaPage();
-        areaPage.init(area);
+        await areaPage.init(area);
     }
 
-    toSearch(value:string){
+    async toSearch(value:string){
         document.title = 'Search';
         window.location.href = urlconfig.url + '/#/search?keyword=' + value;
         const searchResultPage = new SearchResultPage();
-        searchResultPage.init(value);
+        await searchResultPage.init(value);
     }
 
-    toAdminPage(){
+    async toAdminPage(){
         document.title = 'Admin Page';
         window.location.href = urlconfig.url + '/#/admin';
         const adminPage = new AdminPage()
-        adminPage.init();
+        await adminPage.init();
     }
     
-    toActivateAccountPage(){
+    async toActivateAccountPage(){
         document.title = 'Activate Account';
         const activateAccountPage = new ActivateAccountPage();
-        activateAccountPage.init();
+        await activateAccountPage.init();
     }
 }

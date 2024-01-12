@@ -6,6 +6,7 @@ import { IDomEditor } from "@wangeditor/editor";
 import { UserVerification } from "../User Verification";
 import { NavigationProgress } from "../Create Navigation Progress";
 import { RetArticleData } from "../Send Fetch/interface";
+import { ChangePage } from "../Navigation Bar/changePage";
 export class UploadArticle
 {
     private navigationProgress = new NavigationProgress();
@@ -52,38 +53,8 @@ export class UploadArticle
         async function createTitleInput(article: RetArticleData | null)
         {
 
-            async function createSelect()
+            async function createTitleInput()
             {
-                const sendPost = new SendPost();
-                const allArea = await sendPost.getAllArticleArea();
-                const areaOptions = allArea.map(area => area.subArea);
-                const areaWrapper = document.createElement('div');
-                const areaSelect = document.createElement('select');
-                areaWrapper.className = 'areaWrapper';
-                areaSelect.id = 'areaSelect';
-                areaSelect.className = 'areaSelect';
-                areaOptions.forEach(optionValue =>
-                {
-                    optionValue.forEach(optionValue =>
-                    {
-                        if (!optionValue) return;
-                        const option = document.createElement('option');
-                        option.value = optionValue;
-                        option.innerHTML = optionValue;
-                        areaSelect.appendChild(option);
-                    });
-                });
-
-                if (article?.article.articleArea)
-                {
-                    areaSelect.value = article.article.articleArea;
-                }
-                areaWrapper.appendChild(areaSelect);
-                return areaWrapper;
-
-            }
-
-            async function createTitleInput(){
                 const titleWrapper = document.createElement('div');
                 const titleInput = document.createElement('input');
                 titleWrapper.className = 'titleWrapper';
@@ -92,16 +63,18 @@ export class UploadArticle
                 titleInput.id = 'titleInput';
                 titleInput.className = 'titleInput';
 
-                titleInput.onfocus = () =>{
-                    titleWrapper.style.backgroundColor = 'white'
-                    titleWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset'
-                    
-                }
+                titleInput.onfocus = () =>
+                {
+                    titleWrapper.style.backgroundColor = 'white';
+                    titleWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset';
 
-                titleInput.onblur = () =>{
-                    titleWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
-                    titleWrapper.style.boxShadow = 'none'
-                }
+                };
+
+                titleInput.onblur = () =>
+                {
+                    titleWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)';
+                    titleWrapper.style.boxShadow = 'none';
+                };
 
                 if (article?.article.articleTitle)
                 {
@@ -111,48 +84,57 @@ export class UploadArticle
                 return titleWrapper;
             }
 
-            async function createAreaInput(){
-                function createDropDownMenu(){
+            async function createAreaInput()
+            {
+                function createDropDownMenu()
+                {
                     const dropDownWrapper = document.createElement('div');
 
                     dropDownWrapper.className = 'dropDownWrapper';
-    
+
                     const bigAreaWrapper = document.createElement('div');
                     bigAreaWrapper.className = 'bigAreaWrapper';
 
                     const subAreaWrapper = document.createElement('div');
                     subAreaWrapper.className = 'subAreaWrapper';
-
-                    allArea.forEach(area => {
+                    if (!allArea) return dropDownWrapper;
+                    allArea.forEach(area =>
+                    {
                         const bigAreaBtn = document.createElement('div');
                         bigAreaBtn.className = 'bigAreaBtn';
-                        bigAreaBtn.innerHTML = area.AreaName;
-                        bigAreaBtn.onclick = () =>{
+                        bigAreaBtn.innerHTML = area.bigAreaName;
+                        bigAreaBtn.onclick = () =>
+                        {
                             const subAreaBtn = document.querySelectorAll('.subAreaBtn') as NodeListOf<HTMLDivElement>;
-                            subAreaBtn.forEach(btn => {
+                            subAreaBtn.forEach(btn =>
+                            {
                                 btn.remove();
-                            })
-                            area.subArea.forEach(subArea => {
-                                if(subArea){
+                            });
+                            area.subarea.forEach(subArea =>
+                            {
+                                if (subArea.subareaName)
+                                {
                                     const subAreaBtn = document.createElement('div');
                                     subAreaBtn.className = 'subAreaBtn';
-                                    subAreaBtn.innerHTML = subArea;
+                                    subAreaBtn.innerHTML = subArea.subareaName;
                                     subAreaWrapper.appendChild(subAreaBtn);
 
-                                    subAreaBtn.onclick = () =>{
-                                        areaInput.value = area.AreaName + ' - ' + subArea;
-                                        areaHiddenInput.value = subArea;
-                                        areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
-                                        areaInputWrapper.style.boxShadow = 'none'
-                                        areaWrapper.style.width = '30%'
+                                    subAreaBtn.onclick = () =>
+                                    {
+                                        if (!subArea.subareaName) return;
+                                        areaInput.value = area.bigAreaName + ' - ' + subArea.subareaName;
+                                        areaHiddenInput.value = subArea.subareaName;
+                                        areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)';
+                                        areaInputWrapper.style.boxShadow = 'none';
+                                        areaWrapper.style.width = '30%';
                                         dropDownWrapper.classList.remove('showDropDownWrapper');
-                                    }
+                                    };
                                 }
-                            })
-                            subAreaWrapper.style.width =bigAreaWrapper.offsetWidth + 'px';
-                        }
+                            });
+                            subAreaWrapper.style.width = bigAreaWrapper.offsetWidth + 'px';
+                        };
                         bigAreaWrapper.appendChild(bigAreaBtn);
-                    })
+                    });
 
                     dropDownWrapper.appendChild(bigAreaWrapper);
                     dropDownWrapper.appendChild(subAreaWrapper);
@@ -160,7 +142,6 @@ export class UploadArticle
                     return dropDownWrapper;
                 }
                 const allArea = await sendPost.getAllArticleArea();
-                console.log(allArea);
 
                 const areaWrapper = document.createElement('div');
                 areaWrapper.className = 'areaWrapper';
@@ -177,14 +158,22 @@ export class UploadArticle
                 areaHiddenInput.type = 'hidden';
                 areaHiddenInput.className = 'areaHiddenInput';
                 areaHiddenInput.id = 'areaHiddenInput';
-                
+
                 if (article?.article.articleArea)
                 {
-                    const foundArea = allArea.find(area => area.subArea.includes(article.article.articleArea));
-                    if(foundArea){
-                        areaInput.value = foundArea.AreaName + ' - ' + article.article.articleArea;
-                        areaHiddenInput.value = article.article.articleArea;
+                    if (allArea)
+                    {
+                        const foundArea = allArea.find(area =>
+                            area.subarea.some(subarea => subarea.subareaName === article.article.articleArea)
+                        );
+                        if (foundArea)
+                        {
+                            const foundSubarea = foundArea.subarea.find(subarea => subarea.subareaName === article.article.articleArea);
+                            areaInput.value = foundArea.bigAreaName + ' - ' + foundSubarea?.subareaName;
+                            areaHiddenInput.value = foundSubarea?.subareaName || '';
+                        }
                     }
+
                 }
 
                 const dropDownWrapper = createDropDownMenu();
@@ -193,33 +182,38 @@ export class UploadArticle
                 areaInputWrapper.appendChild(dropDownWrapper);
                 areaWrapper.appendChild(areaInputWrapper);
 
-                areaInput.onfocus = () =>{
-                    areaInputWrapper.style.backgroundColor = 'white'
-                    areaInputWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset'
-                    areaWrapper.style.width = '50%'
+                areaInput.onfocus = () =>
+                {
+                    areaInputWrapper.style.backgroundColor = 'white';
+                    areaInputWrapper.style.boxShadow = '0 0 0 1px rgb(22,192,248) inset';
+                    areaWrapper.style.width = '50%';
                     const dropDownWrapper = document.querySelector('.dropDownWrapper') as HTMLDivElement;
-                    if(dropDownWrapper){
+                    if (dropDownWrapper)
+                    {
                         dropDownWrapper.classList.add('showDropDownWrapper');
                     }
 
-                }
+                };
 
-                areaInput.onblur = () =>{
+                areaInput.onblur = () =>
+                {
                     const dropDownWrapper = document.querySelector('.dropDownWrapper') as HTMLDivElement;
-                    if(dropDownWrapper.matches(':hover')){
-                        dropDownWrapper.onmouseleave = () =>{
-                            areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
-                            areaInputWrapper.style.boxShadow = 'none'
-                            areaWrapper.style.width = '30%'
+                    if (dropDownWrapper.matches(':hover'))
+                    {
+                        dropDownWrapper.onmouseleave = () =>
+                        {
+                            areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)';
+                            areaInputWrapper.style.boxShadow = 'none';
+                            areaWrapper.style.width = '30%';
                             dropDownWrapper.classList.remove('showDropDownWrapper');
-                        }
+                        };
                         return;
                     }
-                    areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)'
-                    areaInputWrapper.style.boxShadow = 'none'
-                    areaWrapper.style.width = '30%'
+                    areaInputWrapper.style.backgroundColor = 'rgba(242, 243, 245, 1)';
+                    areaInputWrapper.style.boxShadow = 'none';
+                    areaWrapper.style.width = '30%';
                     dropDownWrapper.classList.remove('showDropDownWrapper');
-                }
+                };
 
                 return areaWrapper;
             }
@@ -228,11 +222,11 @@ export class UploadArticle
             inputWrapper.className = 'inputWrapper';
             const sendPost = new SendPost();
 
-            
+
             const titleWrapper = await createTitleInput();
             const areaInput = await createAreaInput();
-            
-            
+
+
             inputWrapper.appendChild(titleWrapper);
             inputWrapper.appendChild(areaInput);
 
@@ -241,27 +235,41 @@ export class UploadArticle
 
         const createEditor = (html: string | null = null) =>
         {
-            const editorWarpper = document.createElement('div');
-            const toolbar = document.createElement('div');
-            const editorContainer = document.createElement('div');
+            try {
+                const editorWarpper = document.createElement('div');
+                const toolbar = document.createElement('div');
+                const editorContainer = document.createElement('div');
 
-            editorWarpper.id = 'editor—wrapper';
-            editorWarpper.className = 'editor';
+                editorWarpper.id = 'editor—wrapper';
+                editorWarpper.className = 'editor';
 
-            toolbar.id = 'toolbar-container';
+                toolbar.id = 'toolbar-container';
 
-            editorContainer.id = 'editor-container';
-            editorContainer.className = 'editor-container';
+                editorContainer.id = 'editor-container';
+                editorContainer.className = 'editor-container';
 
-            editorWarpper.appendChild(toolbar);
-            editorWarpper.appendChild(editorContainer);
-            postWrapper.appendChild(editorWarpper);
+                editorWarpper.appendChild(toolbar);
+                editorWarpper.appendChild(editorContainer);
+                postWrapper.appendChild(editorWarpper);
 
-            // 在窗口大小改变时重新设置 editorContainer 的高度
-            window.addEventListener('resize', this.setEditorContainerHeight);
+                // 在窗口大小改变时重新设置 editorContainer 的高度
+                window.addEventListener('resize', this.setEditorContainerHeight);
 
-            const editor = new Editor();
-            return editor.createEditor(html);
+                const editor = new Editor();
+                return editor.createEditor(html);
+            } catch (error) {
+                console.log(error);
+                const contentDivs = document.querySelectorAll('.contentDiv');
+                contentDivs.forEach((contentDiv) => {
+                    if(contentDiv.parentNode)
+                    contentDiv.parentNode.removeChild(contentDiv);
+                });
+                const changePage = new ChangePage(true);
+                changePage.to404Page();
+
+                return null;
+            }
+
 
 
         };
@@ -313,11 +321,13 @@ export class UploadArticle
         if (article)
         {
             const editor = createEditor(article.article.articleContent);
+            if(!editor) return;
             const submitWrapper = createSubmit(editor);
             postWrapper.appendChild(submitWrapper);
         } else
         {
             const editor = createEditor();
+            if(!editor) return;
             const submitWrapper = createSubmit(editor);
             postWrapper.appendChild(submitWrapper);
         }

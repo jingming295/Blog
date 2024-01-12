@@ -23,33 +23,33 @@ class init
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                changePage.toUserProfile(id);
+                await changePage.toUserProfile(id);
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         } else if (hash === '')
         {
-            changePage.toIndex();
+            await changePage.toIndex();
         } else if (hash.startsWith('#/newpost'))
         {
-            changePage.toPostArticle();
+            await changePage.toPostArticle();
         } else if (hash.startsWith('#/p'))
         {
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                changePage.toArticle(id);
+                await changePage.toArticle(id);
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         } else if (hash.startsWith('#/404'))
         {
             changePage.to404Page();
         } else if (hash.startsWith('#/manage%20article'))
         {
-            changePage.toManageArticle();
+            await changePage.toManageArticle();
         } else if (hash.startsWith('#/editArticle'))
         {
             const id = hash.slice(hash.indexOf('?id=') + 4);
@@ -58,48 +58,49 @@ class init
                 await changePage.toEditArticle(parseInt(id));
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         } else if (hash.startsWith('#/area'))
         {
             const area = hash.slice(hash.indexOf('?area=') + 6);
             if (area)
             {
-                changePage.toArea(area);
+                await changePage.toArea(area);
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         } else if (hash.startsWith('#/search')){
             const keyword = hash.slice(hash.indexOf('?keyword=') + 9);
             console.log(keyword)
             if (keyword)
             {
-                changePage.toSearch(keyword);
+                await changePage.toSearch(keyword);
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         
         } else if (hash.startsWith('#/admin')){
-            changePage.toAdminPage();
+            await changePage.toAdminPage();
         } else if(hash.startsWith('#/activateAccount')){
             const token = hash.slice(hash.indexOf('?token=') + 7);
             if (token)
             {
-                changePage.toActivateAccountPage();
+                await changePage.toActivateAccountPage();
             } else
             {
-                changePage.toIndex();
+                await changePage.toIndex();
             }
         
-        }
-        else
+        }else
         {
-            changePage.toIndex();
+            await changePage.toIndex();
         }
         const navigationProgress = new NavigationProgress();
         navigationProgress.init();
+
+
     }
 
 

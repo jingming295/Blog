@@ -5,15 +5,8 @@ import { ValidationError } from '../../Validators/inputControl';
 
 export class NormalRequestUserProfile
 {
+    private returnData = new ReturnData();
 
-
-
-    private returnData: ReturnData;
-
-    constructor()
-    {
-        this.returnData = new ReturnData();
-    }
     async requestUserProfile(id: { id: string; }): Promise<RCD>
     {
         try

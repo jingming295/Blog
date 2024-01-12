@@ -4,7 +4,7 @@ import { ChangePage } from "../Navigation Bar/changePage";
 import { UserData as UD, ArticleData as AD } from "../Navigation Bar/interface";
 import { HandlePopMsg } from "../Navigation Bar/popMsg";
 import { ProfileData } from "../User Profile/interface";
-import { ArticleArea, ArticleCardData, ArticleContent, RetArticleData, setting_email, setting_loginandregister } from "./interface";
+import { ArticleArea, ArticleCardData, ArticleContent, ColorScheme, RetArticleData, setting_email, setting_loginandregister } from "./interface";
 import { urlconfig } from "../Url Config/config";
 
 /**
@@ -40,7 +40,7 @@ export class SendPost
             .catch(error =>
             {
                 console.error('Error:', error);
-                throw new Error('Backend Not Running');
+                this.handlePopMsg.popMsg(error);
             });
     }
 
@@ -170,7 +170,7 @@ export class SendPost
                 ArticleID: articleID
             };
             await this.postWithUrlParams('articlePermission', params)
-                .then((response) =>
+                .then(async (response) =>
                 {
                     if (response.code === 0)
                     {
@@ -179,15 +179,15 @@ export class SendPost
                         this.handlePopMsg.popMsg(response.message);
                         localStorage.clear();
                         const changePage = new ChangePage(true);
-                        changePage.toIndex();
+                        await changePage.toIndex();
                         location.reload();
                     }
                 })
-                .catch((error) =>
+                .catch(async (error) =>
                 {
                     localStorage.clear();
                     const changePage = new ChangePage(true);
-                    changePage.toIndex();
+                    await changePage.toIndex();
                     location.reload();
                 });
         } else
@@ -195,13 +195,13 @@ export class SendPost
             this.handlePopMsg.popMsg('You has no permission to edit this article');
             localStorage.clear();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
         }
 
 
     }
 
-    UploadArticle(title: string, article: string, area: string, tag: string)
+    async UploadArticle(title: string, article: string, area: string, tag: string)
     {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
@@ -220,13 +220,13 @@ export class SendPost
                 ArticleData: ArticleData
             };
             this.postWithUrlParams('uploadArticle', params)
-                .then((response) =>
+                .then(async (response) =>
                 {
                     if (response.code === 0)
                     {
                         this.handlePopMsg.popMsg(response.message);
                         const changePage = new ChangePage(true);
-                        changePage.toIndex();
+                        await changePage.toIndex();
                     } else
                     {
                         this.handlePopMsg.popMsg(response.message);
@@ -244,12 +244,12 @@ export class SendPost
         {
             localStorage.clear();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
             location.reload();
         }
     }
 
-    UpdateArticle(id: number, title: string, article: string, area: string, tag: string)
+    async UpdateArticle(id: number, title: string, article: string, area: string, tag: string)
     {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
@@ -290,7 +290,7 @@ export class SendPost
         {
             localStorage.clear();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
             location.reload();
         }
     }
@@ -324,7 +324,7 @@ export class SendPost
         const params = {
             area: area
         };
-        return await this.postWithUrlParams('getArticleCardData', params).then((response) =>
+        return await this.postWithUrlParams('getArticleCardData', params).then(async (response) =>
         {
             if (response.code === 0)
             {
@@ -333,7 +333,7 @@ export class SendPost
             {
                 this.handlePopMsg.popMsg(response.message);
                 const changePage = new ChangePage(true);
-                changePage.to404Page();
+                await changePage.to404Page();
                 return [];
             }
 
@@ -412,7 +412,7 @@ export class SendPost
         const params = {
             articleId: id
         };
-        return await this.postWithUrlParams('getArticleContent', params).then((response) =>
+        return await this.postWithUrlParams('getArticleContent', params).then(async (response) =>
         {
             if (response.code === 0)
             {
@@ -421,13 +421,13 @@ export class SendPost
             {
                 this.handlePopMsg.popMsg(response.message);
                 const changePage = new ChangePage(true);
-                changePage.to404Page();
+                await changePage.to404Page();
                 return null;
             }
-        }).catch((error: any) =>
+        }).catch(async (error: any) =>
         {
             const changePage = new ChangePage(true);
-            changePage.to404Page();
+            await changePage.to404Page();
             return null;
         })
             .finally(() =>
@@ -480,11 +480,11 @@ export class SendPost
                     return null;
                 }
             })
-            .catch((error) =>
+            .catch(async (error) =>
             {
                 this.handlePopMsg.popMsg((error as Error).message);
                 const changePage = new ChangePage(true);
-                changePage.toIndex();
+                await changePage.toIndex();
             })
             .finally(() =>
             {
@@ -504,25 +504,25 @@ export class SendPost
             };
 
             this.postWithUrlParams('deleteArticle', params)
-                .then((response) =>
+                .then(async (response) =>
                 {
                     if (response.code === 0)
                     {
                         this.handlePopMsg.popMsg(response.message);
                         const changePage = new ChangePage(true);
-                        changePage.toManageArticle();
+                        await changePage.toManageArticle();
                     } else
                     {
                         this.handlePopMsg.popMsg(response.message);
                         const changePage = new ChangePage(true);
-                        changePage.toIndex();
+                        await changePage.toIndex();
                     }
                 })
-                .catch((error) =>
+                .catch(async (error) =>
                 {
                     this.handlePopMsg.popMsg((error as Error).message);
                     const changePage = new ChangePage(true);
-                    changePage.toIndex();
+                    await changePage.toIndex();
                 })
                 .finally(() =>
                 {
@@ -533,7 +533,7 @@ export class SendPost
             this.handlePopMsg.popMsg('You has no permission to delete this article');
             localStorage.clear();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
         }
 
     }
@@ -621,13 +621,14 @@ export class SendPost
     {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
-        if(UserData){
+        if (UserData)
+        {
             const parseUserData: UD = JSON.parse(UserData);
             const params = {
                 UserData: parseUserData,
             };
             return await this.postWithUrlParams('getLoginAndRegisterSettings', params)
-                .then((response) =>
+                .then(async (response) =>
                 {
                     if (response.code === 0)
                     {
@@ -636,15 +637,15 @@ export class SendPost
                     {
                         this.handlePopMsg.popMsg(response.message);
                         const changePage = new ChangePage(true);
-                        changePage.toIndex();
+                        await changePage.toIndex();
                         return null;
                     }
                 })
-                .catch((error) =>
+                .catch(async (error) =>
                 {
                     this.handlePopMsg.popMsg((error as Error).message);
                     const changePage = new ChangePage(true);
-                    changePage.toIndex();
+                    await changePage.toIndex();
                     return null;
                 }
                 ).finally(() =>
@@ -657,9 +658,11 @@ export class SendPost
 
     }
 
-    async updateLoginAndRegisterSettings(setting: setting_loginandregister){
+    async updateLoginAndRegisterSettings(setting: setting_loginandregister)
+    {
         const UserData = localStorage.getItem('UserData');
-        if(UserData){
+        if (UserData)
+        {
             const parseUserData: UD = JSON.parse(UserData);
             const params = {
                 UserData: parseUserData,
@@ -691,16 +694,18 @@ export class SendPost
 
     }
 
-    async getEmailSettings(){
+    async getEmailSettings()
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
-        if(UserData){
+        if (UserData)
+        {
             const parseUserData: UD = JSON.parse(UserData);
             const params = {
                 UserData: parseUserData,
             };
             return await this.postWithUrlParams('getEmailSettings', params)
-                .then((response) =>
+                .then(async (response) =>
                 {
                     if (response.code === 0)
                     {
@@ -709,32 +714,35 @@ export class SendPost
                     {
                         this.handlePopMsg.popMsg(response.message);
                         const changePage = new ChangePage(true);
-                        changePage.toIndex();
+                        await changePage.toIndex();
                         return null;
                     }
                 })
-                .catch((error) =>
+                .catch(async (error) =>
                 {
                     this.handlePopMsg.popMsg((error as Error).message);
                     const changePage = new ChangePage(true);
-                    changePage.toIndex();
+                    await changePage.toIndex();
                     return null;
                 }
                 ).finally(() =>
                 {
                     this.navigationProgress.end();
                 });
-        } else {
+        } else
+        {
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
             return null;
         }
     }
 
-    async updateEmailSettings(setting: setting_email){
+    async updateEmailSettings(setting: setting_email)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
-        if(UserData){
+        if (UserData)
+        {
             const parseUserData: UD = JSON.parse(UserData);
             const params = {
                 UserData: parseUserData,
@@ -765,10 +773,12 @@ export class SendPost
         }
     }
 
-    async sendTestEmail(testEmailAddress:string){
+    async sendTestEmail(testEmailAddress: string)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
-        if(UserData){
+        if (UserData)
+        {
             const parseUserData: UD = JSON.parse(UserData);
             const params = {
                 UserData: parseUserData,
@@ -799,7 +809,8 @@ export class SendPost
         }
     }
 
-    async sendActivateAccountRequest(token:string){
+    async sendActivateAccountRequest(token: string)
+    {
         this.navigationProgress.start();
         const params = {
             token: token
@@ -828,7 +839,8 @@ export class SendPost
             });
     }
 
-    async getAllArticleArea(){
+    async getAllArticleArea()
+    {
         const params = {};
         return await this.postWithUrlParams('getAllArticleArea', params)
             .then((response) =>
@@ -839,17 +851,363 @@ export class SendPost
                 } else
                 {
                     this.handlePopMsg.popMsg(response.message);
-                    return [];
+                    return null;
                 }
             })
             .catch((error) =>
             {
                 this.handlePopMsg.popMsg((error as Error).message);
-                return [];
+                return null;
             }
             ).finally(() =>
             {
             });
     }
 
+    async getColorScheme()
+    {
+        const params = {};
+        return await this.postWithUrlParams('getAllColorScheme', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    return response.data as ColorScheme[];
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return null;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return null;
+            }
+            ).finally(() =>
+            {
+            });
+
+    }
+
+    async deleteColorScheme(id: number)
+    {
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                id: id
+            };
+            return await this.postWithUrlParams('deleteColorScheme', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async addColorScheme(textColor: string, backgroundColor: string)
+    {
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                textColor: textColor,
+                backgroundColor: backgroundColor
+            };
+            return await this.postWithUrlParams('addColorScheme', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return response.data as { id: number; };
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return null;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return null;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async getAllBigArea()
+    {
+        this.navigationProgress.start();
+        const params = {};
+        return await this.postWithUrlParams('getAllArticleBigArea', params)
+            .then((response) =>
+            {
+                if (response.code === 0)
+                {
+                    return response.data as {
+                        id: number,
+                        name: string;
+                    }[];
+                } else
+                {
+                    this.handlePopMsg.popMsg(response.message);
+                    return null;
+                }
+            })
+            .catch((error) =>
+            {
+                this.handlePopMsg.popMsg((error as Error).message);
+                return null;
+            }
+            ).finally(() =>
+            {
+                this.navigationProgress.end();
+            });
+    }
+
+    async deleteBigArea(id: number){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                id: id
+            };
+            return await this.postWithUrlParams('deleteBigArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async updateBigArea(id: number, name: string){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                id: id,
+                name: name
+            };
+            return await this.postWithUrlParams('updateBigArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+
+    async addBigArea(name: string){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                name: name
+            };
+            return await this.postWithUrlParams('addBigArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return response.data as { id: number; };
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return null;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return null;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async updateSubArea(id: number, name: string, bigAreaID: number, colorSchemeID:number){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const parseUserData: UD = JSON.parse(UserData);
+            const params = {
+                UserData: parseUserData,
+                id: id,
+                name: name,
+                bigAreaID: bigAreaID,
+                colorSchemeID: colorSchemeID
+            };
+            return await this.postWithUrlParams('updateSubArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    this.handlePopMsg.popMsg((error as Error).message);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+
+    }
+
+    async deleteSubArea(id: number){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const params = {
+                UserData: JSON.parse(UserData),
+                id: id
+            };
+            return await this.postWithUrlParams('deleteSubArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+
+                        return true;
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return false;
+                    }
+                })
+                .catch((error) =>
+                {
+                    console.log(error);
+                    return false;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
+
+    async addSubArea(name: string, bigAreaID: number, colorSchemeID:number){
+        this.navigationProgress.start();
+        const UserData = localStorage.getItem('UserData');
+        if (UserData)
+        {
+            const params = {
+                UserData: JSON.parse(UserData),
+                name: name,
+                bigAreaID: bigAreaID,
+                colorSchemeID: colorSchemeID
+            };
+            return await this.postWithUrlParams('addSubArea', params)
+                .then((response) =>
+                {
+                    if (response.code === 0)
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+
+                        return response.data as { id: number; };
+                    } else
+                    {
+                        this.handlePopMsg.popMsg(response.message);
+                        return null;
+                    }
+                })
+                .catch((error) =>
+                {
+                    console.log(error);
+                    return null;
+                }
+                ).finally(() =>
+                {
+                    this.navigationProgress.end();
+                });
+        }
+    }
 }

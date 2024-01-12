@@ -7,7 +7,7 @@ export class MakeArticlePage
 {
     handlePopMsg = new HandlePopMsg();
 
-    init()
+    async init()
     {
         const hash = window.location.hash;
         if (hash.startsWith('#/p'))
@@ -15,7 +15,7 @@ export class MakeArticlePage
             const id = hash.slice(hash.indexOf('?id=') + 4);
             if (id && Number.isInteger(parseInt(id)))
             {
-                this.makeArticlePage(parseInt(id));
+                await this.makeArticlePage(parseInt(id));
             } else
             {
 
@@ -74,9 +74,9 @@ export class MakeArticlePage
             const articleAuthor = document.createElement('div');
             articleAuthor.className = 'articleAuthor';
             articleAuthor.innerText = `Author: ${data.author.articleAuthor}`;
-            articleAuthor.onclick = ()=>{
+            articleAuthor.onclick = async ()=>{
                 const changePage = new ChangePage(true);
-                changePage.toUserProfile(data.author.articleAuthorID.toString());
+                await changePage.toUserProfile(data.author.articleAuthorID.toString());
             }
             return articleAuthor;
         }
@@ -87,9 +87,9 @@ export class MakeArticlePage
             articleArea.innerText = `Area: ${data.article.articleArea}`;
             articleArea.style.color = data.colorScheme.areaTextColor;
             articleArea.style.backgroundColor = data.colorScheme.areaBackgroundColor;
-            articleArea.onclick = ()=>{
+            articleArea.onclick = async ()=>{
                 const changePage = new ChangePage(true);
-                changePage.toArea(data.article.articleArea);
+                await changePage.toArea(data.article.articleArea);
             }
             return articleArea;
         }

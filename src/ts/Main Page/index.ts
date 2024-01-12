@@ -4,9 +4,9 @@ import '../../scss/MainPage/index.scss';
 import { MakeArticleCard } from './makeArticleCard';
 export class MainPage
 {
-    init = () =>
+    init = async () =>
     {
-        this.createContentDiv();
+        await this.createContentDiv();
     };
 
     private createContentDiv = async () =>

@@ -43,7 +43,7 @@ export class ManageArticle
             {
                 localStorage.clear();
                 const changePage = new ChangePage(true);
-                changePage.toIndex();
+                await changePage.toIndex();
                 location.reload();
             }
         };
@@ -70,7 +70,7 @@ export class ManageArticle
         {
             this.navigationProgress.end();
             const changePage = new ChangePage(true);
-            changePage.toIndex();
+            await changePage.toIndex();
             return;
         }
     }

@@ -31,25 +31,24 @@ export class MakeUserProfile
             if (id && Number.isInteger(parseInt(id)))
             {
                 const profileData = await sendPost.getUserProfile(parseInt(id));
-                console.log(profileData);
                 if (profileData)
                 {
                     this.CreateContent(profileData);
                 } else
                 {
                     const changePage = new ChangePage(true);
-                    changePage.to404Page();
+                    await changePage.to404Page();
                     return;
                 }
             } else
             {
                 const changePage = new ChangePage(true);
-                changePage.to404Page();
+                await changePage.to404Page();
             }
         } else if (hash === '')
         {
             const changePage = new ChangePage(true);
-            changePage.to404Page();
+            await changePage.to404Page();
         }
     };
 
@@ -131,7 +130,7 @@ export class MakeUserProfile
                                     }
                                     clicked = true;
                                     const changePage = new ChangePage(true);
-                                    changePage.toUserProfile(data.userData.id.toString());
+                                    await changePage.toUserProfile(data.userData.id.toString());
                                 }
                             }
                         };
@@ -287,7 +286,7 @@ export class MakeUserProfile
                     },
                     {
                         name: 'Settings',
-                        func: function ()
+                        func: async function ()
                         {
                             navigationProgress.start();
                             const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
@@ -297,7 +296,7 @@ export class MakeUserProfile
                                 const rightPanerWrapper = document.querySelector('.userProfile-Usertab-rightPanelWrapper') as HTMLDivElement;
                                 if (rightPanerWrapper)
                                 {
-                                    const rightPanel = createSettingRightPanel();
+                                    const rightPanel = await createSettingRightPanel();
                                     rightPanerWrapper.appendChild(rightPanel);
 
                                 }
@@ -485,13 +484,13 @@ export class MakeUserProfile
                 return rightPanel;
             }
 
-            function createSettingRightPanel()
+            async function createSettingRightPanel()
             {
                 function Navigation()
                 {
                     const navigationItems = [{
                         name: 'Information',
-                        func: function (navigationItem: HTMLDivElement)
+                        func: async function (navigationItem: HTMLDivElement)
                         {
                             const navigationItemOnSelect = document.querySelectorAll('.navigationItemOnSelect');
                             navigationItemOnSelect.forEach(item =>
@@ -511,7 +510,7 @@ export class MakeUserProfile
                             const rightPanel = document.querySelector('.userProfile-Usertab-rightPanel') as HTMLDivElement;
                             if (rightPanel)
                             {
-                                const basicSettings = BasicSettings();
+                                const basicSettings = await BasicSettings();
                                 if (basicSettings)
                                 {
                                     rightPanel.appendChild(basicSettings);
@@ -572,7 +571,7 @@ export class MakeUserProfile
                     return navigationWrapper;
                 }
 
-                function BasicSettings()
+                async function BasicSettings()
                 {
                     
                     function createChangeName(parsedUserData: UserData)
@@ -728,7 +727,7 @@ export class MakeUserProfile
                                     {
                                         localStorage.setItem('UserData', JSON.stringify(newUserData));
                                         const changePage = new ChangePage(true);
-                                        changePage.toUserProfile(newUserData.userData.id.toString());
+                                        await changePage.toUserProfile(newUserData.userData.id.toString());
                                     }
                                 }
 
@@ -766,7 +765,7 @@ export class MakeUserProfile
                     } else
                     {
                         const changePage = new ChangePage(true);
-                        changePage.to404Page();
+                        await changePage.to404Page();
                         return;
                     }
 
@@ -862,7 +861,7 @@ export class MakeUserProfile
 
                                 if(result){
                                     const changePage = new ChangePage(true);
-                                    changePage.toUserProfile(parsedUserData.userData.id.toString());
+                                    await changePage.toUserProfile(parsedUserData.userData.id.toString());
                                 }
 
 
@@ -890,7 +889,7 @@ export class MakeUserProfile
                 rightPanel.className = 'userProfile-Usertab-rightPanel';
 
                 const navigation = Navigation();
-                const basicSettings = BasicSettings();
+                const basicSettings = await BasicSettings();
                 rightPanel.appendChild(navigation);
 
                 if (basicSettings)
