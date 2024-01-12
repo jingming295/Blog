@@ -35,5 +35,5 @@ jobs:
       - name: Install Typescript for backend
         run: cd server && npm install typescript --save-dev
 
-      - name: Run Start for backend
-        run: cd server && npm run start
+      - name: Run Build for backend
+        run: cd server && npm run build
