@@ -4,7 +4,7 @@ import { NewMenu } from './NewMenu';
 
 export class Editor {
     constructor () {
-        const newMenu = new NewMenu();
+        new NewMenu();
         i18nChangeLanguage('en')
         // newMenu.init();
     }
@@ -61,13 +61,12 @@ export class Editor {
         // };
 
         // eslint-disable-next-line no-unused-vars
-        const toolbar = createToolbar({
+        createToolbar({
             editor,
             selector: '#toolbar-container',
             config: toolbarConfig,
             mode: 'default' // or 'simple'
         });
-        const curToolbarConfig = toolbar.getConfig();    
         return editor;
     }
 }

@@ -1,4 +1,3 @@
-import { ChangePage } from "../Navigation Bar/changePage";
 import { SendPost } from "../Send Fetch";
 import { MakeArticleCard } from "./makeArticleCard";
 
