@@ -411,7 +411,7 @@ export class AdminPage
                     emailVerification: emailVerification
                 };
                 const sendPost = new SendPost();
-                const result = await sendPost.updateLoginAndRegisterSettings(loginAndRegisterSetting);
+                await sendPost.updateLoginAndRegisterSettings(loginAndRegisterSetting);
             };
 
             buttonSubmitWrapper.appendChild(buttonSubmit);
@@ -421,14 +421,13 @@ export class AdminPage
         const sendPost = new SendPost();
 
         const LoginAndRegisterSetting = await sendPost.getLoginAndRegisterSettings();
-        const wrapper = document.getElementById('MainWrapper');
         const MainWrapper = document.createElement('div');
         MainWrapper.className = 'MainWrapper';
         MainWrapper.id = 'MainWrapper';
 
         if (!LoginAndRegisterSetting) return MainWrapper;
 
-        let id = LoginAndRegisterSetting.id;
+        const id = LoginAndRegisterSetting.id;
         let allowNewUserRegister = LoginAndRegisterSetting.allowUserRegis;
         let emailVerification = LoginAndRegisterSetting.emailVerification;
 
@@ -488,14 +487,14 @@ export class AdminPage
             buttonSendTestEmail.onclick = async () =>
             {
                 const sendPost = new SendPost();
-                const result = await sendPost.sendTestEmail(TestEmailAddress);
+                await sendPost.sendTestEmail(TestEmailAddress);
             };
 
             buttonSubmit.onclick = async () =>
             {
                 if (!EmailSetting) return;
                 const sendPost = new SendPost();
-                const result = await sendPost.updateEmailSettings(EmailSetting);
+                await sendPost.updateEmailSettings(EmailSetting);
             };
 
             buttonSubmitWrapper.appendChild(buttonSendTestEmail);
@@ -510,7 +509,7 @@ export class AdminPage
 
         const sendPost = new SendPost();
 
-        let EmailSetting = await sendPost.getEmailSettings();
+        const EmailSetting = await sendPost.getEmailSettings();
         if (!EmailSetting) return MainWrapper;
         let TestEmailAddress = '';
 
@@ -1102,7 +1101,7 @@ export class AdminPage
             AreaItemWrapper.appendChild(actionWrapper);
 
             return AreaItemWrapper;
-        };
+        }
 
         function createAddAreaBtn()
         {
@@ -1125,7 +1124,7 @@ export class AdminPage
                     addColorScheme.classList.add('commonFullScreenMainWrapperActive');
                 }
 
-            };
+            }
 
 
 

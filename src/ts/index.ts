@@ -99,7 +99,7 @@ class init
         }
         const navigationProgress = new NavigationProgress();
         navigationProgress.init();
-
+        
 
     }
 

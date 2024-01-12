@@ -41,6 +41,12 @@ export class SendPost
             {
                 console.error('Error:', error);
                 this.handlePopMsg.popMsg(error);
+                const contentDivs = document.querySelectorAll('.contentDiv');
+                for (let i = 1; i < contentDivs.length; i++)
+                {
+                    console.log(contentDivs[i]);
+                    contentDivs[i].remove();
+                }
             });
     }
 
@@ -174,6 +180,7 @@ export class SendPost
                 {
                     if (response.code === 0)
                     {
+                        return true;
                     } else
                     {
                         this.handlePopMsg.popMsg(response.message);
@@ -185,6 +192,7 @@ export class SendPost
                 })
                 .catch(async (error) =>
                 {
+                    console.log(error);
                     localStorage.clear();
                     const changePage = new ChangePage(true);
                     await changePage.toIndex();
@@ -993,7 +1001,8 @@ export class SendPost
             });
     }
 
-    async deleteBigArea(id: number){
+    async deleteBigArea(id: number)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
@@ -1028,7 +1037,8 @@ export class SendPost
         }
     }
 
-    async updateBigArea(id: number, name: string){
+    async updateBigArea(id: number, name: string)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
@@ -1065,7 +1075,8 @@ export class SendPost
     }
 
 
-    async addBigArea(name: string){
+    async addBigArea(name: string)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
@@ -1100,7 +1111,8 @@ export class SendPost
         }
     }
 
-    async updateSubArea(id: number, name: string, bigAreaID: number, colorSchemeID:number){
+    async updateSubArea(id: number, name: string, bigAreaID: number, colorSchemeID: number)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
@@ -1139,7 +1151,8 @@ export class SendPost
 
     }
 
-    async deleteSubArea(id: number){
+    async deleteSubArea(id: number)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
@@ -1174,7 +1187,8 @@ export class SendPost
         }
     }
 
-    async addSubArea(name: string, bigAreaID: number, colorSchemeID:number){
+    async addSubArea(name: string, bigAreaID: number, colorSchemeID: number)
+    {
         this.navigationProgress.start();
         const UserData = localStorage.getItem('UserData');
         if (UserData)
