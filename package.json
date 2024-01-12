@@ -2,14 +2,18 @@
   "name": "webproject",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server --open"
   },
   "keywords": [],
-  "author": "",
+  "author": "jingming295",
   "license": "GPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jingming295/Blog"
+  },
   "devDependencies": {
     "css-loader": "^6.8.1",
     "file-loader": "^6.2.0",
