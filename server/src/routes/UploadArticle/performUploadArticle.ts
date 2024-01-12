@@ -12,6 +12,7 @@ import { DBUpdate } from "../../SQL/dbUpdate";
 export class UploadArticle
 {
     private returnData: ReturnData;
+    
     constructor()
     {
         this.returnData = new ReturnData();
