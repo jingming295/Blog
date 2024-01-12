@@ -3,6 +3,7 @@
 ## Web Development Project
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jingming295/blog/badge)](https://www.codefactor.io/repository/github/jingming295/blog)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjingming295%2FBlog.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjingming295%2FBlog?ref=badge_shield)
 
 ## Intro
 
@@ -48,3 +49,7 @@ Finally, you can access this website via http://localhost:8080/
   - [x] Color Scheme Setting
   - [x] Add And Edit Article Area
   - [x] Add And Edit Article Sub Area
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjingming295%2FBlog.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjingming295%2FBlog?ref=badge_large)
