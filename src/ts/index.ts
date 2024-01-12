@@ -138,14 +138,11 @@ class init
             if (o.inc.every(k => hash.startsWith(k)))
             {
                 conformPromis = o.fn();
-                console.log(conformPromis);
                 return true;
             }
             else
                 return false;
         });
-        console.log(conformPromis);
-        console.log(hash);
         if(!conformPromis){
             await changePage.toIndex();
         }

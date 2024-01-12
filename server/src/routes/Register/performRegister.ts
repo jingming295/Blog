@@ -21,110 +21,75 @@ export class Register
     {
         this.returnData = new ReturnData();
     }
-    async performRegister(registerRequest: RR): Promise<RCD>
-    {
-        try
-        {
+    async performRegister(registerRequest: RR): Promise<RCD> {
+        try {
             this.validation(registerRequest);
             const sha256 = new SHA256();
             const dbSelect = new DBSelect();
             const dbInsert = new DBInsert();
-            const username = registerRequest.username;
-            const email = registerRequest.email;
-            const password = registerRequest.password;
+            const { username, email, password } = registerRequest;
             const saltedPassword = password;
             const hashedPassword = await sha256.hashPassword(saltedPassword);
-
+    
             const idResult = await dbSelect.selectEmail(email);
-
-            if (idResult.length)
-            {
-                const activeResult = await dbSelect.selectUserActiveStatusByID(idResult[0].u_id);
-                if(activeResult.length && activeResult[0].u_active === 0){
+    
+            if (idResult.length) {
+                const { u_id } = idResult[0];
+                const activeResult = await dbSelect.selectUserActiveStatusByID(u_id);
+    
+                if (activeResult.length && activeResult[0].u_active === 0) {
                     const token = this.generateToken();
                     const dbUpdate = new DBUpdate();
-                    const ResultSetHeader = await dbUpdate.updateUserToken(idResult[0].u_id, token);
-                    if (!ResultSetHeader.warningStatus && ResultSetHeader.affectedRows)
-                    {
+                    const { warningStatus, affectedRows } = await dbUpdate.updateUserToken(u_id, token);
+    
+                    if (!warningStatus && affectedRows) {
                         const mail = new Mail();
                         mail.sendActivateAccountEmail(email, token);
-                        const returnData = this.returnData.returnClientData(0, 'Your account is not activated, a new activation email has been sent to your email');
-                        return returnData;
-                    } else
-                    {
-                        throw new Error(ResultSetHeader.info);
+                        return this.returnData.returnClientData(0, 'Your account is not activated, a new activation email has been sent to your email');
+                    } else {
+                        throw new Error('Error updating user token: ' + warningStatus);
                     }
                 }
-                const returnData = this.returnData.returnClientData(-201, 'The email already register');
-                return returnData;
+    
+                return this.returnData.returnClientData(-201, 'The email already registered');
             }
-
-            const LoginAndRegisterSettings = await dbSelect.selectSettingLoginAndRegister();
-
-            if (LoginAndRegisterSettings.length)
-            {
-                const LoginAndRegisterSetting = LoginAndRegisterSettings[0];
-                if (!LoginAndRegisterSetting.s_LNR_allowUserRegis)
-                {
-                    const returnData = this.returnData.returnClientData(-201, 'Register is not allowed');
-                    return returnData;
+    
+            const loginAndRegisterSettings = await dbSelect.selectSettingLoginAndRegister();
+    
+            if (loginAndRegisterSettings.length) {
+                const { s_LNR_allowUserRegis, s_LNR_emailVerification } = loginAndRegisterSettings[0];
+    
+                if (!s_LNR_allowUserRegis) {
+                    return this.returnData.returnClientData(-201, 'Register is not allowed');
                 }
-                if (LoginAndRegisterSetting.s_LNR_emailVerification)
-                {
-                    const token = this.generateToken();
-                    const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword, token);
-                    if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
-                    {
-                        const mail = new Mail();
-                        mail.sendActivateAccountEmail(email, token);
-                        const returnData = this.returnData.returnClientData(0, 'Register sucessful, please check your email to activate your account');
-                        return returnData;
-                    } else
-                    {
-                        throw new Error(ResultSetHeader.info);
+    
+                const token = s_LNR_emailVerification ? this.generateToken() : undefined;
+                const { warningStatus, insertId } = await dbInsert.Register(username, email, hashedPassword, token);
+    
+                if (!warningStatus && insertId) {
+                    const mail = new Mail();
+                    if (s_LNR_emailVerification) {
+                        mail.sendActivateAccountEmail(email, token!);
+                        return this.returnData.returnClientData(0, 'Register successful, please check your email to activate your account');
+                    } else {
+                        return this.returnData.returnClientData(0, 'Register successful');
                     }
                 } else {
-                    const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword);
-                    if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
-                    {
-                        const returnData = this.returnData.returnClientData(0, 'Register Sucessful');
-                        return returnData;
-                    } else
-                    {
-                        throw new Error(ResultSetHeader.info);
-                    }
+                    throw new Error('Error inserting user: ' + warningStatus);
                 }
-            } else
-            {
-                const ResultSetHeader = await dbInsert.Register(username, email, hashedPassword);
-                if (!ResultSetHeader.warningStatus && ResultSetHeader.insertId)
-                {
-                    const returnData = this.returnData.returnClientData(0, 'Register Sucessful');
-                    return returnData;
-                } else
-                {
-                    throw new Error(ResultSetHeader.info);
-                }
+            } else {
+                throw new Error('Login and Register settings not found');
             }
-
-
-        } catch (error)
-        {
-            if (error instanceof ValidationError)
-            {
-                // handle ValidationError
-                const returnData = this.returnData.returnClientData(error.code, error.message);
-                return returnData;
-            } else
-            {
-                // handle common error
-                const returnData = this.returnData.returnClientData(-400, 'Error');
-                console.log(error);
-                return returnData;
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                return this.returnData.returnClientData(error.code, error.message);
+            } else {
+                console.error(error);
+                return this.returnData.returnClientData(-400, 'Error');
             }
         }
-
     }
+    
 
     /**
      * Validate the input
