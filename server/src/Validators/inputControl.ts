@@ -131,7 +131,4 @@ export class InputControl
             throw new ValidationError(-400, 'Please input a correct sub area name, must be less than 20 characters and contain only alphanumeric characters and spaces.');
         }
     }
-
-
-
 }

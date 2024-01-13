@@ -4,8 +4,6 @@ import { LoginDataFromClient } from '../../Return To Client/interface';
 import { SendTestEmail } from './sendTestEmail';
 import { DataFromClient } from '../../Data From Client';
 const router = express.Router();
-
-
 router.post('/sendTestEmail', async (req: Request, res: Response) =>
 {
     try

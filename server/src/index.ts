@@ -76,7 +76,6 @@ const routers = [
 ];
 app.use('/', routers);
 
-// 处理根路径
 app.get('/', (req, res) =>
 {
   res.send('-404');

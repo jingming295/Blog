@@ -8,8 +8,12 @@
     "start": "ts-node src/index.ts",
     "build": "tsc -p ."
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jingming295/Blog"
+  },
   "keywords": [],
-  "author": "",
+  "author": "jingming295",
   "license": "GPL-2.0",
   "devDependencies": {
     "@types/cors": "^2.8.17",
